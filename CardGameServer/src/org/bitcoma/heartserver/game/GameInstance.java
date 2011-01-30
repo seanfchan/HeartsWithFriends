@@ -110,13 +110,7 @@ public class GameInstance {
     public int getMaxPlayers() {
         return maxPlayers;
     }
-<<<<<<< HEAD
-    
     public FastMap<Long, User> getUserIdToUserMap() {
-=======
-
-    public synchronized FastMap<Long, User> getUserIdToUserMap() {
->>>>>>> mychanges
         return userIdToUserMap;
     }
 
