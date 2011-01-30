@@ -2,11 +2,11 @@ package org.bitcoma.heartserver;
 
 import javolution.util.FastMap;
 
+import org.bitcoma.hearts.model.transfered.GameProtos.GameInfo;
+import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameResponse;
 import org.bitcoma.heartserver.game.GameInstance;
 import org.bitcoma.heartserver.game.GameInstance.State;
 import org.bitcoma.heartserver.model.database.User;
-import org.bitcoma.heartserver.model.transfered.GameProtos.GameInfo;
-import org.bitcoma.heartserver.model.transfered.JoinGameProtos.JoinGameResponse;
 import org.jboss.netty.channel.Channel;
 
 public class GameLobby {

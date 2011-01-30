@@ -1,0 +1,53 @@
+package hearts;
+
+option java_package = "org.bitcoma.hearts.model.transfered";
+option java_outer_classname = "OneMessageProtos";
+option optimize_for = SPEED;
+
+import "Login.proto";
+import "SignupRequest.proto";
+import "JoinGame.proto";
+import "GenericResponse.proto";
+import "FindGames.proto";
+import "FindGameRooms.proto";
+import "ResetPassword.proto";
+import "PlayCard.proto";
+import "StartGame.proto";
+
+message OneMessage {
+  enum Type { 
+    LOGIN_REQUEST             = 1; 
+    SIGNUP_REQUEST            = 2; 
+    JOIN_GAME_REQUEST         = 3; 
+    GENERIC_RESPONSE          = 4; 
+    FIND_GAMES_REQUEST        = 5; 
+    FIND_GAMES_RESPONSE       = 6; 
+    FIND_GAME_ROOMS_REQUEST   = 7; 
+    FIND_GAME_ROOMS_RESPONSE  = 8; 
+    RESET_PASSWORD_REQUEST    = 9; 
+    LOGIN_RESPONSE            = 10;
+    PLAY_CARD                 = 11;
+    JOIN_GAME_RESPONSE        = 12;
+    START_GAME_REQUEST        = 13;
+    START_GAME_RESPONSE        = 14;
+  }
+
+  // Identifies which field is filled in.
+  required Type type = 1;
+
+  // One of the following will be filled in.
+  optional LoginRequest login_request                      = 2;
+  optional SignupRequest signup_request                    = 3;
+  optional JoinGameRequest join_game_request               = 4;
+  optional GenericResponse generic_response                = 5;
+  optional FindGamesRequest find_games_request             = 6;
+  optional FindGamesResponse find_games_response           = 7;
+  optional FindGameRoomsRequest find_game_rooms_request    = 8;
+  optional FindGameRoomsResponse find_game_rooms_response  = 9;
+  optional ResetPasswordRequest reset_password_request     = 10;
+  optional LoginResponse login_response                    = 11;
+  optional PlayCardRequest play_card_request               = 12;
+  optional JoinGameResponse join_game_response             = 13;
+  optional StartGameRequest start_game_request             = 14;
+  optional StartGameResponse start_game_response           = 15;
+}

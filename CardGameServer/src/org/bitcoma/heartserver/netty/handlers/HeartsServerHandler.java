@@ -1,13 +1,13 @@
 package org.bitcoma.heartserver.netty.handlers;
 
+import org.bitcoma.hearts.model.transfered.GenericProtos.GenericResponse;
+import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameRequest;
+import org.bitcoma.hearts.model.transfered.LoginProtos.LoginRequest;
+import org.bitcoma.hearts.model.transfered.OneMessageProtos.OneMessage;
+import org.bitcoma.hearts.model.transfered.SignupProtos.SignupRequest;
+import org.bitcoma.hearts.model.transfered.StartGameProtos.StartGameRequest;
 import org.bitcoma.heartserver.HeartsServerApiImpl;
 import org.bitcoma.heartserver.IHeartsServerApi;
-import org.bitcoma.heartserver.model.transfered.GenericProtos.GenericResponse;
-import org.bitcoma.heartserver.model.transfered.JoinGameProtos.JoinGameRequest;
-import org.bitcoma.heartserver.model.transfered.LoginProtos.LoginRequest;
-import org.bitcoma.heartserver.model.transfered.OneMessageProtos.OneMessage;
-import org.bitcoma.heartserver.model.transfered.SignupProtos.SignupRequest;
-import org.bitcoma.heartserver.model.transfered.StartGameProtos.StartGameRequest;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.ExceptionEvent;

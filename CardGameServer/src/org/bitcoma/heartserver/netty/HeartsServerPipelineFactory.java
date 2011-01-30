@@ -2,7 +2,7 @@ package org.bitcoma.heartserver.netty;
 
 import static org.jboss.netty.channel.Channels.pipeline;
 
-import org.bitcoma.heartserver.model.transfered.OneMessageProtos;
+import org.bitcoma.hearts.model.transfered.OneMessageProtos;
 import org.bitcoma.heartserver.netty.handlers.HeartsServerHandler;
 import org.bitcoma.heartserver.netty.handlers.OneMessageEncoder;
 import org.jboss.netty.channel.ChannelPipeline;

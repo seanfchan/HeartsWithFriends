@@ -3,8 +3,8 @@ package org.bitcoma.heartsclient;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
-import org.bitcoma.heartserver.model.transfered.LoginProtos.LoginRequest;
-import org.bitcoma.heartserver.model.transfered.SignupProtos.SignupRequest;
+import org.bitcoma.hearts.model.transfered.LoginProtos.LoginRequest;
+import org.bitcoma.hearts.model.transfered.SignupProtos.SignupRequest;
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFuture;
