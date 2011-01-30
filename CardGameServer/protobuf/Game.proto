@@ -1,0 +1,17 @@
+package heartserver;
+
+option java_package = "org.bitcoma.heartserver.model.transfered";
+option java_outer_classname = "GameProtos";
+option optimize_for = SPEED;
+
+message GameInfo {
+    optional uint64 game_id = 1;
+    optional string game_name = 2;
+    optional uint32 current_number_of_players = 3;
+    optional uint32 max_number_of_players = 4;
+}
+
+message GameRoomInfo {
+    optional uint64 game_room_id = 1;
+    optional string game_room_name = 2;
+}

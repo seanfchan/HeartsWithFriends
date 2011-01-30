@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Simple ActiveJDBC Example" default="instrument">
+
+    <property name="target" value="${basedir}/bin"/>
+
+    <path id="run_classpath">
+        <pathelement location="${target}"/>
+        <fileset dir="lib">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="build_classpath">
+        <path refid="run_classpath"/>
+    	<!--
+        <fileset dir="build_time_libs">
+            <include name="*.jar"/>
+        </fileset>
+        -->
+    </path>
+
+    <target name="clean">
+        <delete dir="${target}" failonerror="false"/>
+        <mkdir dir="${target}"/>
+    </target>
+
+    <target name="compile">
+        <javac srcdir="src" destdir="${target}" debug="true">
+            <classpath refid="run_classpath"/>
+        </javac>
+    </target>
+
+    <target name="instrument" depends="compile">
+        <java classname="activejdbc.instrumentation.Main">
+            <sysproperty key="outputDirectory" value="${target}"/>
+            <classpath refid="build_classpath"/>
+        </java>
+    </target>
+
+    <target name="run" depends="instrument">
+        <java classname="activejdbc.ant.example.Main">
+            <classpath refid="run_classpath"/>
+        </java>
+    </target>
+
+</project>

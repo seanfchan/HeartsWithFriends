@@ -1,0 +1,19 @@
+package heartserver;
+
+option java_package = "org.bitcoma.heartserver.model.transfered";
+option java_outer_classname = "FindGamesProtos";
+option optimize_for = SPEED;
+
+import "Game.proto";
+
+message FindGamesRequest {
+
+    optional uint64 game_room_id = 1;
+    
+}
+
+message FindGamesResponse {
+    
+    repeated GameInfo game_room_infos = 1;
+
+}

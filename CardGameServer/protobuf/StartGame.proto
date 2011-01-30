@@ -1,0 +1,19 @@
+package heartserver;
+
+option java_package = "org.bitcoma.heartserver.model.transfered";
+option java_outer_classname = "StartGameProtos";
+option optimize_for = SPEED;
+
+import "Card.proto";
+
+message StartGameRequest {
+
+    optional uint64 game_id = 1;
+
+}
+
+message StartGameResponse {
+
+    repeated Card cards = 1;
+
+}

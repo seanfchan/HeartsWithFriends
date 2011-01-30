@@ -1,0 +1,9 @@
+package heartserver;
+
+option java_package = "org.bitcoma.heartserver.model.transfered";
+option java_outer_classname = "CardProtos";
+option optimize_for = SPEED;
+
+message Card {
+    optional uint32 value = 1;
+}
