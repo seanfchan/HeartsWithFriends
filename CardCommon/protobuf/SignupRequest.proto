@@ -1,0 +1,12 @@
+package hearts;
+
+option java_package = "org.bitcoma.hearts.model.transfered";
+option java_outer_classname = "SignupProtos";
+option optimize_for = SPEED;
+
+message SignupRequest {
+
+    optional string email = 1;
+    optional string password = 2;
+
+}

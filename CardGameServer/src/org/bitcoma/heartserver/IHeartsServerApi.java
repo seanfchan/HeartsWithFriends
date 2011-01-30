@@ -1,9 +1,9 @@
 package org.bitcoma.heartserver;
 
-import org.bitcoma.heartserver.model.transfered.JoinGameProtos.JoinGameRequest;
-import org.bitcoma.heartserver.model.transfered.LoginProtos.LoginRequest;
-import org.bitcoma.heartserver.model.transfered.SignupProtos.SignupRequest;
-import org.bitcoma.heartserver.model.transfered.StartGameProtos.StartGameRequest;
+import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameRequest;
+import org.bitcoma.hearts.model.transfered.LoginProtos.LoginRequest;
+import org.bitcoma.hearts.model.transfered.SignupProtos.SignupRequest;
+import org.bitcoma.hearts.model.transfered.StartGameProtos.StartGameRequest;
 import org.jboss.netty.channel.Channel;
 
 import com.google.protobuf.MessageLite;

@@ -2,9 +2,9 @@ package org.bitcoma.heartsclient;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.bitcoma.heartserver.model.transfered.GenericProtos.GenericResponse;
-import org.bitcoma.heartserver.model.transfered.LoginProtos.LoginResponse;
-import org.bitcoma.heartserver.model.transfered.OneMessageProtos.OneMessage;
+import org.bitcoma.hearts.model.transfered.GenericProtos.GenericResponse;
+import org.bitcoma.hearts.model.transfered.LoginProtos.LoginResponse;
+import org.bitcoma.hearts.model.transfered.OneMessageProtos.OneMessage;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;

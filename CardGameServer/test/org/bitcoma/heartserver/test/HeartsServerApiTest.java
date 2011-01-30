@@ -6,13 +6,13 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import org.bitcoma.hearts.model.transfered.GenericProtos.GenericResponse;
+import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameRequest;
+import org.bitcoma.hearts.model.transfered.LoginProtos.LoginRequest;
+import org.bitcoma.hearts.model.transfered.LoginProtos.LoginResponse;
+import org.bitcoma.hearts.model.transfered.SignupProtos.SignupRequest;
 import org.bitcoma.heartserver.HeartsServerApiImpl;
 import org.bitcoma.heartserver.model.database.User;
-import org.bitcoma.heartserver.model.transfered.GenericProtos.GenericResponse;
-import org.bitcoma.heartserver.model.transfered.JoinGameProtos.JoinGameRequest;
-import org.bitcoma.heartserver.model.transfered.LoginProtos.LoginRequest;
-import org.bitcoma.heartserver.model.transfered.LoginProtos.LoginResponse;
-import org.bitcoma.heartserver.model.transfered.SignupProtos.SignupRequest;
 import org.bitcoma.heartserver.utils.Encryptor;
 import org.junit.Before;
 import org.junit.Test;
