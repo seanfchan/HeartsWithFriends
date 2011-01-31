@@ -4,6 +4,7 @@ import org.bitcoma.hearts.model.transfered.GenericProtos.GenericResponse;
 import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameRequest;
 import org.bitcoma.hearts.model.transfered.LoginProtos.LoginRequest;
 import org.bitcoma.hearts.model.transfered.OneMessageProtos.OneMessage;
+import org.bitcoma.hearts.model.transfered.PlayCardProtos.PlayCardRequest;
 import org.bitcoma.hearts.model.transfered.SignupProtos.SignupRequest;
 import org.bitcoma.hearts.model.transfered.StartGameProtos.StartGameRequest;
 import org.bitcoma.heartserver.HeartsServerApiImpl;
@@ -55,6 +56,14 @@ public class HeartsServerHandler extends SimpleChannelHandler {
             StartGameRequest startGameRequest = msg.getStartGameRequest();
 
             response = api.startGame(startGameRequest);
+            e.getChannel().write(response);
+            break;
+
+        case PLAY_CARD_REQUEST:
+            logger.info("Server: Play Card Request Seen");
+            PlayCardRequest playCardRequest = msg.getPlayCardRequest();
+
+            response = api.playCard(playCardRequest);
             e.getChannel().write(response);
             break;
 

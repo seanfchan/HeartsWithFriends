@@ -2,6 +2,7 @@ package org.bitcoma.heartserver;
 
 import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameRequest;
 import org.bitcoma.hearts.model.transfered.LoginProtos.LoginRequest;
+import org.bitcoma.hearts.model.transfered.PlayCardProtos.PlayCardRequest;
 import org.bitcoma.hearts.model.transfered.SignupProtos.SignupRequest;
 import org.bitcoma.hearts.model.transfered.StartGameProtos.StartGameRequest;
 import org.jboss.netty.channel.Channel;
@@ -17,6 +18,8 @@ public interface IHeartsServerApi {
     MessageLite joinGame(JoinGameRequest request);
 
     MessageLite startGame(StartGameRequest request);
+
+    MessageLite playCard(PlayCardRequest request);
 
     /**
      * Resets all internal state of logged in user.

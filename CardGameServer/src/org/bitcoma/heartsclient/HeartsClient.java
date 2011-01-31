@@ -65,10 +65,11 @@ public class HeartsClient {
         // .setResponseCode(GenericResponse.ResponseCode.OK).build();
         // channel.write(gr);
 
-        SignupRequest sr = SignupRequest.newBuilder().setEmail("dude").setPassword("mypass").build();
+        SignupRequest sr = SignupRequest.newBuilder().setUserName("dude").setEmail("dude@mymail.com")
+                .setPassword("mypass").build();
         channel.write(sr);
 
-        LoginRequest lr = LoginRequest.newBuilder().setEmail("dude").setPassword("mypass").build();
+        LoginRequest lr = LoginRequest.newBuilder().setIdentifier("dude").setPassword("mypass").build();
         channel.write(lr);
 
         // Wait until the channel closes. To make sure responses are seen.

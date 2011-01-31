@@ -26,10 +26,10 @@ message OneMessage {
     FIND_GAME_ROOMS_RESPONSE  = 8; 
     RESET_PASSWORD_REQUEST    = 9; 
     LOGIN_RESPONSE            = 10;
-    PLAY_CARD                 = 11;
+    PLAY_CARD_REQUEST         = 11;
     JOIN_GAME_RESPONSE        = 12;
     START_GAME_REQUEST        = 13;
-    START_GAME_RESPONSE        = 14;
+    START_GAME_RESPONSE       = 14;
   }
 
   // Identifies which field is filled in.

@@ -23,20 +23,22 @@ public class HeartsServerApiTest {
 
     HeartsServerApiImpl api;
 
-    public static final String DEFAULT_USER = "user@mymail.com";
+    public static final String DEFAULT_USERNAME = "username";
+    public static final String DEFAULT_EMAIL = "username@mymail.com";
     public static final String DEFAULT_PASSWORD = "password";
 
     @Before
     public void setUp() {
         api = new HeartsServerApiImpl();
 
-        removeUser(DEFAULT_USER);
-        createUser(DEFAULT_USER, DEFAULT_PASSWORD, User.ACTIVE);
+        removeUser(DEFAULT_EMAIL);
+        createUser(DEFAULT_USERNAME, DEFAULT_EMAIL, DEFAULT_PASSWORD, User.ACTIVE);
     }
 
-    public void createUser(String email, String password, int state) {
+    public void createUser(String userName, String email, String password, int state) {
         api.connectDB();
         User user = new User();
+        user.set("user_name", userName);
         user.set("email", email);
         user.set("password", Encryptor.instance().encrypt(password));
         user.set("state", state);
@@ -55,13 +57,14 @@ public class HeartsServerApiTest {
 
     public void loginUser() {
         // User not logged in
-        LoginRequest lr = LoginRequest.newBuilder().setEmail(DEFAULT_USER).setPassword(DEFAULT_PASSWORD).build();
+        LoginRequest lr = LoginRequest.newBuilder().setIdentifier(DEFAULT_USERNAME).setPassword(DEFAULT_PASSWORD)
+                .build();
         api.login(lr, null);
         assertNotNull("Current user should not be null", api.getCurrentUser());
     }
 
     @Test
-    public void testJoinGmae() {
+    public void testJoinGame() {
         // Test that you need to be logged in
         JoinGameRequest jgr = JoinGameRequest.newBuilder().setGameId(0).build();
         MessageLite response = api.joinGame(jgr);
@@ -100,7 +103,7 @@ public class HeartsServerApiTest {
         assertNull("Current user should be null", api.getCurrentUser());
 
         // Successful login
-        lr = LoginRequest.newBuilder().setEmail(DEFAULT_USER).setPassword(DEFAULT_PASSWORD).build();
+        lr = LoginRequest.newBuilder().setIdentifier(DEFAULT_USERNAME).setPassword(DEFAULT_PASSWORD).build();
         response = api.login(lr, null);
         assertTrue("Successful login should have a login response", response instanceof LoginResponse);
         LoginResponse loginResponse = (LoginResponse) response;
@@ -108,7 +111,7 @@ public class HeartsServerApiTest {
         assertNotNull("Current user should not be null", api.getCurrentUser());
 
         // Login for user that doesn't exist
-        lr = LoginRequest.newBuilder().setEmail("bademail@mymail.com").setPassword("doggy").build();
+        lr = LoginRequest.newBuilder().setIdentifier("bademail@mymail.com").setPassword("doggy").build();
         response = api.login(lr, null);
         assertTrue("Unsuccessful login should have generic response", response instanceof GenericResponse);
         gr = (GenericResponse) response;
@@ -117,7 +120,7 @@ public class HeartsServerApiTest {
         assertNull("Current user should be null", api.getCurrentUser());
 
         // Login with bad password
-        lr = LoginRequest.newBuilder().setEmail(DEFAULT_USER).setPassword("badpassword").build();
+        lr = LoginRequest.newBuilder().setIdentifier(DEFAULT_USERNAME).setPassword("badpassword").build();
         response = api.login(lr, null);
         assertTrue("Unsuccessful login should have generic response", response instanceof GenericResponse);
         gr = (GenericResponse) response;
@@ -128,6 +131,9 @@ public class HeartsServerApiTest {
 
     @Test
     public void testSignup() {
+        final String USERNAME = "dudeman";
+        final String EMAIL = "dude@mymail.com";
+
         // Missing params
         SignupRequest sr = SignupRequest.newBuilder().build();
         MessageLite response = api.signup(sr);
@@ -138,8 +144,8 @@ public class HeartsServerApiTest {
         assertNull("Current user should be null", api.getCurrentUser());
 
         // Successful signup
-        removeUser("dude@mymail.com");
-        sr = SignupRequest.newBuilder().setEmail("dude@mymail.com").setPassword("doggy").build();
+        removeUser(EMAIL);
+        sr = SignupRequest.newBuilder().setUserName(USERNAME).setEmail(EMAIL).setPassword("doggy").build();
         response = api.signup(sr);
         assertTrue("Successful signup should have a generic response", response instanceof GenericResponse);
         gr = (GenericResponse) response;
@@ -148,7 +154,7 @@ public class HeartsServerApiTest {
         assertNull("Current user should be null", api.getCurrentUser());
 
         // Signup for user that exists already
-        sr = SignupRequest.newBuilder().setEmail("dude@mymail.com").setPassword("doggy").build();
+        sr = SignupRequest.newBuilder().setUserName(USERNAME).setEmail(EMAIL).setPassword("doggy").build();
         response = api.signup(sr);
         assertTrue("Unsuccessful signup should have generic response", response instanceof GenericResponse);
         gr = (GenericResponse) response;
@@ -156,8 +162,9 @@ public class HeartsServerApiTest {
                 GenericResponse.ResponseCode.RESOURCE_UNAVAILABLE, gr.getResponseCode());
         assertNull("Current user should be null", api.getCurrentUser());
 
-        // Signup with invalid email address
-        sr = SignupRequest.newBuilder().setEmail("dude_mymail.com").setPassword("badpassword").build();
+        // Signup with invalid email address and invalid username
+        sr = SignupRequest.newBuilder().setUserName("myspecialman").setEmail("dude_mymail.com")
+                .setPassword("badpassword").build();
         response = api.signup(sr);
         assertTrue("Unsuccessful signup should have generic response", response instanceof GenericResponse);
         gr = (GenericResponse) response;
