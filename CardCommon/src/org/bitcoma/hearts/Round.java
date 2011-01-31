@@ -94,8 +94,8 @@ public class Round {
             numOfCardsInHand = 7;
             break;
         }
-        
-        numOfCardsInDeck = (byte)(numOfCardsInHand * numOfPlayers);
+
+        numOfCardsInDeck = (byte) (numOfCardsInHand * numOfPlayers);
 
         Random rand = new Random();
 
@@ -129,10 +129,18 @@ public class Round {
         return false;
     }
 
+    public boolean hasRoundEnded() {
+        for (Long userId : userIdToHand.keySet()) {
+            if (userIdToHand.get(userId).size() != 0)
+                return false;
+        }
+        return true;
+    }
+
     public Long getLoserId() {
         return loserId;
     }
-    
+
     public Map<Long, LinkedList<Card>> getUserIdToHand() {
         return userIdToHand;
     }
