@@ -12,12 +12,13 @@ public class User extends Model {
     // See documentation about this here:
     // http://code.google.com/p/activejdbc/wiki/Validations
     static {
-        validatePresenceOf("email", "password");
+        validatePresenceOf("email", "user_name", "password");
 
         // Checks against regular expression. Doesn't check if really exists.
         validateEmailOf("email");
 
         // Make sure password is at least 6 characters long (no-whitespace)
+        validateRegexpOf("user_name", "[^\\s]{6,}");
         validateRegexpOf("password", "[^\\s]{6,}");
     }
 

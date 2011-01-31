@@ -8,7 +8,7 @@ import "GenericResponse.proto";
 
 message LoginRequest {
 
-    optional string email = 1;
+    optional string identifier = 1;
     optional string password = 2;
 
 }

@@ -6,6 +6,7 @@ import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameRequest;
 import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameResponse;
 import org.bitcoma.hearts.model.transfered.LoginProtos.LoginRequest;
 import org.bitcoma.hearts.model.transfered.LoginProtos.LoginResponse;
+import org.bitcoma.hearts.model.transfered.PlayCardProtos.PlayCardRequest;
 import org.bitcoma.hearts.model.transfered.SignupProtos.SignupRequest;
 import org.bitcoma.hearts.model.transfered.StartGameProtos.StartGameRequest;
 import org.bitcoma.heartserver.game.GameInstance;
@@ -178,16 +179,20 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
     public MessageLite login(LoginRequest request, Channel channel) {
         setCurrentUser(null);
 
-        if (request != null && request.hasEmail() && request.hasPassword()) {
+        if (request != null && request.hasIdentifier() && request.hasPassword()) {
             connectDB();
 
             MessageLite response = null;
 
-            String email = request.getEmail();
+            String identifier = request.getIdentifier();
             String password = request.getPassword();
 
             // Step 1: Look for active users with a matching email/password.
-            User user = (User) User.findFirst("email = ? and state = ?", email, User.ACTIVE);
+            User user;
+            if (identifier.contains("@"))
+                user = (User) User.findFirst("email = ? and state = ?", identifier, User.ACTIVE);
+            else
+                user = (User) User.findFirst("user_name = ? and state = ?", identifier, User.ACTIVE);
             if (user == null) {
                 // User doesn't exist so return an error.
                 response = GenericResponse.newBuilder()
@@ -224,15 +229,17 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
         MessageLite response = null;
         setCurrentUser(null);
 
-        if (request != null && request.hasEmail() && request.hasPassword()) {
+        if (request != null && request.hasUserName() && request.hasEmail() && request.hasPassword()) {
             connectDB();
 
+            String userName = request.getUserName();
             String email = request.getEmail();
             String password = request.getPassword();
 
             // Step 1: Check for user with same email.
-            User user = (User) User.findFirst("email = ?", email);
-            if (user != null) {
+            User userByEmail = (User) User.findFirst("email = ?", email);
+            User userByUserName = (User) User.findFirst("user_name = ?", userName);
+            if (userByEmail != null || userByUserName != null) {
                 // User already exists so return an error.
                 response = GenericResponse.newBuilder()
                         .setResponseCode(GenericResponse.ResponseCode.RESOURCE_UNAVAILABLE).build();
@@ -241,16 +248,17 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
                 String hashedPassword = Encryptor.instance().encrypt(password);
 
                 // Step 3: Store the user in the database.
-                user = new User();
-                user.set("email", email);
-                user.set("password", hashedPassword);
+                User newUser = new User();
+                newUser.set("user_name", userName);
+                newUser.set("email", email);
+                newUser.set("password", hashedPassword);
 
                 // TODO: @jon Needs to be modified to verify email addresses
                 // Should send email and wait for user to click link. Should
                 // start in pending state first
-                user.set("state", User.ACTIVE);
+                newUser.set("state", User.ACTIVE);
 
-                if (user.save()) {
+                if (newUser.save()) {
                     // Saved successfully to database
                     response = GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.OK).build();
                 } else {
@@ -264,6 +272,22 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
             disconnectDB();
 
             return response;
+        } else {
+            // Parameters were not as expected
+            return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.MISSING_PARAMS).build();
+        }
+    }
+
+    @Override
+    public MessageLite playCard(PlayCardRequest request) {
+
+        if (getCurrentUser() == null && getCurrentGame() == null) {
+            // Need to be logged in at this point
+            return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.UNAUTHORIZED).build();
+        } else if (request != null && request.getCardsCount() > 0) {
+
+            // TODO: @jon implement the cards going to the game logic
+            return null;
         } else {
             // Parameters were not as expected
             return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.MISSING_PARAMS).build();

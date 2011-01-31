@@ -1,3 +1,11 @@
 *.class
-CardCommon/bin
-CardGameServer/bin
+.*.swp
+
+CardCommon/bin/*
+CardCommon/bin/**/*
+CardCommon/protobuf/org/*
+CardCommon/protobuf/org/**/*
+
+CardGameServer/bin/*
+CardGameServer/bin/**/*
+
