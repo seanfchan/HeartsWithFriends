@@ -1,0 +1,40 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/logIn"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:padding="10dp">
+
+    <EditText android:id="@+id/nameOrEmail"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:hint="@string/emailOrUserNameHint"/>
+    		  
+    <EditText android:id="@+id/putPassword"
+    		  android:layout_width="fill_parent"
+    		  android:layout_height="wrap_content"
+    		  android:hint="@string/passwordHint"
+    		  android:password="true"/>   		     		 
+    		  
+    <RelativeLayout 
+    		 android:layout_width="fill_parent"
+    		 android:layout_height="?android:attr/listPreferredItemHeight">
+    		 
+    <Button android:id="@+id/buttonYes"
+    		android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:text="OK"
+    		android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"/>
+     
+    <Button android:id="@+id/buttonNo"
+    		android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:text="Cancel"
+    		android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@id/buttonYes"/>       
+    
+    </RelativeLayout>
+    
+    		  
+</LinearLayout>

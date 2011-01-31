@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, SplashActivity!</string>
+    <string name="app_name">HeartsWithFriends</string>
+<string name="emailStringHint">Your Email</string>
+<string name="nameStringHint">Your Name</string>
+<string name="passwordHint">Enter your Password</string>
+<string name="confirmPasswordHint">Re-enter Password</string>
+<string name="emailOrUserNameHint">Your username or email</string>
+</resources>
