@@ -19,6 +19,7 @@ public class InstructionsActivity extends Activity
         content.setText("\nHere are the instructions to play this game.\n\nYou can play this game for fun");
         content.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD_ITALIC);
         content.setTextSize(15);
+        content.setTextColor(Color.parseColor("#ffffff"));
         
         scrollView.setBackgroundColor(Color.parseColor("#228b22"));
         scrollView.addView(content);

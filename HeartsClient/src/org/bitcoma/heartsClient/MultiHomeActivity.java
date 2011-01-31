@@ -22,8 +22,13 @@ public class MultiHomeActivity extends Activity
         
         TextView welcomeUser = new TextView(this);
         welcomeUser.setText("Welcome, " + userName);
+        welcomeUser.setPadding(4,0,0,0);
         welcomeUser.setTextSize(25);
         mainL.addView(welcomeUser);
+        
+        TextView padding = new TextView(this);
+        padding.setText("\n");
+        mainL.addView(padding);
         
         Button playButton = new Button(this);
         playButton.setText("Play Hearts :)");
