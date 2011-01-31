@@ -26,7 +26,7 @@ public class Card {
     private static final byte NUM_RANKS = 13;
 
     public Card(byte suit, byte rank) {
-        value = (byte) (suit * NUM_RANKS + rank);
+        value = (byte) (suit * NUM_RANKS + rank - 2);
     }
 
     public Card(byte value) {
