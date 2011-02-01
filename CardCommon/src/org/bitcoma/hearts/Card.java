@@ -1,6 +1,8 @@
 package org.bitcoma.hearts;
 
-public class Card {
+import java.util.Arrays;
+
+public class Card implements Comparable<Card> {
 
 	// Suit values
     public static final byte SPADES = 0;
@@ -48,6 +50,21 @@ public class Card {
     		return 13;
     	return 0;
     }
+    
+    public static void sortCards(Card[] input)
+    {
+    	Arrays.sort(input);
+    }
 
     private byte value;
+
+	@Override
+	public int compareTo(Card o) {
+		if (this.getRank() < o.getRank())
+			return -1;
+		else if (this.getRank() == o.getRank())
+			return 0;
+		else
+			return 1;
+	}
 }
