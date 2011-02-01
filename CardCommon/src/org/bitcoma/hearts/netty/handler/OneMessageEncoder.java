@@ -1,4 +1,4 @@
-package org.bitcoma.heartserver.netty.handlers;
+package org.bitcoma.hearts.netty.handler;
 
 import org.bitcoma.hearts.model.transfered.OneMessageWrapper;
 import org.jboss.netty.channel.Channel;

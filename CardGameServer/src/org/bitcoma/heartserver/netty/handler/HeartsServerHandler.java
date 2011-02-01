@@ -1,4 +1,4 @@
-package org.bitcoma.heartserver.netty.handlers;
+package org.bitcoma.heartserver.netty.handler;
 
 import org.bitcoma.hearts.model.transfered.GenericProtos.GenericResponse;
 import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameRequest;

@@ -3,7 +3,7 @@ package org.bitcoma.heartsclient;
 import static org.jboss.netty.channel.Channels.pipeline;
 
 import org.bitcoma.hearts.model.transfered.OneMessageProtos;
-import org.bitcoma.heartserver.netty.handlers.OneMessageEncoder;
+import org.bitcoma.hearts.netty.handler.OneMessageEncoder;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;

@@ -13,11 +13,15 @@
             </intent-filter>
         </activity>
 
-    <activity android:name="AppHomeActivity" android:label="AppHome" android:theme="@android:style/Theme.NoTitleBar"></activity>
-<activity android:name="AuthActivity" android:label="Authentication" android:theme="@android:style/Theme.NoTitleBar"></activity>
-<activity android:name="InstructionsActivity" android:label="Instructions" android:theme="@android:style/Theme.NoTitleBar"></activity>
-<activity android:name="MultiHomeActivity" android:label="MultiPlayer" android:theme="@android:style/Theme.NoTitleBar"></activity>
-</application>
+	    <activity android:name="AppHomeActivity" android:label="AppHome" android:theme="@android:style/Theme.NoTitleBar"></activity>
+		<activity android:name="AuthActivity" android:label="Authentication" android:theme="@android:style/Theme.NoTitleBar"></activity>
+		<activity android:name="InstructionsActivity" android:label="Instructions" android:theme="@android:style/Theme.NoTitleBar"></activity>
+		<activity android:name="MultiHomeActivity" android:label="MultiPlayer" android:theme="@android:style/Theme.NoTitleBar"></activity>
+	
+
+	</application>
+	
+	<uses-permission android:name="android.permission.INTERNET" />
     <uses-sdk android:minSdkVersion="7" />
 
 </manifest> 

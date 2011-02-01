@@ -9,3 +9,5 @@ CardCommon/protobuf/org/**/*
 CardGameServer/bin/*
 CardGameServer/bin/**/*
 
+HeartsClient/bin/*
+HeartsClient/bin/**/*
