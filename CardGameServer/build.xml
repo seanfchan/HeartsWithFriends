@@ -2,21 +2,21 @@
 <project name="Simple ActiveJDBC Example" default="instrument">
 
     <property name="target" value="${basedir}/bin"/>
-
+	<property name="commondir" value="${basedir}/../CardCommon"/>
+	
     <path id="run_classpath">
         <pathelement location="${target}"/>
         <fileset dir="lib">
             <include name="*.jar"/>
         </fileset>
+    	<fileset dir="${commondir}/lib">
+            <include name="*.jar"/>
+        </fileset>
+    	<pathelement location="${commondir}/bin"/>
     </path>
 
     <path id="build_classpath">
         <path refid="run_classpath"/>
-    	<!--
-        <fileset dir="build_time_libs">
-            <include name="*.jar"/>
-        </fileset>
-        -->
     </path>
 
     <target name="clean">
