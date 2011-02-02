@@ -101,8 +101,10 @@ public class Round {
 
         int swapIndex = 0;
         Card tempCard = null;
-        for (byte i = 0; i < numOfCardsInDeck; ++i) {
-            swapIndex = (byte) (rand.nextInt() % numOfCardsInDeck);
+        System.out.println(numOfCardsInDeck);
+        for (byte i = (byte) (numOfCardsInDeck - 1); i > 0 ; --i) {
+            swapIndex = (byte) (rand.nextInt(i) % numOfCardsInDeck);
+            System.out.println(swapIndex);
             tempCard = deck.set(swapIndex, deck.get(i));
             deck.set(i, tempCard);
         }
@@ -113,7 +115,7 @@ public class Round {
     public void deal(LinkedList<Card> deck) {
         int start = 0;
         for (Long userId : userIdToHand.keySet()) {
-            userIdToHand.get(userId).addAll(deck.subList(start, numOfCardsInHand));
+            userIdToHand.get(userId).addAll(deck.subList(start, start + numOfCardsInHand));
             start += numOfCardsInHand;
         }
     }
