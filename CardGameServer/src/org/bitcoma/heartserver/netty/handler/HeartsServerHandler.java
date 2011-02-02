@@ -4,6 +4,7 @@ import org.bitcoma.hearts.model.transfered.GenericProtos.GenericResponse;
 import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameRequest;
 import org.bitcoma.hearts.model.transfered.LoginProtos.LoginRequest;
 import org.bitcoma.hearts.model.transfered.OneMessageProtos.OneMessage;
+import org.bitcoma.hearts.model.transfered.OneMessageWrapper;
 import org.bitcoma.hearts.model.transfered.PlayCardProtos.PlayCardRequest;
 import org.bitcoma.hearts.model.transfered.SignupProtos.SignupRequest;
 import org.bitcoma.hearts.model.transfered.StartGameProtos.StartGameRequest;
@@ -34,21 +35,23 @@ public class HeartsServerHandler extends SimpleChannelHandler {
             logger.info("Server: Join Request seen");
             JoinGameRequest joinRequest = msg.getJoinGameRequest();
             response = api.joinGame(joinRequest);
-            e.getChannel().write(response);
+            // Write response to channel with matching message id
+            e.getChannel().write(new OneMessageWrapper(msg.getMessageId(), response));
             break;
         case LOGIN_REQUEST:
             logger.info("Server: Login Request seen");
             LoginRequest loginRequest = msg.getLoginRequest();
             response = api.login(loginRequest, e.getChannel());
-            e.getChannel().write(response);
+            // Write response to channel with matching message id
+            e.getChannel().write(new OneMessageWrapper(msg.getMessageId(), response));
             break;
         case SIGNUP_REQUEST:
             logger.info("Server: Signup Request seen");
             SignupRequest signupRequest = msg.getSignupRequest();
 
-            // Write the response to the channel
             response = api.signup(signupRequest);
-            e.getChannel().write(response);
+            // Write response to channel with matching message id
+            e.getChannel().write(new OneMessageWrapper(msg.getMessageId(), response));
             break;
 
         case START_GAME_REQUEST:
@@ -56,7 +59,8 @@ public class HeartsServerHandler extends SimpleChannelHandler {
             StartGameRequest startGameRequest = msg.getStartGameRequest();
 
             response = api.startGame(startGameRequest);
-            e.getChannel().write(response);
+            // Write response to channel with matching message id
+            e.getChannel().write(new OneMessageWrapper(msg.getMessageId(), response));
             break;
 
         case PLAY_CARD_REQUEST:
@@ -64,7 +68,8 @@ public class HeartsServerHandler extends SimpleChannelHandler {
             PlayCardRequest playCardRequest = msg.getPlayCardRequest();
 
             response = api.playCard(playCardRequest);
-            e.getChannel().write(response);
+            // Write response to channel with matching message id
+            e.getChannel().write(new OneMessageWrapper(msg.getMessageId(), response));
             break;
 
         // NOTE: Currently not supported as this functionality is not
@@ -85,9 +90,10 @@ public class HeartsServerHandler extends SimpleChannelHandler {
         // Unrecognized messages.
         default:
             logger.info("Server: Unrecognized/unexpected message seen");
-            GenericResponse genericResponse3 = GenericResponse.newBuilder()
+            GenericResponse genericResponse = GenericResponse.newBuilder()
                     .setResponseCode(GenericResponse.ResponseCode.UNEXPECTED_REQUEST).build();
-            e.getChannel().write(genericResponse3);
+            // Write response to channel with matching message id
+            e.getChannel().write(new OneMessageWrapper(msg.getMessageId(), genericResponse));
             break;
         }
     }

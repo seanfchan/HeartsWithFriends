@@ -32,22 +32,26 @@ message OneMessage {
     START_GAME_RESPONSE       = 14;
   }
 
+  // Identifier for message. Responses will have same message_id
+  // as the original request.
+  required uint32 message_id = 1;
+
   // Identifies which field is filled in.
-  required Type type = 1;
+  required Type type = 2;
 
   // One of the following will be filled in.
-  optional LoginRequest login_request                      = 2;
-  optional SignupRequest signup_request                    = 3;
-  optional JoinGameRequest join_game_request               = 4;
-  optional GenericResponse generic_response                = 5;
-  optional FindGamesRequest find_games_request             = 6;
-  optional FindGamesResponse find_games_response           = 7;
-  optional FindGameRoomsRequest find_game_rooms_request    = 8;
-  optional FindGameRoomsResponse find_game_rooms_response  = 9;
-  optional ResetPasswordRequest reset_password_request     = 10;
-  optional LoginResponse login_response                    = 11;
-  optional PlayCardRequest play_card_request               = 12;
-  optional JoinGameResponse join_game_response             = 13;
-  optional StartGameRequest start_game_request             = 14;
-  optional StartGameResponse start_game_response           = 15;
+  optional LoginRequest login_request                      = 3;
+  optional SignupRequest signup_request                    = 4;
+  optional JoinGameRequest join_game_request               = 5;
+  optional GenericResponse generic_response                = 6;
+  optional FindGamesRequest find_games_request             = 7;
+  optional FindGamesResponse find_games_response           = 8;
+  optional FindGameRoomsRequest find_game_rooms_request    = 9;
+  optional FindGameRoomsResponse find_game_rooms_response  = 10;
+  optional ResetPasswordRequest reset_password_request     = 11;
+  optional LoginResponse login_response                    = 12;
+  optional PlayCardRequest play_card_request               = 13;
+  optional JoinGameResponse join_game_response             = 14;
+  optional StartGameRequest start_game_request             = 15;
+  optional StartGameResponse start_game_response           = 16;
 }

@@ -1,11 +1,12 @@
 package org.bitcoma.heartsClient.netty;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.bitcoma.hearts.model.transfered.OneMessageProtos.OneMessage;
+import org.bitcoma.hearts.model.transfered.OneMessageWrapper;
 import org.bitcoma.heartsClient.HeartsProtoHandler;
 import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.ExceptionEvent;
@@ -18,19 +19,30 @@ public class HeartsClientHandler extends SimpleChannelUpstreamHandler {
 
     private List<HeartsProtoHandler> handlers = null;
     private Channel channel;
+    private int messageId = 0;
+    private HashMap<Integer, MessageLite> pendingRequests;
 
     /**
      * Creates a client-side handler.
      */
     public HeartsClientHandler(List<HeartsProtoHandler> handlers) {
         this.handlers = handlers;
+        pendingRequests = new HashMap<Integer, MessageLite>();
     }
 
+    // Note: synchronized at the NettyThread level
     public boolean writeMessage(MessageLite msg) {
         if (channel == null || msg == null)
             return false;
         else {
-            ChannelFuture future = channel.write(msg);
+            ++messageId;
+
+            synchronized (pendingRequests) {
+                pendingRequests.put(messageId, msg);
+            }
+
+            OneMessageWrapper wrapper = new OneMessageWrapper(messageId, msg);
+            channel.write(wrapper);
             return true;
         }
     }
@@ -68,8 +80,14 @@ public class HeartsClientHandler extends SimpleChannelUpstreamHandler {
             break;
         case LOGIN_RESPONSE:
             if (msg.hasLoginResponse()) {
+
+                MessageLite origRequest;
+                synchronized (pendingRequests) {
+                    origRequest = pendingRequests.remove(msg.getMessageId());
+                }
+
                 for (HeartsProtoHandler handler : handlers) {
-                    handler.handleLoginResponse(msg.getLoginResponse());
+                    handler.handleLoginResponse(msg.getLoginResponse(), origRequest);
                 }
             }
             break;
@@ -89,8 +107,14 @@ public class HeartsClientHandler extends SimpleChannelUpstreamHandler {
             break;
         case FIND_GAMES_RESPONSE:
             if (msg.hasFindGamesResponse()) {
+
+                MessageLite origRequest;
+                synchronized (pendingRequests) {
+                    origRequest = pendingRequests.remove(msg.getMessageId());
+                }
+
                 for (HeartsProtoHandler handler : handlers) {
-                    handler.handleFindGamesResponse(msg.getFindGamesResponse());
+                    handler.handleFindGamesResponse(msg.getFindGamesResponse(), origRequest);
                 }
             }
             break;
@@ -103,15 +127,27 @@ public class HeartsClientHandler extends SimpleChannelUpstreamHandler {
             break;
         case FIND_GAME_ROOMS_RESPONSE:
             if (msg.hasFindGameRoomsResponse()) {
+
+                MessageLite origRequest;
+                synchronized (pendingRequests) {
+                    origRequest = pendingRequests.remove(msg.getMessageId());
+                }
+
                 for (HeartsProtoHandler handler : handlers) {
-                    handler.handleFindGameRoomsResponse(msg.getFindGameRoomsResponse());
+                    handler.handleFindGameRoomsResponse(msg.getFindGameRoomsResponse(), origRequest);
                 }
             }
             break;
         case GENERIC_RESPONSE:
             if (msg.hasGenericResponse()) {
+
+                MessageLite origRequest;
+                synchronized (pendingRequests) {
+                    origRequest = pendingRequests.remove(msg.getMessageId());
+                }
+
                 for (HeartsProtoHandler handler : handlers) {
-                    handler.handleGenericResponse(msg.getGenericResponse());
+                    handler.handleGenericResponse(msg.getGenericResponse(), origRequest);
                 }
             }
             break;

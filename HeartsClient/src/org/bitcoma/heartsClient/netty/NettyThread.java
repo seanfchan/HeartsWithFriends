@@ -54,7 +54,7 @@ public class NettyThread extends Thread {
      *            Message to write to the server
      * @return true if write was successful, false otherwise
      */
-    public boolean writeMessage(MessageLite msg) {
+    public synchronized boolean writeMessage(MessageLite msg) {
         if (clientHandler == null)
             return false;
         return clientHandler.writeMessage(msg);
@@ -100,7 +100,7 @@ public class NettyThread extends Thread {
 
         clientHandler = writeChannel.getPipeline().get(HeartsClientHandler.class);
 
-        // Wait until the channel closes. To make sure responses are seen.
+        // Wait until the channel closes.
         future.getChannel().getCloseFuture().awaitUninterruptibly();
 
         // Shut down thread pools to exit.

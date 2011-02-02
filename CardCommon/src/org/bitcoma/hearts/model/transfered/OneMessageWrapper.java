@@ -18,54 +18,82 @@ import org.bitcoma.hearts.model.transfered.StartGameProtos.StartGameResponse;
 
 public class OneMessageWrapper {
 
+    private int messageId;
+    private Object data;
+
+    public OneMessageWrapper(int messageId, Object data) {
+        setMessageId(messageId);
+        setData(data);
+    }
+
+    public int getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(int messageId) {
+        this.messageId = messageId;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
+
     // Takes an object and wraps in the OneMessage union for sending over the
     // wire. Placed here as client and server will need this functionality.
-    public static Object wrapMessage(Object msg) {
-        if (msg instanceof FindGameRoomsRequest) {
-            return OneMessage.newBuilder().setType(OneMessage.Type.FIND_GAME_ROOMS_REQUEST)
-                    .setFindGameRoomsRequest((FindGameRoomsRequest) msg).build();
-        } else if (msg instanceof FindGameRoomsResponse) {
-            return OneMessage.newBuilder().setType(OneMessage.Type.FIND_GAME_ROOMS_RESPONSE)
-                    .setFindGameRoomsResponse((FindGameRoomsResponse) msg).build();
-        } else if (msg instanceof FindGamesRequest) {
-            return OneMessage.newBuilder().setType(OneMessage.Type.FIND_GAMES_REQUEST)
-                    .setFindGamesRequest((FindGamesRequest) msg).build();
-        } else if (msg instanceof FindGamesResponse) {
-            return OneMessage.newBuilder().setType(OneMessage.Type.FIND_GAMES_RESPONSE)
-                    .setFindGamesResponse((FindGamesResponse) msg).build();
-        } else if (msg instanceof JoinGameRequest) {
-            return OneMessage.newBuilder().setType(OneMessage.Type.JOIN_GAME_REQUEST)
-                    .setJoinGameRequest((JoinGameRequest) msg).build();
-        } else if (msg instanceof JoinGameResponse) {
-            return OneMessage.newBuilder().setType(OneMessage.Type.JOIN_GAME_RESPONSE)
-                    .setJoinGameResponse((JoinGameResponse) msg).build();
-        } else if (msg instanceof StartGameRequest) {
-            return OneMessage.newBuilder().setType(OneMessage.Type.START_GAME_REQUEST)
-                    .setStartGameRequest((StartGameRequest) msg).build();
-        } else if (msg instanceof StartGameResponse) {
-            return OneMessage.newBuilder().setType(OneMessage.Type.START_GAME_RESPONSE)
-                    .setStartGameResponse((StartGameResponse) msg).build();
-        } else if (msg instanceof LoginRequest) {
-            return OneMessage.newBuilder().setType(OneMessage.Type.LOGIN_REQUEST).setLoginRequest((LoginRequest) msg)
-                    .build();
-        } else if (msg instanceof SignupRequest) {
-            return OneMessage.newBuilder().setType(OneMessage.Type.SIGNUP_REQUEST)
-                    .setSignupRequest((SignupRequest) msg).build();
-        } else if (msg instanceof GenericResponse) {
-            return OneMessage.newBuilder().setType(OneMessage.Type.GENERIC_RESPONSE)
-                    .setGenericResponse((GenericResponse) msg).build();
-        } else if (msg instanceof ResetPasswordRequest) {
-            return OneMessage.newBuilder().setType(OneMessage.Type.RESET_PASSWORD_REQUEST)
-                    .setResetPasswordRequest((ResetPasswordRequest) msg).build();
-        } else if (msg instanceof LoginResponse) {
-            return OneMessage.newBuilder().setType(OneMessage.Type.LOGIN_RESPONSE)
-                    .setLoginResponse((LoginResponse) msg).build();
-        } else if (msg instanceof PlayCardRequest) {
-            return OneMessage.newBuilder().setType(OneMessage.Type.PLAY_CARD_REQUEST)
-                    .setPlayCardRequest((PlayCardRequest) msg).build();
-        } else {
-            return null;
+    public static Object wrapMessage(Object message) {
+        if (message instanceof OneMessageWrapper) {
+            OneMessageWrapper wrapper = (OneMessageWrapper) message;
+            Object msg = wrapper.getData();
+            OneMessage.Builder builder = OneMessage.newBuilder().setMessageId(wrapper.getMessageId());
+
+            if (msg instanceof FindGameRoomsRequest) {
+                return builder.setType(OneMessage.Type.FIND_GAME_ROOMS_REQUEST)
+                        .setFindGameRoomsRequest((FindGameRoomsRequest) msg).build();
+            } else if (msg instanceof FindGameRoomsResponse) {
+                return builder.setType(OneMessage.Type.FIND_GAME_ROOMS_RESPONSE)
+                        .setFindGameRoomsResponse((FindGameRoomsResponse) msg).build();
+            } else if (msg instanceof FindGamesRequest) {
+                return builder.setType(OneMessage.Type.FIND_GAMES_REQUEST).setFindGamesRequest((FindGamesRequest) msg)
+                        .build();
+            } else if (msg instanceof FindGamesResponse) {
+                return builder.setType(OneMessage.Type.FIND_GAMES_RESPONSE)
+                        .setFindGamesResponse((FindGamesResponse) msg).build();
+            } else if (msg instanceof JoinGameRequest) {
+                return builder.setType(OneMessage.Type.JOIN_GAME_REQUEST).setJoinGameRequest((JoinGameRequest) msg)
+                        .build();
+            } else if (msg instanceof JoinGameResponse) {
+                return builder.setType(OneMessage.Type.JOIN_GAME_RESPONSE).setJoinGameResponse((JoinGameResponse) msg)
+                        .build();
+            } else if (msg instanceof StartGameRequest) {
+                return builder.setType(OneMessage.Type.START_GAME_REQUEST).setStartGameRequest((StartGameRequest) msg)
+                        .build();
+            } else if (msg instanceof StartGameResponse) {
+                return builder.setType(OneMessage.Type.START_GAME_RESPONSE)
+                        .setStartGameResponse((StartGameResponse) msg).build();
+            } else if (msg instanceof LoginRequest) {
+                return builder.setType(OneMessage.Type.LOGIN_REQUEST).setLoginRequest((LoginRequest) msg).build();
+            } else if (msg instanceof SignupRequest) {
+                return builder.setType(OneMessage.Type.SIGNUP_REQUEST).setSignupRequest((SignupRequest) msg).build();
+            } else if (msg instanceof GenericResponse) {
+                return builder.setType(OneMessage.Type.GENERIC_RESPONSE).setGenericResponse((GenericResponse) msg)
+                        .build();
+            } else if (msg instanceof ResetPasswordRequest) {
+                return builder.setType(OneMessage.Type.RESET_PASSWORD_REQUEST)
+                        .setResetPasswordRequest((ResetPasswordRequest) msg).build();
+            } else if (msg instanceof LoginResponse) {
+                return builder.setType(OneMessage.Type.LOGIN_RESPONSE).setLoginResponse((LoginResponse) msg).build();
+            } else if (msg instanceof PlayCardRequest) {
+                return builder.setType(OneMessage.Type.PLAY_CARD_REQUEST).setPlayCardRequest((PlayCardRequest) msg)
+                        .build();
+            } else {
+                return null;
+            }
         }
+        return null;
     }
 
 }

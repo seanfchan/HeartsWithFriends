@@ -32,8 +32,6 @@ public class AuthActivity extends Activity {
     Long userId;
 
     private static String TAG = "AuthActivity";
-    private boolean bPendingSignupRequest = false;
-    private boolean bPendingLoginRequest = false;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +87,6 @@ public class AuthActivity extends Activity {
                     signUpDialog.dismiss();
 
                     // TODO @madiha: send the information to the server here.
-                    bPendingSignupRequest = true;
                     SignupRequest request = SignupRequest.newBuilder().setEmail(emailAddress).setUserName(userName)
                             .setPassword(password1).build();
                     NettyThread.getInstance().writeMessage(request);
@@ -149,7 +146,6 @@ public class AuthActivity extends Activity {
                 logInDialog.dismiss();
 
                 // TODO @madiha: send the information to the server here.
-                bPendingLoginRequest = true;
                 LoginRequest request = LoginRequest.newBuilder().setIdentifier(userName).setPassword(password).build();
                 NettyThread.getInstance().writeMessage(request);
             }
@@ -200,17 +196,15 @@ public class AuthActivity extends Activity {
      */
     private HeartsProtoHandler mHandler = new HeartsProtoHandler() {
         @Override
-        public void handleGenericResponse(GenericResponse msg) {
+        public void handleGenericResponse(GenericResponse msg, MessageLite origRequest) {
 
             Log.i(TAG, "Received Generic Response");
 
-            if (bPendingSignupRequest) {
-                bPendingSignupRequest = false;
+            if (origRequest instanceof SignupRequest) {
 
                 switch (msg.getResponseCode()) {
                 case OK:
                     // HACK: @jon We will login after a signup
-                    bPendingLoginRequest = true;
                     LoginRequest request = LoginRequest.newBuilder().setIdentifier(userName).setPassword(password)
                             .build();
                     NettyThread.getInstance().writeMessage(request);
@@ -235,8 +229,7 @@ public class AuthActivity extends Activity {
                         signUpDialog.show();
                     }
                 });
-            } else if (bPendingLoginRequest) {
-                bPendingLoginRequest = false;
+            } else if (origRequest instanceof LoginRequest) {
 
                 switch (msg.getResponseCode()) {
                 case UNAUTHORIZED:
@@ -263,13 +256,11 @@ public class AuthActivity extends Activity {
         }
 
         @Override
-        public void handleLoginResponse(LoginResponse msg) {
+        public void handleLoginResponse(LoginResponse msg, MessageLite origRequest) {
             Log.i(TAG, "Received Login Response");
-            if (bPendingSignupRequest) {
-                bPendingSignupRequest = false;
+            if (origRequest instanceof SignupRequest) {
                 // Should not happen
-            } else if (bPendingLoginRequest) {
-                bPendingLoginRequest = false;
+            } else if (origRequest instanceof LoginRequest) {
                 // Did we successfully login?
                 if (msg.hasUserId()) {
                     userId = msg.getUserId();

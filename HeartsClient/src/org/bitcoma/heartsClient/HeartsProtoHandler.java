@@ -66,11 +66,11 @@ public abstract class HeartsProtoHandler {
         defaultHandler(request);
     }
 
-    public void handleLoginResponse(LoginResponse response) {
+    public void handleLoginResponse(LoginResponse response, MessageLite origRequest) {
         defaultHandler(response);
     }
 
-    public void handleGenericResponse(GenericResponse response) {
+    public void handleGenericResponse(GenericResponse response, MessageLite origRequest) {
         defaultHandler(response);
     }
 
@@ -78,7 +78,7 @@ public abstract class HeartsProtoHandler {
         defaultHandler(request);
     }
 
-    public void handleJoinGameResponse(JoinGameResponse response) {
+    public void handleJoinGameResponse(JoinGameResponse response, MessageLite origRequest) {
         defaultHandler(response);
     }
 
@@ -94,7 +94,7 @@ public abstract class HeartsProtoHandler {
         defaultHandler(request);
     }
 
-    public void handleStartGameResponse(StartGameResponse response) {
+    public void handleStartGameResponse(StartGameResponse response, MessageLite origRequest) {
         defaultHandler(response);
     }
 
@@ -102,7 +102,7 @@ public abstract class HeartsProtoHandler {
         defaultHandler(request);
     }
 
-    public void handleFindGamesResponse(FindGamesResponse response) {
+    public void handleFindGamesResponse(FindGamesResponse response, MessageLite origRequest) {
         defaultHandler(response);
     }
 
@@ -110,7 +110,7 @@ public abstract class HeartsProtoHandler {
         defaultHandler(request);
     }
 
-    public void handleFindGameRoomsResponse(FindGameRoomsResponse response) {
+    public void handleFindGameRoomsResponse(FindGameRoomsResponse response, MessageLite origRequest) {
         defaultHandler(response);
     }
 
