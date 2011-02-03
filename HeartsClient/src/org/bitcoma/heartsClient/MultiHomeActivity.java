@@ -84,7 +84,7 @@ public class MultiHomeActivity extends Activity {
                 @Override
                 public void onCancel(DialogInterface dialog) {
                     // Remove them from a game as they have cancelled the
-                    // request.
+                    // request. Strictly for server.
                     // TODO: @madiha remove any state for joining a game if we
                     // have any
 
