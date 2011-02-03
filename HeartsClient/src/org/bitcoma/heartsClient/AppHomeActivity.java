@@ -23,7 +23,6 @@ public class AppHomeActivity extends Activity {
             public void onClick(View arg0) {
                 Intent authIntent = new Intent(AppHomeActivity.this, AuthActivity.class);
                 startActivity(authIntent);
-
             }
 
         });

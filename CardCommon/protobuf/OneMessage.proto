@@ -13,6 +13,7 @@ import "FindGameRooms.proto";
 import "ResetPassword.proto";
 import "PlayCard.proto";
 import "StartGame.proto";
+import "LeaveGame.proto";
 
 message OneMessage {
   enum Type { 
@@ -30,6 +31,7 @@ message OneMessage {
     JOIN_GAME_RESPONSE        = 12;
     START_GAME_REQUEST        = 13;
     START_GAME_RESPONSE       = 14;
+    LEAVE_GAME_REQUEST        = 15;
   }
 
   // Identifier for message. Responses will have same message_id
@@ -54,4 +56,5 @@ message OneMessage {
   optional JoinGameResponse join_game_response             = 14;
   optional StartGameRequest start_game_request             = 15;
   optional StartGameResponse start_game_response           = 16;
+  optional LeaveGameRequest leave_game_reqeuest            = 17;
 }

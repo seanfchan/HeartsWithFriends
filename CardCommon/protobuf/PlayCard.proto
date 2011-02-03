@@ -9,3 +9,20 @@ import "Card.proto";
 message PlayCardRequest {
 	repeated Card cards = 1;
 }
+
+message PlayCardResponse {
+
+	enum TurnType {
+		PASSING = 0;
+		ONE_DOWN = 1;
+	}
+
+	// User that played the card
+	optional uint64 src_user_id = 1;
+	
+	optional TurnType turn_type = 2;
+
+	// Cards to be played or received.
+	repeated Card cards = 3;
+	
+}

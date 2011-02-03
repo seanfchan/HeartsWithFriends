@@ -2,6 +2,7 @@ package org.bitcoma.heartserver.netty.handler;
 
 import org.bitcoma.hearts.model.transfered.GenericProtos.GenericResponse;
 import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameRequest;
+import org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest;
 import org.bitcoma.hearts.model.transfered.LoginProtos.LoginRequest;
 import org.bitcoma.hearts.model.transfered.OneMessageProtos.OneMessage;
 import org.bitcoma.hearts.model.transfered.OneMessageWrapper;
@@ -32,12 +33,21 @@ public class HeartsServerHandler extends SimpleChannelHandler {
 
         switch (msg.getType()) {
         case JOIN_GAME_REQUEST:
-            logger.info("Server: Join Request seen");
+            logger.info("Server: Join Game Request seen");
             JoinGameRequest joinRequest = msg.getJoinGameRequest();
             response = api.joinGame(joinRequest);
             // Write response to channel with matching message id
             e.getChannel().write(new OneMessageWrapper(msg.getMessageId(), response));
             break;
+
+        case LEAVE_GAME_REQUEST:
+            logger.info("Server: Leave Game Request seen");
+            LeaveGameRequest leaveRequest = msg.getLeaveGameReqeuest();
+            response = api.leaveGame(leaveRequest);
+            // Write response to channel with matching message id
+            e.getChannel().write(new OneMessageWrapper(msg.getMessageId(), response));
+            break;
+
         case LOGIN_REQUEST:
             logger.info("Server: Login Request seen");
             LoginRequest loginRequest = msg.getLoginRequest();
@@ -45,6 +55,7 @@ public class HeartsServerHandler extends SimpleChannelHandler {
             // Write response to channel with matching message id
             e.getChannel().write(new OneMessageWrapper(msg.getMessageId(), response));
             break;
+
         case SIGNUP_REQUEST:
             logger.info("Server: Signup Request seen");
             SignupRequest signupRequest = msg.getSignupRequest();

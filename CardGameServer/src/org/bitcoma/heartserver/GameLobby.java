@@ -3,7 +3,9 @@ package org.bitcoma.heartserver;
 import javolution.util.FastMap;
 
 import org.bitcoma.hearts.model.transfered.GameProtos.GameInfo;
+import org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo;
 import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameResponse;
+import org.bitcoma.hearts.model.transfered.OneMessageWrapper;
 import org.bitcoma.heartserver.game.GameInstance;
 import org.bitcoma.heartserver.game.GameInstance.State;
 import org.bitcoma.heartserver.model.database.User;
@@ -37,11 +39,17 @@ public class GameLobby {
                         .getNext()) {
                     Channel writePipe = ServerState.userIdToChannelMap.get(temp.getKey());
 
-                    GameInfo tempGameInfo = GameInfo.newBuilder()
-                            .setCurrentNumberOfPlayers(game.getCurrentNumPlayers()).setGameId(game.getId())
-                            .setMaxNumberOfPlayers(game.getMaxPlayers()).build();
-
-                    writePipe.write(JoinGameResponse.newBuilder().setGameInfo(tempGameInfo).build());
+                    GameInfo.Builder tempGameInfo = GameInfo.newBuilder().setGameId(game.getId())
+                            .setMaxNumberOfPlayers(game.getMaxPlayers());
+                    // Construct players to send to the client
+                    for (User u : game.getUserIdToUserMap().values()) {
+                        tempGameInfo.addPlayers(PlayerInfo.newBuilder().setUserId(u.getLongId())
+                                .setUserName(u.getString("user_name")).build());
+                    }
+                    // NOTE: message id is zero because we are sending to other
+                    // clients.
+                    writePipe.write(new OneMessageWrapper(0, JoinGameResponse.newBuilder().setGameInfo(tempGameInfo)
+                            .build()));
                 }
 
                 // Need to switch from waiting to active if game full

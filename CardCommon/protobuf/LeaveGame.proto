@@ -1,0 +1,11 @@
+package hearts;
+
+option java_package = "org.bitcoma.hearts.model.transfered";
+option java_outer_classname = "LeaveGameProtos";
+option optimize_for = SPEED;
+
+message LeaveGameRequest {
+
+    optional uint64 game_id = 1;
+
+}
