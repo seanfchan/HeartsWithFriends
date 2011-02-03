@@ -1,6 +1,7 @@
 package org.bitcoma.heartserver;
 
 import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameRequest;
+import org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest;
 import org.bitcoma.hearts.model.transfered.LoginProtos.LoginRequest;
 import org.bitcoma.hearts.model.transfered.PlayCardProtos.PlayCardRequest;
 import org.bitcoma.hearts.model.transfered.SignupProtos.SignupRequest;
@@ -16,6 +17,8 @@ public interface IHeartsServerApi {
     MessageLite signup(SignupRequest request);
 
     MessageLite joinGame(JoinGameRequest request);
+
+    MessageLite leaveGame(LeaveGameRequest request);
 
     MessageLite startGame(StartGameRequest request);
 

@@ -42,6 +42,7 @@ public final class R {
         public static final int confirmPasswordHint=0x7f040005;
         public static final int emailOrUserNameHint=0x7f040006;
         public static final int emailStringHint=0x7f040002;
+        public static final int findGame=0x7f040007;
         public static final int hello=0x7f040000;
         public static final int nameStringHint=0x7f040003;
         public static final int passwordHint=0x7f040004;

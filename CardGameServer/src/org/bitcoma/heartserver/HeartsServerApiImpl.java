@@ -1,9 +1,11 @@
 package org.bitcoma.heartserver;
 
 import org.bitcoma.hearts.model.transfered.GameProtos.GameInfo;
+import org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo;
 import org.bitcoma.hearts.model.transfered.GenericProtos.GenericResponse;
 import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameRequest;
 import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameResponse;
+import org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest;
 import org.bitcoma.hearts.model.transfered.LoginProtos.LoginRequest;
 import org.bitcoma.hearts.model.transfered.LoginProtos.LoginResponse;
 import org.bitcoma.hearts.model.transfered.PlayCardProtos.PlayCardRequest;
@@ -44,7 +46,7 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
     }
 
     private void setCurrentUser(User user) {
-        if (user == null && currentUser != null) {
+        if (user != getCurrentUser()) {
             ServerState.userIdToChannelMap.remove(currentUser.getLongId());
 
             setCurrentGame(null);
@@ -62,7 +64,7 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
     }
 
     private void setCurrentGame(GameInstance game) {
-        if (game == null && currentGame != null) {
+        if (game != getCurrentGame()) {
             if (getCurrentUser() != null)
                 currentGame.removePlayer(getCurrentUser());
         }
@@ -124,11 +126,40 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
                 }
             }
 
-            GameInfo tempGameInfo = GameInfo.newBuilder()
-                    .setCurrentNumberOfPlayers(getCurrentGame().getCurrentNumPlayers())
-                    .setGameId(getCurrentGame().getId()).setMaxNumberOfPlayers(getCurrentGame().getMaxPlayers())
-                    .build();
+            GameInfo.Builder tempGameInfo = GameInfo.newBuilder().setGameId(getCurrentGame().getId())
+                    .setMaxNumberOfPlayers(getCurrentGame().getMaxPlayers());
+            // Construct players to send to the client
+            for (User user : getCurrentGame().getUserIdToUserMap().values()) {
+                tempGameInfo.addPlayers(PlayerInfo.newBuilder().setUserId(user.getLongId())
+                        .setUserName(user.getString("user_name")).build());
+            }
+
             return JoinGameResponse.newBuilder().setGameInfo(tempGameInfo).build();
+
+        } else {
+            // Parameters were not as expected
+            return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.MISSING_PARAMS).build();
+        }
+    }
+
+    @Override
+    public MessageLite leaveGame(LeaveGameRequest request) {
+
+        if (getCurrentUser() == null) {
+            // Need to be logged in at this point
+            return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.UNAUTHORIZED).build();
+        } else if (request != null && request.hasGameId()) {
+
+            if (getCurrentGame() == null) {
+                // Not in a game so this is unexpected.
+                return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.UNEXPECTED_REQUEST)
+                        .build();
+            }
+
+            // Remove the user from the game they are in.
+            setCurrentGame(null);
+
+            return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.OK).build();
 
         } else {
             // Parameters were not as expected
@@ -139,7 +170,7 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
     @Override
     public MessageLite startGame(StartGameRequest request) {
 
-        if (getCurrentUser() == null && getCurrentGame() == null) {
+        if (getCurrentUser() == null || getCurrentGame() == null) {
             // Need to be logged in at this point
             return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.UNAUTHORIZED).build();
         } else if (request != null && request.hasGameId()) {
@@ -281,7 +312,7 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
     @Override
     public MessageLite playCard(PlayCardRequest request) {
 
-        if (getCurrentUser() == null && getCurrentGame() == null) {
+        if (getCurrentUser() == null || getCurrentGame() == null) {
             // Need to be logged in at this point
             return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.UNAUTHORIZED).build();
         } else if (request != null && request.getCardsCount() > 0) {

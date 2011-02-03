@@ -88,6 +88,11 @@ public final class OneMessageProtos {
     boolean hasStartGameResponse();
     org.bitcoma.hearts.model.transfered.StartGameProtos.StartGameResponse getStartGameResponse();
     org.bitcoma.hearts.model.transfered.StartGameProtos.StartGameResponseOrBuilder getStartGameResponseOrBuilder();
+    
+    // optional .hearts.LeaveGameRequest leave_game_reqeuest = 17;
+    boolean hasLeaveGameReqeuest();
+    org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest getLeaveGameReqeuest();
+    org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequestOrBuilder getLeaveGameReqeuestOrBuilder();
   }
   public static final class OneMessage extends
       com.google.protobuf.GeneratedMessage
@@ -133,6 +138,7 @@ public final class OneMessageProtos {
       JOIN_GAME_RESPONSE(11, 12),
       START_GAME_REQUEST(12, 13),
       START_GAME_RESPONSE(13, 14),
+      LEAVE_GAME_REQUEST(14, 15),
       ;
       
       public static final int LOGIN_REQUEST_VALUE = 1;
@@ -149,6 +155,7 @@ public final class OneMessageProtos {
       public static final int JOIN_GAME_RESPONSE_VALUE = 12;
       public static final int START_GAME_REQUEST_VALUE = 13;
       public static final int START_GAME_RESPONSE_VALUE = 14;
+      public static final int LEAVE_GAME_REQUEST_VALUE = 15;
       
       
       public final int getNumber() { return value; }
@@ -169,6 +176,7 @@ public final class OneMessageProtos {
           case 12: return JOIN_GAME_RESPONSE;
           case 13: return START_GAME_REQUEST;
           case 14: return START_GAME_RESPONSE;
+          case 15: return LEAVE_GAME_REQUEST;
           default: return null;
         }
       }
@@ -199,7 +207,7 @@ public final class OneMessageProtos {
       }
       
       private static final Type[] VALUES = {
-        LOGIN_REQUEST, SIGNUP_REQUEST, JOIN_GAME_REQUEST, GENERIC_RESPONSE, FIND_GAMES_REQUEST, FIND_GAMES_RESPONSE, FIND_GAME_ROOMS_REQUEST, FIND_GAME_ROOMS_RESPONSE, RESET_PASSWORD_REQUEST, LOGIN_RESPONSE, PLAY_CARD_REQUEST, JOIN_GAME_RESPONSE, START_GAME_REQUEST, START_GAME_RESPONSE, 
+        LOGIN_REQUEST, SIGNUP_REQUEST, JOIN_GAME_REQUEST, GENERIC_RESPONSE, FIND_GAMES_REQUEST, FIND_GAMES_RESPONSE, FIND_GAME_ROOMS_REQUEST, FIND_GAME_ROOMS_RESPONSE, RESET_PASSWORD_REQUEST, LOGIN_RESPONSE, PLAY_CARD_REQUEST, JOIN_GAME_RESPONSE, START_GAME_REQUEST, START_GAME_RESPONSE, LEAVE_GAME_REQUEST, 
       };
       
       public static Type valueOf(
@@ -425,6 +433,19 @@ public final class OneMessageProtos {
       return startGameResponse_;
     }
     
+    // optional .hearts.LeaveGameRequest leave_game_reqeuest = 17;
+    public static final int LEAVE_GAME_REQEUEST_FIELD_NUMBER = 17;
+    private org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest leaveGameReqeuest_;
+    public boolean hasLeaveGameReqeuest() {
+      return ((bitField0_ & 0x00010000) == 0x00010000);
+    }
+    public org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest getLeaveGameReqeuest() {
+      return leaveGameReqeuest_;
+    }
+    public org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequestOrBuilder getLeaveGameReqeuestOrBuilder() {
+      return leaveGameReqeuest_;
+    }
+    
     private void initFields() {
       messageId_ = 0;
       type_ = org.bitcoma.hearts.model.transfered.OneMessageProtos.OneMessage.Type.LOGIN_REQUEST;
@@ -442,6 +463,7 @@ public final class OneMessageProtos {
       joinGameResponse_ = org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameResponse.getDefaultInstance();
       startGameRequest_ = org.bitcoma.hearts.model.transfered.StartGameProtos.StartGameRequest.getDefaultInstance();
       startGameResponse_ = org.bitcoma.hearts.model.transfered.StartGameProtos.StartGameResponse.getDefaultInstance();
+      leaveGameReqeuest_ = org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -510,6 +532,9 @@ public final class OneMessageProtos {
       }
       if (((bitField0_ & 0x00008000) == 0x00008000)) {
         output.writeMessage(16, startGameResponse_);
+      }
+      if (((bitField0_ & 0x00010000) == 0x00010000)) {
+        output.writeMessage(17, leaveGameReqeuest_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -583,6 +608,10 @@ public final class OneMessageProtos {
       if (((bitField0_ & 0x00008000) == 0x00008000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(16, startGameResponse_);
+      }
+      if (((bitField0_ & 0x00010000) == 0x00010000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(17, leaveGameReqeuest_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -712,6 +741,7 @@ public final class OneMessageProtos {
           getJoinGameResponseFieldBuilder();
           getStartGameRequestFieldBuilder();
           getStartGameResponseFieldBuilder();
+          getLeaveGameReqeuestFieldBuilder();
         }
       }
       private static Builder create() {
@@ -808,6 +838,12 @@ public final class OneMessageProtos {
           startGameResponseBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00008000);
+        if (leaveGameReqeuestBuilder_ == null) {
+          leaveGameReqeuest_ = org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest.getDefaultInstance();
+        } else {
+          leaveGameReqeuestBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00010000);
         return this;
       }
       
@@ -966,6 +1002,14 @@ public final class OneMessageProtos {
         } else {
           result.startGameResponse_ = startGameResponseBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00010000) == 0x00010000)) {
+          to_bitField0_ |= 0x00010000;
+        }
+        if (leaveGameReqeuestBuilder_ == null) {
+          result.leaveGameReqeuest_ = leaveGameReqeuest_;
+        } else {
+          result.leaveGameReqeuest_ = leaveGameReqeuestBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1029,6 +1073,9 @@ public final class OneMessageProtos {
         }
         if (other.hasStartGameResponse()) {
           mergeStartGameResponse(other.getStartGameResponse());
+        }
+        if (other.hasLeaveGameReqeuest()) {
+          mergeLeaveGameReqeuest(other.getLeaveGameReqeuest());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -1209,6 +1256,15 @@ public final class OneMessageProtos {
               }
               input.readMessage(subBuilder, extensionRegistry);
               setStartGameResponse(subBuilder.buildPartial());
+              break;
+            }
+            case 138: {
+              org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest.Builder subBuilder = org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest.newBuilder();
+              if (hasLeaveGameReqeuest()) {
+                subBuilder.mergeFrom(getLeaveGameReqeuest());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setLeaveGameReqeuest(subBuilder.buildPartial());
               break;
             }
           }
@@ -2522,6 +2578,96 @@ public final class OneMessageProtos {
         return startGameResponseBuilder_;
       }
       
+      // optional .hearts.LeaveGameRequest leave_game_reqeuest = 17;
+      private org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest leaveGameReqeuest_ = org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest, org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest.Builder, org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequestOrBuilder> leaveGameReqeuestBuilder_;
+      public boolean hasLeaveGameReqeuest() {
+        return ((bitField0_ & 0x00010000) == 0x00010000);
+      }
+      public org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest getLeaveGameReqeuest() {
+        if (leaveGameReqeuestBuilder_ == null) {
+          return leaveGameReqeuest_;
+        } else {
+          return leaveGameReqeuestBuilder_.getMessage();
+        }
+      }
+      public Builder setLeaveGameReqeuest(org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest value) {
+        if (leaveGameReqeuestBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          leaveGameReqeuest_ = value;
+          onChanged();
+        } else {
+          leaveGameReqeuestBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00010000;
+        return this;
+      }
+      public Builder setLeaveGameReqeuest(
+          org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest.Builder builderForValue) {
+        if (leaveGameReqeuestBuilder_ == null) {
+          leaveGameReqeuest_ = builderForValue.build();
+          onChanged();
+        } else {
+          leaveGameReqeuestBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00010000;
+        return this;
+      }
+      public Builder mergeLeaveGameReqeuest(org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest value) {
+        if (leaveGameReqeuestBuilder_ == null) {
+          if (((bitField0_ & 0x00010000) == 0x00010000) &&
+              leaveGameReqeuest_ != org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest.getDefaultInstance()) {
+            leaveGameReqeuest_ =
+              org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest.newBuilder(leaveGameReqeuest_).mergeFrom(value).buildPartial();
+          } else {
+            leaveGameReqeuest_ = value;
+          }
+          onChanged();
+        } else {
+          leaveGameReqeuestBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00010000;
+        return this;
+      }
+      public Builder clearLeaveGameReqeuest() {
+        if (leaveGameReqeuestBuilder_ == null) {
+          leaveGameReqeuest_ = org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest.getDefaultInstance();
+          onChanged();
+        } else {
+          leaveGameReqeuestBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00010000);
+        return this;
+      }
+      public org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest.Builder getLeaveGameReqeuestBuilder() {
+        bitField0_ |= 0x00010000;
+        onChanged();
+        return getLeaveGameReqeuestFieldBuilder().getBuilder();
+      }
+      public org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequestOrBuilder getLeaveGameReqeuestOrBuilder() {
+        if (leaveGameReqeuestBuilder_ != null) {
+          return leaveGameReqeuestBuilder_.getMessageOrBuilder();
+        } else {
+          return leaveGameReqeuest_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest, org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest.Builder, org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequestOrBuilder> 
+          getLeaveGameReqeuestFieldBuilder() {
+        if (leaveGameReqeuestBuilder_ == null) {
+          leaveGameReqeuestBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest, org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest.Builder, org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequestOrBuilder>(
+                  leaveGameReqeuest_,
+                  getParentForChildren(),
+                  isClean());
+          leaveGameReqeuest_ = null;
+        }
+        return leaveGameReqeuestBuilder_;
+      }
+      
       // @@protoc_insertion_point(builder_scope:hearts.OneMessage)
     }
     
@@ -2551,38 +2697,41 @@ public final class OneMessageProtos {
       "\023SignupRequest.proto\032\016JoinGame.proto\032\025Ge" +
       "nericResponse.proto\032\017FindGames.proto\032\023Fi" +
       "ndGameRooms.proto\032\023ResetPassword.proto\032\016" +
-      "PlayCard.proto\032\017StartGame.proto\"\226\t\n\nOneM" +
-      "essage\022\022\n\nmessage_id\030\001 \002(\r\022%\n\004type\030\002 \002(\016" +
-      "2\027.hearts.OneMessage.Type\022+\n\rlogin_reque" +
-      "st\030\003 \001(\0132\024.hearts.LoginRequest\022-\n\016signup" +
-      "_request\030\004 \001(\0132\025.hearts.SignupRequest\0222\n" +
-      "\021join_game_request\030\005 \001(\0132\027.hearts.JoinGa",
-      "meRequest\0221\n\020generic_response\030\006 \001(\0132\027.he" +
-      "arts.GenericResponse\0224\n\022find_games_reque" +
-      "st\030\007 \001(\0132\030.hearts.FindGamesRequest\0226\n\023fi" +
-      "nd_games_response\030\010 \001(\0132\031.hearts.FindGam" +
-      "esResponse\022=\n\027find_game_rooms_request\030\t " +
-      "\001(\0132\034.hearts.FindGameRoomsRequest\022?\n\030fin" +
-      "d_game_rooms_response\030\n \001(\0132\035.hearts.Fin" +
-      "dGameRoomsResponse\022<\n\026reset_password_req" +
-      "uest\030\013 \001(\0132\034.hearts.ResetPasswordRequest" +
-      "\022-\n\016login_response\030\014 \001(\0132\025.hearts.LoginR",
-      "esponse\0222\n\021play_card_request\030\r \001(\0132\027.hea" +
-      "rts.PlayCardRequest\0224\n\022join_game_respons" +
-      "e\030\016 \001(\0132\030.hearts.JoinGameResponse\0224\n\022sta" +
-      "rt_game_request\030\017 \001(\0132\030.hearts.StartGame" +
-      "Request\0226\n\023start_game_response\030\020 \001(\0132\031.h" +
-      "earts.StartGameResponse\"\326\002\n\004Type\022\021\n\rLOGI" +
-      "N_REQUEST\020\001\022\022\n\016SIGNUP_REQUEST\020\002\022\025\n\021JOIN_" +
-      "GAME_REQUEST\020\003\022\024\n\020GENERIC_RESPONSE\020\004\022\026\n\022" +
-      "FIND_GAMES_REQUEST\020\005\022\027\n\023FIND_GAMES_RESPO" +
-      "NSE\020\006\022\033\n\027FIND_GAME_ROOMS_REQUEST\020\007\022\034\n\030FI",
-      "ND_GAME_ROOMS_RESPONSE\020\010\022\032\n\026RESET_PASSWO" +
-      "RD_REQUEST\020\t\022\022\n\016LOGIN_RESPONSE\020\n\022\025\n\021PLAY" +
-      "_CARD_REQUEST\020\013\022\026\n\022JOIN_GAME_RESPONSE\020\014\022" +
-      "\026\n\022START_GAME_REQUEST\020\r\022\027\n\023START_GAME_RE" +
-      "SPONSE\020\016B9\n#org.bitcoma.hearts.model.tra" +
-      "nsferedB\020OneMessageProtosH\001"
+      "PlayCard.proto\032\017StartGame.proto\032\017LeaveGa" +
+      "me.proto\"\345\t\n\nOneMessage\022\022\n\nmessage_id\030\001 " +
+      "\002(\r\022%\n\004type\030\002 \002(\0162\027.hearts.OneMessage.Ty" +
+      "pe\022+\n\rlogin_request\030\003 \001(\0132\024.hearts.Login" +
+      "Request\022-\n\016signup_request\030\004 \001(\0132\025.hearts" +
+      ".SignupRequest\0222\n\021join_game_request\030\005 \001(",
+      "\0132\027.hearts.JoinGameRequest\0221\n\020generic_re" +
+      "sponse\030\006 \001(\0132\027.hearts.GenericResponse\0224\n" +
+      "\022find_games_request\030\007 \001(\0132\030.hearts.FindG" +
+      "amesRequest\0226\n\023find_games_response\030\010 \001(\013" +
+      "2\031.hearts.FindGamesResponse\022=\n\027find_game" +
+      "_rooms_request\030\t \001(\0132\034.hearts.FindGameRo" +
+      "omsRequest\022?\n\030find_game_rooms_response\030\n" +
+      " \001(\0132\035.hearts.FindGameRoomsResponse\022<\n\026r" +
+      "eset_password_request\030\013 \001(\0132\034.hearts.Res" +
+      "etPasswordRequest\022-\n\016login_response\030\014 \001(",
+      "\0132\025.hearts.LoginResponse\0222\n\021play_card_re" +
+      "quest\030\r \001(\0132\027.hearts.PlayCardRequest\0224\n\022" +
+      "join_game_response\030\016 \001(\0132\030.hearts.JoinGa" +
+      "meResponse\0224\n\022start_game_request\030\017 \001(\0132\030" +
+      ".hearts.StartGameRequest\0226\n\023start_game_r" +
+      "esponse\030\020 \001(\0132\031.hearts.StartGameResponse" +
+      "\0225\n\023leave_game_reqeuest\030\021 \001(\0132\030.hearts.L" +
+      "eaveGameRequest\"\356\002\n\004Type\022\021\n\rLOGIN_REQUES" +
+      "T\020\001\022\022\n\016SIGNUP_REQUEST\020\002\022\025\n\021JOIN_GAME_REQ" +
+      "UEST\020\003\022\024\n\020GENERIC_RESPONSE\020\004\022\026\n\022FIND_GAM",
+      "ES_REQUEST\020\005\022\027\n\023FIND_GAMES_RESPONSE\020\006\022\033\n" +
+      "\027FIND_GAME_ROOMS_REQUEST\020\007\022\034\n\030FIND_GAME_" +
+      "ROOMS_RESPONSE\020\010\022\032\n\026RESET_PASSWORD_REQUE" +
+      "ST\020\t\022\022\n\016LOGIN_RESPONSE\020\n\022\025\n\021PLAY_CARD_RE" +
+      "QUEST\020\013\022\026\n\022JOIN_GAME_RESPONSE\020\014\022\026\n\022START" +
+      "_GAME_REQUEST\020\r\022\027\n\023START_GAME_RESPONSE\020\016" +
+      "\022\026\n\022LEAVE_GAME_REQUEST\020\017B9\n#org.bitcoma." +
+      "hearts.model.transferedB\020OneMessageProto" +
+      "sH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2594,7 +2743,7 @@ public final class OneMessageProtos {
           internal_static_hearts_OneMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_hearts_OneMessage_descriptor,
-              new java.lang.String[] { "MessageId", "Type", "LoginRequest", "SignupRequest", "JoinGameRequest", "GenericResponse", "FindGamesRequest", "FindGamesResponse", "FindGameRoomsRequest", "FindGameRoomsResponse", "ResetPasswordRequest", "LoginResponse", "PlayCardRequest", "JoinGameResponse", "StartGameRequest", "StartGameResponse", },
+              new java.lang.String[] { "MessageId", "Type", "LoginRequest", "SignupRequest", "JoinGameRequest", "GenericResponse", "FindGamesRequest", "FindGamesResponse", "FindGameRoomsRequest", "FindGameRoomsResponse", "ResetPasswordRequest", "LoginResponse", "PlayCardRequest", "JoinGameResponse", "StartGameRequest", "StartGameResponse", "LeaveGameReqeuest", },
               org.bitcoma.hearts.model.transfered.OneMessageProtos.OneMessage.class,
               org.bitcoma.hearts.model.transfered.OneMessageProtos.OneMessage.Builder.class);
           return null;
@@ -2612,6 +2761,7 @@ public final class OneMessageProtos {
           org.bitcoma.hearts.model.transfered.ResetPasswordProtos.getDescriptor(),
           org.bitcoma.hearts.model.transfered.PlayCardProtos.getDescriptor(),
           org.bitcoma.hearts.model.transfered.StartGameProtos.getDescriptor(),
+          org.bitcoma.hearts.model.transfered.LeaveGameProtos.getDescriptor(),
         }, assigner);
   }
   

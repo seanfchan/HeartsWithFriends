@@ -14,7 +14,6 @@ public class GameInstance {
     public static long gameCounter = 0;
     private long id;
     private int readyNumPlayers;
-    private int currentNumPlayers;
     private int maxPlayers;
     private State gameState;
 
@@ -28,7 +27,6 @@ public class GameInstance {
             throw new IllegalArgumentException("Max Players has to be greater than zero.");
 
         id = getNextId();
-        currentNumPlayers = 0;
         readyNumPlayers = 0;
         maxPlayers = inputMaxPlayers;
         gameState = inputState;
@@ -48,7 +46,6 @@ public class GameInstance {
         if (getCurrentNumPlayers() >= getMaxPlayers())
             return false;
 
-        setCurrentNumPlayers(getCurrentNumPlayers() + 1);
         userIdToUserMap.put(user.getLongId(), user);
 
         if (getCurrentNumPlayers() == getMaxPlayers()) {
@@ -69,18 +66,13 @@ public class GameInstance {
         if (getCurrentNumPlayers() < 1)
             return false;
 
-        setCurrentNumPlayers(getCurrentNumPlayers() - 1);
         userIdToUserMap.remove(user.getLongId());
 
         return true;
     }
 
     public synchronized int getCurrentNumPlayers() {
-        return currentNumPlayers;
-    }
-
-    private synchronized void setCurrentNumPlayers(int currentNumPlayers) {
-        this.currentNumPlayers = currentNumPlayers;
+        return userIdToUserMap.size();
     }
 
     public synchronized State getGameState() {
@@ -110,6 +102,7 @@ public class GameInstance {
     public int getMaxPlayers() {
         return maxPlayers;
     }
+
     public FastMap<Long, User> getUserIdToUserMap() {
         return userIdToUserMap;
     }

@@ -5,9 +5,13 @@ option java_outer_classname = "GameProtos";
 option optimize_for = SPEED;
 
 message GameInfo {
+	message PlayerInfo {
+		optional uint64 user_id = 1;
+		optional string user_name = 2;
+	};
     optional uint64 game_id = 1;
     optional string game_name = 2;
-    optional uint32 current_number_of_players = 3;
+    repeated PlayerInfo players = 3;
     optional uint32 max_number_of_players = 4;
 }
 

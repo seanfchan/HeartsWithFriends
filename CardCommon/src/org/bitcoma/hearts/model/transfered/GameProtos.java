@@ -19,9 +19,15 @@ public final class GameProtos {
     boolean hasGameName();
     String getGameName();
     
-    // optional uint32 current_number_of_players = 3;
-    boolean hasCurrentNumberOfPlayers();
-    int getCurrentNumberOfPlayers();
+    // repeated .hearts.GameInfo.PlayerInfo players = 3;
+    java.util.List<org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo> 
+        getPlayersList();
+    org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo getPlayers(int index);
+    int getPlayersCount();
+    java.util.List<? extends org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfoOrBuilder> 
+        getPlayersOrBuilderList();
+    org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfoOrBuilder getPlayersOrBuilder(
+        int index);
     
     // optional uint32 max_number_of_players = 4;
     boolean hasMaxNumberOfPlayers();
@@ -53,6 +59,436 @@ public final class GameProtos {
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return org.bitcoma.hearts.model.transfered.GameProtos.internal_static_hearts_GameInfo_fieldAccessorTable;
+    }
+    
+    public interface PlayerInfoOrBuilder
+        extends com.google.protobuf.MessageOrBuilder {
+      
+      // optional uint64 user_id = 1;
+      boolean hasUserId();
+      long getUserId();
+      
+      // optional string user_name = 2;
+      boolean hasUserName();
+      String getUserName();
+    }
+    public static final class PlayerInfo extends
+        com.google.protobuf.GeneratedMessage
+        implements PlayerInfoOrBuilder {
+      // Use PlayerInfo.newBuilder() to construct.
+      private PlayerInfo(Builder builder) {
+        super(builder);
+      }
+      private PlayerInfo(boolean noInit) {}
+      
+      private static final PlayerInfo defaultInstance;
+      public static PlayerInfo getDefaultInstance() {
+        return defaultInstance;
+      }
+      
+      public PlayerInfo getDefaultInstanceForType() {
+        return defaultInstance;
+      }
+      
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.bitcoma.hearts.model.transfered.GameProtos.internal_static_hearts_GameInfo_PlayerInfo_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.bitcoma.hearts.model.transfered.GameProtos.internal_static_hearts_GameInfo_PlayerInfo_fieldAccessorTable;
+      }
+      
+      private int bitField0_;
+      // optional uint64 user_id = 1;
+      public static final int USER_ID_FIELD_NUMBER = 1;
+      private long userId_;
+      public boolean hasUserId() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public long getUserId() {
+        return userId_;
+      }
+      
+      // optional string user_name = 2;
+      public static final int USER_NAME_FIELD_NUMBER = 2;
+      private Object userName_;
+      public boolean hasUserName() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public String getUserName() {
+        Object ref = userName_;
+        if (ref instanceof String) {
+          return (String) ref;
+        } else {
+          com.google.protobuf.ByteString bs = 
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+            userName_ = s;
+          }
+          return s;
+        }
+      }
+      private com.google.protobuf.ByteString getUserNameBytes() {
+        Object ref = userName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+          userName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      
+      private void initFields() {
+        userId_ = 0L;
+        userName_ = "";
+      }
+      private byte memoizedIsInitialized = -1;
+      public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized != -1) return isInitialized == 1;
+        
+        memoizedIsInitialized = 1;
+        return true;
+      }
+      
+      public void writeTo(com.google.protobuf.CodedOutputStream output)
+                          throws java.io.IOException {
+        getSerializedSize();
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          output.writeUInt64(1, userId_);
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          output.writeBytes(2, getUserNameBytes());
+        }
+        getUnknownFields().writeTo(output);
+      }
+      
+      private int memoizedSerializedSize = -1;
+      public int getSerializedSize() {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+      
+        size = 0;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeUInt64Size(1, userId_);
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBytesSize(2, getUserNameBytes());
+        }
+        size += getUnknownFields().getSerializedSize();
+        memoizedSerializedSize = size;
+        return size;
+      }
+      
+      @java.lang.Override
+      protected Object writeReplace() throws java.io.ObjectStreamException {
+        return super.writeReplace();
+      }
+      
+      public static org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return newBuilder().mergeFrom(data).buildParsed();
+      }
+      public static org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo parseFrom(
+          com.google.protobuf.ByteString data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return newBuilder().mergeFrom(data, extensionRegistry)
+                 .buildParsed();
+      }
+      public static org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo parseFrom(byte[] data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return newBuilder().mergeFrom(data).buildParsed();
+      }
+      public static org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo parseFrom(
+          byte[] data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return newBuilder().mergeFrom(data, extensionRegistry)
+                 .buildParsed();
+      }
+      public static org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo parseFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return newBuilder().mergeFrom(input).buildParsed();
+      }
+      public static org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo parseFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return newBuilder().mergeFrom(input, extensionRegistry)
+                 .buildParsed();
+      }
+      public static org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo parseDelimitedFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        Builder builder = newBuilder();
+        if (builder.mergeDelimitedFrom(input)) {
+          return builder.buildParsed();
+        } else {
+          return null;
+        }
+      }
+      public static org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo parseDelimitedFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        Builder builder = newBuilder();
+        if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+          return builder.buildParsed();
+        } else {
+          return null;
+        }
+      }
+      public static org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo parseFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return newBuilder().mergeFrom(input).buildParsed();
+      }
+      public static org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo parseFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return newBuilder().mergeFrom(input, extensionRegistry)
+                 .buildParsed();
+      }
+      
+      public static Builder newBuilder() { return Builder.create(); }
+      public Builder newBuilderForType() { return newBuilder(); }
+      public static Builder newBuilder(org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo prototype) {
+        return newBuilder().mergeFrom(prototype);
+      }
+      public Builder toBuilder() { return newBuilder(this); }
+      
+      @java.lang.Override
+      protected Builder newBuilderForType(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+      }
+      public static final class Builder extends
+          com.google.protobuf.GeneratedMessage.Builder<Builder>
+         implements org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfoOrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return org.bitcoma.hearts.model.transfered.GameProtos.internal_static_hearts_GameInfo_PlayerInfo_descriptor;
+        }
+        
+        protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return org.bitcoma.hearts.model.transfered.GameProtos.internal_static_hearts_GameInfo_PlayerInfo_fieldAccessorTable;
+        }
+        
+        // Construct using org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo.newBuilder()
+        private Builder() {
+          maybeForceBuilderInitialization();
+        }
+        
+        private Builder(BuilderParent parent) {
+          super(parent);
+          maybeForceBuilderInitialization();
+        }
+        private void maybeForceBuilderInitialization() {
+          if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          }
+        }
+        private static Builder create() {
+          return new Builder();
+        }
+        
+        public Builder clear() {
+          super.clear();
+          userId_ = 0L;
+          bitField0_ = (bitField0_ & ~0x00000001);
+          userName_ = "";
+          bitField0_ = (bitField0_ & ~0x00000002);
+          return this;
+        }
+        
+        public Builder clone() {
+          return create().mergeFrom(buildPartial());
+        }
+        
+        public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+          return org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo.getDescriptor();
+        }
+        
+        public org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo getDefaultInstanceForType() {
+          return org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo.getDefaultInstance();
+        }
+        
+        public org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo build() {
+          org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(result);
+          }
+          return result;
+        }
+        
+        private org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo buildParsed()
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(
+              result).asInvalidProtocolBufferException();
+          }
+          return result;
+        }
+        
+        public org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo buildPartial() {
+          org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo result = new org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo(this);
+          int from_bitField0_ = bitField0_;
+          int to_bitField0_ = 0;
+          if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+            to_bitField0_ |= 0x00000001;
+          }
+          result.userId_ = userId_;
+          if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+            to_bitField0_ |= 0x00000002;
+          }
+          result.userName_ = userName_;
+          result.bitField0_ = to_bitField0_;
+          onBuilt();
+          return result;
+        }
+        
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+          if (other instanceof org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo) {
+            return mergeFrom((org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo)other);
+          } else {
+            super.mergeFrom(other);
+            return this;
+          }
+        }
+        
+        public Builder mergeFrom(org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo other) {
+          if (other == org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo.getDefaultInstance()) return this;
+          if (other.hasUserId()) {
+            setUserId(other.getUserId());
+          }
+          if (other.hasUserName()) {
+            setUserName(other.getUserName());
+          }
+          this.mergeUnknownFields(other.getUnknownFields());
+          return this;
+        }
+        
+        public final boolean isInitialized() {
+          return true;
+        }
+        
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(
+              this.getUnknownFields());
+          while (true) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              default: {
+                if (!parseUnknownField(input, unknownFields,
+                                       extensionRegistry, tag)) {
+                  this.setUnknownFields(unknownFields.build());
+                  onChanged();
+                  return this;
+                }
+                break;
+              }
+              case 8: {
+                bitField0_ |= 0x00000001;
+                userId_ = input.readUInt64();
+                break;
+              }
+              case 18: {
+                bitField0_ |= 0x00000002;
+                userName_ = input.readBytes();
+                break;
+              }
+            }
+          }
+        }
+        
+        private int bitField0_;
+        
+        // optional uint64 user_id = 1;
+        private long userId_ ;
+        public boolean hasUserId() {
+          return ((bitField0_ & 0x00000001) == 0x00000001);
+        }
+        public long getUserId() {
+          return userId_;
+        }
+        public Builder setUserId(long value) {
+          bitField0_ |= 0x00000001;
+          userId_ = value;
+          onChanged();
+          return this;
+        }
+        public Builder clearUserId() {
+          bitField0_ = (bitField0_ & ~0x00000001);
+          userId_ = 0L;
+          onChanged();
+          return this;
+        }
+        
+        // optional string user_name = 2;
+        private Object userName_ = "";
+        public boolean hasUserName() {
+          return ((bitField0_ & 0x00000002) == 0x00000002);
+        }
+        public String getUserName() {
+          Object ref = userName_;
+          if (!(ref instanceof String)) {
+            String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+            userName_ = s;
+            return s;
+          } else {
+            return (String) ref;
+          }
+        }
+        public Builder setUserName(String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+          userName_ = value;
+          onChanged();
+          return this;
+        }
+        public Builder clearUserName() {
+          bitField0_ = (bitField0_ & ~0x00000002);
+          userName_ = getDefaultInstance().getUserName();
+          onChanged();
+          return this;
+        }
+        void setUserName(com.google.protobuf.ByteString value) {
+          bitField0_ |= 0x00000002;
+          userName_ = value;
+          onChanged();
+        }
+        
+        // @@protoc_insertion_point(builder_scope:hearts.GameInfo.PlayerInfo)
+      }
+      
+      static {
+        defaultInstance = new PlayerInfo(true);
+        defaultInstance.initFields();
+      }
+      
+      // @@protoc_insertion_point(class_scope:hearts.GameInfo.PlayerInfo)
     }
     
     private int bitField0_;
@@ -98,21 +534,32 @@ public final class GameProtos {
       }
     }
     
-    // optional uint32 current_number_of_players = 3;
-    public static final int CURRENT_NUMBER_OF_PLAYERS_FIELD_NUMBER = 3;
-    private int currentNumberOfPlayers_;
-    public boolean hasCurrentNumberOfPlayers() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+    // repeated .hearts.GameInfo.PlayerInfo players = 3;
+    public static final int PLAYERS_FIELD_NUMBER = 3;
+    private java.util.List<org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo> players_;
+    public java.util.List<org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo> getPlayersList() {
+      return players_;
     }
-    public int getCurrentNumberOfPlayers() {
-      return currentNumberOfPlayers_;
+    public java.util.List<? extends org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfoOrBuilder> 
+        getPlayersOrBuilderList() {
+      return players_;
+    }
+    public int getPlayersCount() {
+      return players_.size();
+    }
+    public org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo getPlayers(int index) {
+      return players_.get(index);
+    }
+    public org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfoOrBuilder getPlayersOrBuilder(
+        int index) {
+      return players_.get(index);
     }
     
     // optional uint32 max_number_of_players = 4;
     public static final int MAX_NUMBER_OF_PLAYERS_FIELD_NUMBER = 4;
     private int maxNumberOfPlayers_;
     public boolean hasMaxNumberOfPlayers() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
+      return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     public int getMaxNumberOfPlayers() {
       return maxNumberOfPlayers_;
@@ -121,7 +568,7 @@ public final class GameProtos {
     private void initFields() {
       gameId_ = 0L;
       gameName_ = "";
-      currentNumberOfPlayers_ = 0;
+      players_ = java.util.Collections.emptyList();
       maxNumberOfPlayers_ = 0;
     }
     private byte memoizedIsInitialized = -1;
@@ -142,10 +589,10 @@ public final class GameProtos {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeBytes(2, getGameNameBytes());
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeUInt32(3, currentNumberOfPlayers_);
+      for (int i = 0; i < players_.size(); i++) {
+        output.writeMessage(3, players_.get(i));
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeUInt32(4, maxNumberOfPlayers_);
       }
       getUnknownFields().writeTo(output);
@@ -165,11 +612,11 @@ public final class GameProtos {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(2, getGameNameBytes());
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      for (int i = 0; i < players_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(3, currentNumberOfPlayers_);
+          .computeMessageSize(3, players_.get(i));
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(4, maxNumberOfPlayers_);
       }
@@ -287,6 +734,7 @@ public final class GameProtos {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getPlayersFieldBuilder();
         }
       }
       private static Builder create() {
@@ -299,8 +747,12 @@ public final class GameProtos {
         bitField0_ = (bitField0_ & ~0x00000001);
         gameName_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
-        currentNumberOfPlayers_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000004);
+        if (playersBuilder_ == null) {
+          players_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000004);
+        } else {
+          playersBuilder_.clear();
+        }
         maxNumberOfPlayers_ = 0;
         bitField0_ = (bitField0_ & ~0x00000008);
         return this;
@@ -349,12 +801,17 @@ public final class GameProtos {
           to_bitField0_ |= 0x00000002;
         }
         result.gameName_ = gameName_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
+        if (playersBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004)) {
+            players_ = java.util.Collections.unmodifiableList(players_);
+            bitField0_ = (bitField0_ & ~0x00000004);
+          }
+          result.players_ = players_;
+        } else {
+          result.players_ = playersBuilder_.build();
         }
-        result.currentNumberOfPlayers_ = currentNumberOfPlayers_;
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
+          to_bitField0_ |= 0x00000004;
         }
         result.maxNumberOfPlayers_ = maxNumberOfPlayers_;
         result.bitField0_ = to_bitField0_;
@@ -379,8 +836,31 @@ public final class GameProtos {
         if (other.hasGameName()) {
           setGameName(other.getGameName());
         }
-        if (other.hasCurrentNumberOfPlayers()) {
-          setCurrentNumberOfPlayers(other.getCurrentNumberOfPlayers());
+        if (playersBuilder_ == null) {
+          if (!other.players_.isEmpty()) {
+            if (players_.isEmpty()) {
+              players_ = other.players_;
+              bitField0_ = (bitField0_ & ~0x00000004);
+            } else {
+              ensurePlayersIsMutable();
+              players_.addAll(other.players_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.players_.isEmpty()) {
+            if (playersBuilder_.isEmpty()) {
+              playersBuilder_.dispose();
+              playersBuilder_ = null;
+              players_ = other.players_;
+              bitField0_ = (bitField0_ & ~0x00000004);
+              playersBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getPlayersFieldBuilder() : null;
+            } else {
+              playersBuilder_.addAllMessages(other.players_);
+            }
+          }
         }
         if (other.hasMaxNumberOfPlayers()) {
           setMaxNumberOfPlayers(other.getMaxNumberOfPlayers());
@@ -426,9 +906,10 @@ public final class GameProtos {
               gameName_ = input.readBytes();
               break;
             }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              currentNumberOfPlayers_ = input.readUInt32();
+            case 26: {
+              org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo.Builder subBuilder = org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo.newBuilder();
+              input.readMessage(subBuilder, extensionRegistry);
+              addPlayers(subBuilder.buildPartial());
               break;
             }
             case 32: {
@@ -499,25 +980,190 @@ public final class GameProtos {
         onChanged();
       }
       
-      // optional uint32 current_number_of_players = 3;
-      private int currentNumberOfPlayers_ ;
-      public boolean hasCurrentNumberOfPlayers() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+      // repeated .hearts.GameInfo.PlayerInfo players = 3;
+      private java.util.List<org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo> players_ =
+        java.util.Collections.emptyList();
+      private void ensurePlayersIsMutable() {
+        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+          players_ = new java.util.ArrayList<org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo>(players_);
+          bitField0_ |= 0x00000004;
+         }
       }
-      public int getCurrentNumberOfPlayers() {
-        return currentNumberOfPlayers_;
+      
+      private com.google.protobuf.RepeatedFieldBuilder<
+          org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo, org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo.Builder, org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfoOrBuilder> playersBuilder_;
+      
+      public java.util.List<org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo> getPlayersList() {
+        if (playersBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(players_);
+        } else {
+          return playersBuilder_.getMessageList();
+        }
       }
-      public Builder setCurrentNumberOfPlayers(int value) {
-        bitField0_ |= 0x00000004;
-        currentNumberOfPlayers_ = value;
-        onChanged();
+      public int getPlayersCount() {
+        if (playersBuilder_ == null) {
+          return players_.size();
+        } else {
+          return playersBuilder_.getCount();
+        }
+      }
+      public org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo getPlayers(int index) {
+        if (playersBuilder_ == null) {
+          return players_.get(index);
+        } else {
+          return playersBuilder_.getMessage(index);
+        }
+      }
+      public Builder setPlayers(
+          int index, org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo value) {
+        if (playersBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensurePlayersIsMutable();
+          players_.set(index, value);
+          onChanged();
+        } else {
+          playersBuilder_.setMessage(index, value);
+        }
         return this;
       }
-      public Builder clearCurrentNumberOfPlayers() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        currentNumberOfPlayers_ = 0;
-        onChanged();
+      public Builder setPlayers(
+          int index, org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo.Builder builderForValue) {
+        if (playersBuilder_ == null) {
+          ensurePlayersIsMutable();
+          players_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          playersBuilder_.setMessage(index, builderForValue.build());
+        }
         return this;
+      }
+      public Builder addPlayers(org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo value) {
+        if (playersBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensurePlayersIsMutable();
+          players_.add(value);
+          onChanged();
+        } else {
+          playersBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      public Builder addPlayers(
+          int index, org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo value) {
+        if (playersBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensurePlayersIsMutable();
+          players_.add(index, value);
+          onChanged();
+        } else {
+          playersBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      public Builder addPlayers(
+          org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo.Builder builderForValue) {
+        if (playersBuilder_ == null) {
+          ensurePlayersIsMutable();
+          players_.add(builderForValue.build());
+          onChanged();
+        } else {
+          playersBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addPlayers(
+          int index, org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo.Builder builderForValue) {
+        if (playersBuilder_ == null) {
+          ensurePlayersIsMutable();
+          players_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          playersBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addAllPlayers(
+          java.lang.Iterable<? extends org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo> values) {
+        if (playersBuilder_ == null) {
+          ensurePlayersIsMutable();
+          super.addAll(values, players_);
+          onChanged();
+        } else {
+          playersBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      public Builder clearPlayers() {
+        if (playersBuilder_ == null) {
+          players_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000004);
+          onChanged();
+        } else {
+          playersBuilder_.clear();
+        }
+        return this;
+      }
+      public Builder removePlayers(int index) {
+        if (playersBuilder_ == null) {
+          ensurePlayersIsMutable();
+          players_.remove(index);
+          onChanged();
+        } else {
+          playersBuilder_.remove(index);
+        }
+        return this;
+      }
+      public org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo.Builder getPlayersBuilder(
+          int index) {
+        return getPlayersFieldBuilder().getBuilder(index);
+      }
+      public org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfoOrBuilder getPlayersOrBuilder(
+          int index) {
+        if (playersBuilder_ == null) {
+          return players_.get(index);  } else {
+          return playersBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      public java.util.List<? extends org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfoOrBuilder> 
+           getPlayersOrBuilderList() {
+        if (playersBuilder_ != null) {
+          return playersBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(players_);
+        }
+      }
+      public org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo.Builder addPlayersBuilder() {
+        return getPlayersFieldBuilder().addBuilder(
+            org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo.getDefaultInstance());
+      }
+      public org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo.Builder addPlayersBuilder(
+          int index) {
+        return getPlayersFieldBuilder().addBuilder(
+            index, org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo.getDefaultInstance());
+      }
+      public java.util.List<org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo.Builder> 
+           getPlayersBuilderList() {
+        return getPlayersFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo, org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo.Builder, org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfoOrBuilder> 
+          getPlayersFieldBuilder() {
+        if (playersBuilder_ == null) {
+          playersBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo, org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo.Builder, org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfoOrBuilder>(
+                  players_,
+                  ((bitField0_ & 0x00000004) == 0x00000004),
+                  getParentForChildren(),
+                  isClean());
+          players_ = null;
+        }
+        return playersBuilder_;
       }
       
       // optional uint32 max_number_of_players = 4;
@@ -988,6 +1634,11 @@ public final class GameProtos {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_hearts_GameInfo_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_hearts_GameInfo_PlayerInfo_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_hearts_GameInfo_PlayerInfo_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_hearts_GameRoomInfo_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -1001,13 +1652,14 @@ public final class GameProtos {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\nGame.proto\022\006hearts\"p\n\010GameInfo\022\017\n\007game" +
-      "_id\030\001 \001(\004\022\021\n\tgame_name\030\002 \001(\t\022!\n\031current_" +
-      "number_of_players\030\003 \001(\r\022\035\n\025max_number_of" +
-      "_players\030\004 \001(\r\"<\n\014GameRoomInfo\022\024\n\014game_r" +
-      "oom_id\030\001 \001(\004\022\026\n\016game_room_name\030\002 \001(\tB3\n#" +
-      "org.bitcoma.hearts.model.transferedB\nGam" +
-      "eProtosH\001"
+      "\n\nGame.proto\022\006hearts\"\255\001\n\010GameInfo\022\017\n\007gam" +
+      "e_id\030\001 \001(\004\022\021\n\tgame_name\030\002 \001(\t\022,\n\007players" +
+      "\030\003 \003(\0132\033.hearts.GameInfo.PlayerInfo\022\035\n\025m" +
+      "ax_number_of_players\030\004 \001(\r\0320\n\nPlayerInfo" +
+      "\022\017\n\007user_id\030\001 \001(\004\022\021\n\tuser_name\030\002 \001(\t\"<\n\014" +
+      "GameRoomInfo\022\024\n\014game_room_id\030\001 \001(\004\022\026\n\016ga" +
+      "me_room_name\030\002 \001(\tB3\n#org.bitcoma.hearts" +
+      ".model.transferedB\nGameProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1019,9 +1671,17 @@ public final class GameProtos {
           internal_static_hearts_GameInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_hearts_GameInfo_descriptor,
-              new java.lang.String[] { "GameId", "GameName", "CurrentNumberOfPlayers", "MaxNumberOfPlayers", },
+              new java.lang.String[] { "GameId", "GameName", "Players", "MaxNumberOfPlayers", },
               org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.class,
               org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.Builder.class);
+          internal_static_hearts_GameInfo_PlayerInfo_descriptor =
+            internal_static_hearts_GameInfo_descriptor.getNestedTypes().get(0);
+          internal_static_hearts_GameInfo_PlayerInfo_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_hearts_GameInfo_PlayerInfo_descriptor,
+              new java.lang.String[] { "UserId", "UserName", },
+              org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo.class,
+              org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo.Builder.class);
           internal_static_hearts_GameRoomInfo_descriptor =
             getDescriptor().getMessageTypes().get(1);
           internal_static_hearts_GameRoomInfo_fieldAccessorTable = new

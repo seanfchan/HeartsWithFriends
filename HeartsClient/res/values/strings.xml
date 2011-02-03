@@ -7,4 +7,5 @@
 <string name="passwordHint">Enter your Password</string>
 <string name="confirmPasswordHint">Re-enter Password</string>
 <string name="emailOrUserNameHint">Your username or email</string>
+<string name="findGame">Finding a game</string>
 </resources>
