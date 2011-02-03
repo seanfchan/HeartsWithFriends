@@ -11,19 +11,19 @@ public class Round {
     private final byte cardsInADeck = 52;
     private byte numOfCardsInDeck;
     private byte numOfCardsInHand;
-    private Map<Long, Byte> userIdToScoreInRound;
-    private Map<Long, Byte> userIdToScoreInGame;
+    private Map<Long, Integer> userIdToScoreInRound;
+    private Map<Long, Integer> userIdToScoreInGame;
     private Map<Long, LinkedList<Card>> userIdToHand;
     private Long loserId = null;
 
-    public Round(Map<Long, Byte> UserIdToScoreInGame) {
+    public Round(Map<Long, Integer> UserIdToScoreInGame) {
         userIdToHand = new HashMap<Long, LinkedList<Card>>();
-        userIdToScoreInRound = new HashMap<Long, Byte>();
+        userIdToScoreInRound = new HashMap<Long, Integer>();
         this.userIdToScoreInGame = UserIdToScoreInGame;
 
         // Initializing score
         for (Long userId : userIdToScoreInGame.keySet()) {
-            userIdToScoreInRound.put(userId, (byte) 0);
+            userIdToScoreInRound.put(userId, 0);
             userIdToHand.put(userId, new LinkedList<Card>());
         }
     }

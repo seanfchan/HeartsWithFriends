@@ -71,6 +71,8 @@ public class AuthActivity extends Activity {
             @Override
             public void onClick(View v) {
 
+                // TODO: @whoever we cannot send passwords in the clear, we need
+                // to encrypt it
                 userName = ((EditText) signUpDialog.findViewById(R.id.username)).getText().toString();
                 emailAddress = ((EditText) signUpDialog.findViewById(R.id.emailadd)).getText().toString();
                 String password1 = ((EditText) signUpDialog.findViewById(R.id.givePassword)).getText().toString();
