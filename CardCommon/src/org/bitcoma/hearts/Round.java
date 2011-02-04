@@ -185,4 +185,8 @@ public class Round {
     public Map<Long, LinkedList<Card>> getUserIdToHand() {
         return userIdToHand;
     }
+
+    public Map<Long, Byte> getUserIdToScoreInRound() {
+        return userIdToScoreInRound;
+    }
 }

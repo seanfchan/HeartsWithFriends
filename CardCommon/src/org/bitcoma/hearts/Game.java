@@ -46,6 +46,7 @@ public class Game {
         return winner;
     }
 
+    // Looking for players with scores greater than or equal to 100
     public boolean isGameOver() {
 
         for (Long id : userIdToGameScore.keySet()) {
@@ -62,5 +63,21 @@ public class Game {
             return (new LinkedList<Card>(currentRound.getUserIdToHand().get(id)));
         else
             return null;
+    }
+
+    public void startNewRound() {
+        currentRound = new Round(this.userIdToGameScore);
+    }
+
+    public void removeCard(Long userId, Card played) {
+        currentRound.removeCard(userId, played);
+    }
+
+    public void updateScores(Trick currentTrick) {
+        currentRound.updateScores(currentTrick);
+    }
+
+    public Map<Long, Byte> getUserIdToScoreInRound() {
+        return currentRound.getUserIdToScoreInRound();
     }
 }
