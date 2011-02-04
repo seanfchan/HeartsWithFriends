@@ -14,44 +14,47 @@ public class GameTry {
             playerIds.add((long) i);
 
         Game myGame = new Game(playerIds);
-        myGame.currentRound.shuffle(4);
+        int roundNum = 1;
+        
 
-        // TODO @madiha to @sean - There is no way in game to allow for Bot
-        // players to be added
-        // masking players to be bots here.
-        LinkedList<BotPlay> players = new LinkedList<BotPlay>();
-        players.add(new BotPlay((long) 1, myGame.currentRound.getUserIdToHand().get((long) 1)));
-        players.add(new BotPlay((long) 2, myGame.currentRound.getUserIdToHand().get((long) 2)));
-        players.add(new BotPlay((long) 3, myGame.currentRound.getUserIdToHand().get((long) 3)));
-        players.add(new BotPlay((long) 4, myGame.currentRound.getUserIdToHand().get((long) 4)));
-
-        int i = 0;
-        for (BotPlay p : players) {
-            System.out.println("Bot " + (i + 1) + " cards : " + p.matrix.keySet());
-            i++;
-        }
-
-        BotPlay first = null;
-        // finding which player has two of clubs
-        int num = 0;
-        int playerNum = 0;
-        boolean foundFirst = false;
-        for (BotPlay p : players) {
-            for (Card c : p.matrix.keySet()) {
-                if (c.getSuit() == Card.CLUBS && c.getRank() == Card.TWO) {
-                    foundFirst = true;
-                    break;
-                }
-            }
-            if (foundFirst)
-                break;
-            num++;
-        }
-        playerNum = num;
-        System.out.println("Bot " + (playerNum + 1) + " has two of clubs");
+        
         while (!myGame.isGameOver()) {
+
+            System.out.println("Round " + roundNum);
+            myGame.currentRound.shuffle(4);
+            LinkedList<BotPlay> players = new LinkedList<BotPlay>();
+            players.add(new BotPlay((long) 1, myGame.currentRound.getUserIdToHand().get((long) 1)));
+            players.add(new BotPlay((long) 2, myGame.currentRound.getUserIdToHand().get((long) 2)));
+            players.add(new BotPlay((long) 3, myGame.currentRound.getUserIdToHand().get((long) 3)));
+            players.add(new BotPlay((long) 4, myGame.currentRound.getUserIdToHand().get((long) 4)));
+
+            int i = 0;
+            for (BotPlay p : players) {
+                System.out.println("Bot " + (i + 1) + " cards : " + p.matrix.keySet());
+                i++;
+            }
+            System.out.println("\n");
+            
+            BotPlay first = null;
+            // finding which player has two of clubs
+            int num = 0;
+            int playerNum = 0;
+            boolean foundFirst = false;
+            for (BotPlay p : players) {
+                for (Card c : p.matrix.keySet()) {
+                    if (c.getSuit() == Card.CLUBS && c.getRank() == Card.TWO) {
+                        foundFirst = true;
+                        break;
+                    }
+                }
+                if (foundFirst)
+                    break;
+                num++;
+            }
+            playerNum = num;
             int tricks = 1;
             while (!myGame.currentRound.hasRoundEnded()) {
+                
                 Trick startTrick = new Trick();
                 LinkedList<Card> soFarTrick = new LinkedList<Card>();
 
@@ -110,24 +113,32 @@ public class GameTry {
                 playerNum = loser.intValue() - 1;
 
                 System.out.println("End of trick " + tricks + "\n");
+                
+                System.out.println("Score card");
+
+                for (Long id : myGame.userIdToGameScore.keySet()) {
+                    System.out.println("Player " + id + ": " + myGame.userIdToGameScore.get(id));
+                }
+                System.out.println("\n");
+                if (myGame.isGameOver())
+                    break;
                 tricks++;
             }
             // initializing a new round.
             myGame.currentRound = new Round(myGame.userIdToGameScore);
-            players.add(new BotPlay((long) 1, myGame.currentRound.getUserIdToHand().get((long) 1)));
-            players.add(new BotPlay((long) 2, myGame.currentRound.getUserIdToHand().get((long) 2)));
-            players.add(new BotPlay((long) 3, myGame.currentRound.getUserIdToHand().get((long) 3)));
-            players.add(new BotPlay((long) 4, myGame.currentRound.getUserIdToHand().get((long) 4)));
-            break; // another testing thing
+            // reset states
+            roundNum++;
+
         }
 
-        System.out.println("Score card");
+        System.out.println("~~Game Summary~~");
 
         for (Long id : myGame.userIdToGameScore.keySet()) {
             System.out.println("Player " + id + ": " + myGame.userIdToGameScore.get(id));
         }
 
         System.out.println("Winners are " + myGame.findWinner());
+        System.out.println("Game over!");
     }
 
 }
