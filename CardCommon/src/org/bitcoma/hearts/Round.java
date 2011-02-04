@@ -152,6 +152,21 @@ public class Round {
         userIdToHand.put(userId, result);
     }
 
+    // Play card(s) input: userid, list of cards
+    public void playCard(Long id, LinkedList<Card> cardsToPlay, Trick currentTrick) {
+        // Normal case of just playing cards
+        if (cardsToPlay.size() != 3) {
+            currentTrick.makeMove(id, cardsToPlay.getFirst());
+
+            removeCard(id, cardsToPlay.getFirst());
+        }
+        // Giving/receiving 3 card in the beginning of a round
+        else {
+            for (Card c : cardsToPlay)
+                removeCard(id, c);
+        }
+    }
+
     public Long getLoserId() {
         return loserId;
     }

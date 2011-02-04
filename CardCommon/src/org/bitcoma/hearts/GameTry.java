@@ -20,18 +20,17 @@ public class GameTry {
         // players to be added
         // masking players to be bots here.
         LinkedList<BotPlay> players = new LinkedList<BotPlay>();
-        players.add(new BotPlay((long) 1,myGame.currentRound.getUserIdToHand().get((long) 1)));
-        players.add(new BotPlay((long) 2,myGame.currentRound.getUserIdToHand().get((long) 2)));
-        players.add(new BotPlay((long) 3,myGame.currentRound.getUserIdToHand().get((long) 3)));
-        players.add(new BotPlay((long) 4,myGame.currentRound.getUserIdToHand().get((long) 4)));
+        players.add(new BotPlay((long) 1, myGame.currentRound.getUserIdToHand().get((long) 1)));
+        players.add(new BotPlay((long) 2, myGame.currentRound.getUserIdToHand().get((long) 2)));
+        players.add(new BotPlay((long) 3, myGame.currentRound.getUserIdToHand().get((long) 3)));
+        players.add(new BotPlay((long) 4, myGame.currentRound.getUserIdToHand().get((long) 4)));
 
         int i = 0;
-        for (BotPlay p : players)
-        {
-            System.out.println("Bot " + (i+1) + " cards : " + p.matrix.keySet());
+        for (BotPlay p : players) {
+            System.out.println("Bot " + (i + 1) + " cards : " + p.matrix.keySet());
             i++;
         }
-        
+
         BotPlay first = null;
         // finding which player has two of clubs
         int num = 0;
@@ -49,22 +48,20 @@ public class GameTry {
             num++;
         }
         playerNum = num;
-        System.out.println("Bot " + (playerNum+1) + " has two of clubs");
+        System.out.println("Bot " + (playerNum + 1) + " has two of clubs");
         while (!myGame.isGameOver()) {
             int tricks = 1;
-            while (!myGame.currentRound.hasRoundEnded()) 
-            {
+            while (!myGame.currentRound.hasRoundEnded()) {
                 Trick startTrick = new Trick();
                 LinkedList<Card> soFarTrick = new LinkedList<Card>();
 
                 // starting trick
-                //System.out.println(playerNum);
+                // System.out.println(playerNum);
                 first = players.get(playerNum);
                 Card played = first.playCard((byte) 0, soFarTrick);
                 System.out.println("Bot " + first.playerId + " played " + played);
                 boolean result = startTrick.isMoveValid(first.playerId, played, first.getBotCards());
-                if (result)
-                {
+                if (result) {
                     startTrick.makeMove(first.playerId, played);
                     myGame.currentRound.removeCard(first.playerId, played);
                 }
@@ -72,10 +69,10 @@ public class GameTry {
 
                 int nextPlayer = (playerNum + 1) % 4;
                 Card played2 = players.get(nextPlayer).playCard(played.getSuit(), soFarTrick);
-                System.out.println("Bot " +players.get(nextPlayer).playerId + " played " + played2);
-                result = startTrick.isMoveValid(players.get(nextPlayer).playerId, played2, players.get(nextPlayer).getBotCards());
-                if (result)
-                {
+                System.out.println("Bot " + players.get(nextPlayer).playerId + " played " + played2);
+                result = startTrick.isMoveValid(players.get(nextPlayer).playerId, played2, players.get(nextPlayer)
+                        .getBotCards());
+                if (result) {
                     startTrick.makeMove(players.get(nextPlayer).playerId, played2);
                     myGame.currentRound.removeCard(players.get(nextPlayer).playerId, played2);
                 }
@@ -84,9 +81,9 @@ public class GameTry {
                 nextPlayer = (nextPlayer + 1) % 4;
                 Card played3 = players.get(nextPlayer).playCard(played.getSuit(), soFarTrick);
                 System.out.println("Bot " + players.get(nextPlayer).playerId + " played " + played3);
-                result = startTrick.isMoveValid(players.get(nextPlayer).playerId, played3, players.get(nextPlayer).getBotCards());
-                if (result)
-                {
+                result = startTrick.isMoveValid(players.get(nextPlayer).playerId, played3, players.get(nextPlayer)
+                        .getBotCards());
+                if (result) {
                     startTrick.makeMove(players.get(nextPlayer).playerId, played3);
                     myGame.currentRound.removeCard(players.get(nextPlayer).playerId, played3);
                 }
@@ -94,44 +91,42 @@ public class GameTry {
 
                 nextPlayer = (nextPlayer + 1) % 4;
                 Card played4 = players.get(nextPlayer).playCard(played.getSuit(), soFarTrick);
-                System.out.println("Bot " +players.get(nextPlayer).playerId + " played " + played4);
-                result = startTrick.isMoveValid(players.get(nextPlayer).playerId, played4, players.get(nextPlayer).getBotCards());
-                if (result)
-                {
+                System.out.println("Bot " + players.get(nextPlayer).playerId + " played " + played4);
+                result = startTrick.isMoveValid(players.get(nextPlayer).playerId, played4, players.get(nextPlayer)
+                        .getBotCards());
+                if (result) {
                     startTrick.makeMove(players.get(nextPlayer).playerId, played4);
                     myGame.currentRound.removeCard(players.get(nextPlayer).playerId, played4);
                 }
                 soFarTrick.add(played4);
-                
+
                 Long loser = startTrick.getLoser();
                 int penalty = startTrick.computeScore();
                 System.out.println("Loser of the trick is " + loser + " gets " + penalty);
-                
-                myGame.playerIdToGameScore.put(loser, myGame.playerIdToGameScore.get(loser) + penalty);
-                //System.out.println(myGame.playerIdToGameScore.get(loser));
-                
+
+                myGame.userIdToGameScore.put(loser, myGame.userIdToGameScore.get(loser) + penalty);
+                // System.out.println(myGame.playerIdToGameScore.get(loser));
+
                 playerNum = loser.intValue() - 1;
-                
-                
+
                 System.out.println("End of trick " + tricks + "\n");
                 tricks++;
             }
             // initializing a new round.
-            myGame.currentRound = new Round(myGame.playerIdToGameScore);
-            players.add(new BotPlay((long) 1,myGame.currentRound.getUserIdToHand().get((long) 1)));
-            players.add(new BotPlay((long) 2,myGame.currentRound.getUserIdToHand().get((long) 2)));
-            players.add(new BotPlay((long) 3,myGame.currentRound.getUserIdToHand().get((long) 3)));
-            players.add(new BotPlay((long) 4,myGame.currentRound.getUserIdToHand().get((long) 4)));
+            myGame.currentRound = new Round(myGame.userIdToGameScore);
+            players.add(new BotPlay((long) 1, myGame.currentRound.getUserIdToHand().get((long) 1)));
+            players.add(new BotPlay((long) 2, myGame.currentRound.getUserIdToHand().get((long) 2)));
+            players.add(new BotPlay((long) 3, myGame.currentRound.getUserIdToHand().get((long) 3)));
+            players.add(new BotPlay((long) 4, myGame.currentRound.getUserIdToHand().get((long) 4)));
             break; // another testing thing
         }
 
         System.out.println("Score card");
-        
-        for (Long id : myGame.playerIdToGameScore.keySet())
-        {
-            System.out.println("Player " + id + ": " + myGame.playerIdToGameScore.get(id));
+
+        for (Long id : myGame.userIdToGameScore.keySet()) {
+            System.out.println("Player " + id + ": " + myGame.userIdToGameScore.get(id));
         }
-        
+
         System.out.println("Winners are " + myGame.findWinner());
     }
 
