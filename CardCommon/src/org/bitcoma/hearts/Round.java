@@ -143,6 +143,7 @@ public class Round {
         Card toRemove = null;
         for (Card c : result) {
             if (c.getSuit() == played.getSuit() && c.getRank() == played.getRank()) {
+                System.out.println("Found card to remove");
                 toRemove = c;
                 break;
             }

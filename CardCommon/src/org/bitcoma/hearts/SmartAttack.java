@@ -124,6 +124,10 @@ public class SmartAttack {
                         startTrick.makeMove(first.playerId, played);
                         myGame.currentRound.removeCard(first.playerId, played);
                     }
+                    if (first.playerId == 4)
+                    {
+                        players.get(3).matrix.remove(played);
+                    }
                     System.out.println(name.get(first.playerId) + " played " + played);
                     soFarTrick.add(played);
                 }
@@ -160,6 +164,10 @@ public class SmartAttack {
                 if (result) {
                     startTrick.makeMove(players.get(nextPlayer).playerId, played2);
                     myGame.currentRound.removeCard(players.get(nextPlayer).playerId, played2);
+                }
+                if (nextPlayer == 3)
+                {
+                    players.get(3).matrix.remove(played2);
                 }
                 System.out.println(name.get(players.get(nextPlayer).playerId) + " played " + played2);
                 soFarTrick.add(played2);
@@ -198,6 +206,10 @@ public class SmartAttack {
                     startTrick.makeMove(players.get(nextPlayer).playerId, played3);
                     myGame.currentRound.removeCard(players.get(nextPlayer).playerId, played3);
                 }
+                if (nextPlayer == 3)
+                {
+                    players.get(3).matrix.remove(played3);
+                }
                 System.out.println(name.get(players.get(nextPlayer).playerId) + " played " + played3);
                 soFarTrick.add(played3);
 
@@ -234,6 +246,10 @@ public class SmartAttack {
                 if (result) {
                     startTrick.makeMove(players.get(nextPlayer).playerId, played4);
                     myGame.currentRound.removeCard(players.get(nextPlayer).playerId, played4);
+                }
+                if (nextPlayer == 3)
+                {
+                    players.get(3).matrix.remove(played4);
                 }
                 System.out.println(name.get(players.get(nextPlayer).playerId) + " played " + played4);
                 soFarTrick.add(played4);
