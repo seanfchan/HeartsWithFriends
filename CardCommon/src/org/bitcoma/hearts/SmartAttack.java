@@ -111,14 +111,16 @@ public class SmartAttack {
                             {
                                 played = s;
                                 break;
-                            }                          
+                            } 
+                            counter++;
                         } 
-                        counter++;
+                        
                     }
                     else
                     {
                         played = first.playCard((byte) 0, soFarTrick);    
                     }
+                    System.out.println(played);
                     result = startTrick.isMoveValid(first.playerId, played, first.getBotCards());
                     if (result) {
                         startTrick.makeMove(first.playerId, played);
