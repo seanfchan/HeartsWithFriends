@@ -112,7 +112,8 @@ public class SmartAttack {
                                 played = s;
                                 break;
                             }                          
-                        }              
+                        } 
+                        counter++;
                     }
                     else
                     {
