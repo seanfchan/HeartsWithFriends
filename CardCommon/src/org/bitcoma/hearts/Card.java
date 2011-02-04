@@ -59,7 +59,7 @@ public class Card implements Comparable<Card> {
 
 	public String toString() {
 	    String suit = new String();
-	    /*switch (this.getSuit())
+	    switch (this.getSuit())
 	    {
 	        case 0:
 	            suit = "Spades";
@@ -76,8 +76,8 @@ public class Card implements Comparable<Card> {
 	        default:
 	            suit = "UNknown";
 	            break;
-	    }*/
-		return "Suit[" + this.getSuit() + "] " + "Value[" + this.getRank() + "]";
+	    }
+		return "Suit[" + suit + "]" + "Value[" + this.getRank() + "]";
 	}
 
 	@Override
