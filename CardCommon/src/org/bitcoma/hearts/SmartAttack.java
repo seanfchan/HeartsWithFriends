@@ -145,7 +145,8 @@ public class SmartAttack {
                         {
                             played2 = s;
                             break;
-                        }                          
+                        }  
+                        counter++;
                     }              
                 }
                 else
@@ -180,7 +181,8 @@ public class SmartAttack {
                         {
                             played3 = s;
                             break;
-                        }                          
+                        }  
+                        counter++;
                     }              
                 }
                 else
@@ -216,7 +218,8 @@ public class SmartAttack {
                         {
                             played4 = s;
                             break;
-                        }                          
+                        }  
+                        counter++;
                     }              
                 }
                 else
