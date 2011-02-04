@@ -114,9 +114,6 @@ public class GameTry {
                 
                 
                 System.out.println("End of trick " + tricks + "\n");
-                // HACK added because round end is not giving the right output..
-                if (tricks == 13)
-                    break;
                 tricks++;
             }
             // initializing a new round.
