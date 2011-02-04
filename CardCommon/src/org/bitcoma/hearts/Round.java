@@ -11,19 +11,19 @@ public class Round {
     private final byte cardsInADeck = 52;
     private byte numOfCardsInDeck;
     private byte numOfCardsInHand;
-    private Map<Long, Integer> userIdToScoreInRound;
-    private Map<Long, Integer> userIdToScoreInGame;
+    private Map<Long, Byte> userIdToScoreInRound;
+    private Map<Long, Byte> userIdToScoreInGame;
     private Map<Long, LinkedList<Card>> userIdToHand;
     private Long loserId = null;
 
-    public Round(Map<Long, Integer> UserIdToScoreInGame) {
+    public Round(Map<Long, Byte> userIdToScoreInGame) {
         userIdToHand = new HashMap<Long, LinkedList<Card>>();
-        userIdToScoreInRound = new HashMap<Long, Integer>();
-        this.userIdToScoreInGame = UserIdToScoreInGame;
+        userIdToScoreInRound = new HashMap<Long, Byte>();
+        this.userIdToScoreInGame = userIdToScoreInGame;
 
         // Initializing score
         for (Long userId : userIdToScoreInGame.keySet()) {
-            userIdToScoreInRound.put(userId, 0);
+            userIdToScoreInRound.put(userId, (byte) 0);
             userIdToHand.put(userId, new LinkedList<Card>());
         }
     }
@@ -164,6 +164,17 @@ public class Round {
         else {
             for (Card c : cardsToPlay)
                 removeCard(id, c);
+        }
+    }
+
+    // Updating scores in Round and Game, meant to be run after every trick
+    public void updateScores(Trick currentTrick) {
+        Long loser = currentTrick.getLoser();
+        userIdToScoreInRound.put(loser, (byte) (userIdToScoreInRound.get(loser) + currentTrick.computeScore()));
+
+        // If round ends update game score
+        if (hasRoundEnded()) {
+            userIdToScoreInGame.put(loser, (byte) (userIdToScoreInGame.get(loser) + userIdToScoreInRound.get(loser)));
         }
     }
 

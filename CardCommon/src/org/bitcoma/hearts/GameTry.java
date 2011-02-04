@@ -107,7 +107,7 @@ public class GameTry {
                 int penalty = startTrick.computeScore();
                 System.out.println("Loser of the trick is " + loser + " gets " + penalty);
 
-                myGame.userIdToGameScore.put(loser, myGame.userIdToGameScore.get(loser) + penalty);
+                myGame.userIdToGameScore.put(loser, (byte) (myGame.userIdToGameScore.get(loser) + penalty));
                 // System.out.println(myGame.playerIdToGameScore.get(loser));
 
                 playerNum = loser.intValue() - 1;

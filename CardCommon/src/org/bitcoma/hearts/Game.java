@@ -7,15 +7,15 @@ import java.util.Map;
 
 public class Game {
 
-    Map<Long, Integer> userIdToGameScore;
+    Map<Long, Byte> userIdToGameScore;
     Round currentRound;
 
     public Game(List<Long> playerIds) {
 
-        userIdToGameScore = new HashMap<Long, Integer>();
+        userIdToGameScore = new HashMap<Long, Byte>();
 
         for (Long id : playerIds) {
-            userIdToGameScore.put(id, 0);
+            userIdToGameScore.put(id, (byte) 0);
         }
 
         // TODO: @sean check if the number of players match the max number of
