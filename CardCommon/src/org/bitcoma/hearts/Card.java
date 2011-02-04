@@ -58,8 +58,26 @@ public class Card implements Comparable<Card> {
 	private byte value;
 
 	public String toString() {
-		return "Suit[" + this.getSuit() + "] " + "Value[" + this.getRank()
-				+ "], ";
+	    String suit = new String();
+	    /*switch (this.getSuit())
+	    {
+	        case 0:
+	            suit = "Spades";
+	            break;
+	        case 1:
+	            suit = "Hearts";
+	            break;
+	        case 2:
+	            suit = "Clubs";
+	            break;
+	        case 3:
+	            suit = "Diamonds";
+	            break;
+	        default:
+	            suit = "UNknown";
+	            break;
+	    }*/
+		return "Suit[" + this.getSuit() + "] " + "Value[" + this.getRank() + "]";
 	}
 
 	@Override

@@ -94,7 +94,7 @@ public class GameTry {
 
                 nextPlayer = (nextPlayer + 1) % 4;
                 Card played4 = players.get(nextPlayer).playCard(played.getSuit(), soFarTrick);
-                System.out.println("Bot  " +players.get(nextPlayer).playerId + " played " + played4);
+                System.out.println("Bot " +players.get(nextPlayer).playerId + " played " + played4);
                 result = startTrick.isMoveValid(players.get(nextPlayer).playerId, played4, players.get(nextPlayer).getBotCards());
                 if (result)
                 {
@@ -102,10 +102,18 @@ public class GameTry {
                     myGame.currentRound.removeCard(players.get(nextPlayer).playerId, played4);
                 }
                 soFarTrick.add(played4);
-                System.out.println("Loser of the trick is " + startTrick.getLoser());
-                playerNum = startTrick.getLoser().intValue() - 1;
                 
-                System.out.println("End of trick " + tricks);
+                Long loser = startTrick.getLoser();
+                int penalty = startTrick.computeScore();
+                System.out.println("Loser of the trick is " + loser + " gets " + penalty);
+                
+                myGame.playerIdToGameScore.put(loser, myGame.playerIdToGameScore.get(loser) + penalty);
+                //System.out.println(myGame.playerIdToGameScore.get(loser));
+                
+                playerNum = loser.intValue() - 1;
+                
+                
+                System.out.println("End of trick " + tricks + "\n");
                 // HACK added because round end is not giving the right output..
                 if (tricks == 13)
                     break;
@@ -117,10 +125,17 @@ public class GameTry {
             players.add(new BotPlay((long) 2,myGame.currentRound.getUserIdToHand().get((long) 2)));
             players.add(new BotPlay((long) 3,myGame.currentRound.getUserIdToHand().get((long) 3)));
             players.add(new BotPlay((long) 4,myGame.currentRound.getUserIdToHand().get((long) 4)));
-            //break; // another testing thing
+            break; // another testing thing
         }
 
-        System.out.println(myGame.findWinner());
+        System.out.println("Score card");
+        
+        for (Long id : myGame.playerIdToGameScore.keySet())
+        {
+            System.out.println("Player " + id + ": " + myGame.playerIdToGameScore.get(id));
+        }
+        
+        System.out.println("Winners are " + myGame.findWinner());
     }
 
 }
