@@ -3,30 +3,32 @@ package org.bitcoma.hearts;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Random;
 
-public class GameTry
-{
-	public GameTry()
-	{
-		
-	}
-	
-	public static void main(String [] args)
-	{
-		Map<Long, Byte> gameMap = new HashMap<Long, Byte>();
-		gameMap.put((long) 1, (byte) 0);
-		gameMap.put((long) 2, (byte) 0);
-		gameMap.put((long) 3, (byte) 0);
-		gameMap.put((long) 4, (byte) 0);
-		
-		Round r = new Round(gameMap);
-		
-		r.shuffle(4);
-		Map<Long, LinkedList<Card>> cardHands = r.getUserIdToHand();
-		
-		System.out.println(cardHands.get((long) 1));
-		System.out.println(cardHands.get((long) 2));
-		System.out.println(cardHands.get((long) 3));
-		System.out.println(cardHands.get((long) 4));
-	}
+public class GameTry {
+    
+    public GameTry()
+    {
+        
+    }
+    
+    public static void main(String[] args)
+    {
+        LinkedList<Long> playerIds = new LinkedList<Long>();
+        for (int i = 1; i <= 4; i++)
+            playerIds.add((long) i);
+        
+        Game myGame = new Game(playerIds);
+        myGame.currentRound.shuffle(4);
+        
+        // TODO @madiha to @sean - There is no way in game to allow for Bot players to be added
+        // masking players to be bots here.
+        BotPlay player1 = new BotPlay(myGame.currentRound.getUserIdToHand().get((long) 1));
+        BotPlay player2 = new BotPlay(myGame.currentRound.getUserIdToHand().get((long) 2));
+        BotPlay player3 = new BotPlay(myGame.currentRound.getUserIdToHand().get((long) 3));
+        BotPlay player4 = new BotPlay(myGame.currentRound.getUserIdToHand().get((long) 4));
+        
+        
+    }
+    
 }

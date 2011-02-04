@@ -47,12 +47,12 @@ public class Game {
     }
 
     public boolean isGameOver() {
-        Map<Long, LinkedList<Card>> userIdToHand = currentRound.getUserIdToHand();
-        for (Long id : userIdToHand.keySet()) {
-            if (!userIdToHand.get(id).isEmpty())
-                return false;
+        
+        for (Long id : playerIdToGameScore.keySet()) {
+            if (playerIdToGameScore.get(id) >= 100)
+                return true;
         }
-        return true;
+        return false;
     }
 
     // Get Hand of player by playerId
