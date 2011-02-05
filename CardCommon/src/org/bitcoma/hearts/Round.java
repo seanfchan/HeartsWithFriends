@@ -17,12 +17,14 @@ public class Round {
     private Map<Long, LinkedList<Card>> userIdToHand;
     private Long loserId = null;
     private Trick currentTrick = null;
+    private IHeartsHandler handler;
 
-    public Round(Map<Long, Byte> userIdToScoreInGame) {
+    public Round(Map<Long, Byte> userIdToScoreInGame, IHeartsHandler handler) {
         userIdToHand = new HashMap<Long, LinkedList<Card>>();
         userIdToScoreInRound = new HashMap<Long, Byte>();
         this.userIdToScoreInGame = userIdToScoreInGame;
         currentTrick = new Trick();
+        this.handler = handler;
 
         // Initializing score
         for (Long userId : userIdToScoreInGame.keySet()) {
@@ -147,31 +149,84 @@ public class Round {
             result.remove(played);
     }
 
-    // Play card(s) input: userid, list of cards
-    public void playCard(Long id, LinkedList<Card> cardsToPlay) {
-        // Normal case of just playing cards
-        if (cardsToPlay.size() != 3) {
-            currentTrick.makeMove(id, cardsToPlay.getFirst());
+    /**
+     * External API for playing cards from game.
+     * 
+     * @param id
+     * @param cardsToPlay
+     * @return
+     */
+    public boolean playCard(Long id, List<Card> cardsToPlay) {
+        // TODO: @someone need to check the next player is a bot and use
+        // internal API to make their turns
 
-            removeCard(id, cardsToPlay.getFirst());
-        }
-        // Giving/receiving 3 card in the beginning of a round
-        else {
-            for (Card c : cardsToPlay)
-                removeCard(id, c);
-        }
+        return playCardInternal(id, cardsToPlay);
     }
 
-    public boolean playCard(Long id, Card singleCardToPlay) {
-        List<Card> playerCards = userIdToHand.get(id);
-        if (currentTrick.isMoveValid(singleCardToPlay, playerCards)) {
-            currentTrick.makeMove(id, singleCardToPlay);
+    /**
+     * Method actually plays the cards. Used for bots and real players
+     * 
+     * @param id
+     * @param cardsToPlay
+     * @return
+     */
+    private boolean playCardInternal(Long id, List<Card> cardsToPlay) {
+        int numCardsPlayed = cardsToPlay.size();
+        if (numCardsPlayed == 3 || numCardsPlayed == 1) {
 
-            removeCard(id, singleCardToPlay);
-            return true;
-        } else {
-            return false;
+            // Single card played
+            if (numCardsPlayed == 1) {
+                Card cardToPlay = cardsToPlay.get(0);
+                if (currentTrick.isMoveValid(cardToPlay, userIdToHand.get(id))) {
+
+                    // Move was valid
+                    removeCard(id, cardToPlay);
+
+                    if (handler != null) {
+                        handler.handleSingleCardPlayed(id, cardToPlay);
+                    }
+
+                    // Trick has ended
+                    if (currentTrick.getNumCards() == userIdToScoreInRound.size()) {
+                        updateScores(currentTrick);
+
+                        // Send updates to handle since trick has ended.
+                        if (handler != null) {
+                            handler.handleScoreUpdate(userIdToScoreInGame, userIdToScoreInRound);
+                            handler.handleTrickEnded(currentTrick);
+                        }
+
+                        currentTrick = new Trick();
+                    }
+                    return true;
+
+                } else {
+                    return false;
+                }
+            } else if (numCardsPlayed == 3) {
+
+                // Does the player have all the cards trying to pass?
+                List<Card> hand = userIdToHand.get(id);
+                for (Card c : cardsToPlay) {
+                    if (!hand.contains(c))
+                        return false;
+                }
+
+                // TODO: @someone give other player the cards
+
+                // Remove cards from your hand
+                for (Card c : cardsToPlay)
+                    removeCard(id, c);
+
+                if (handler != null) {
+                    // TODO: @someone Change second parameter to who receives
+                    // the cards.
+                    handler.handleCardsPassed(id, (long) 0, cardsToPlay);
+                }
+            }
         }
+
+        return false;
     }
 
     // Updating scores in Round and Game, meant to be run after every trick
@@ -195,5 +250,19 @@ public class Round {
 
     public Map<Long, Byte> getUserIdToScoreInRound() {
         return userIdToScoreInRound;
+    }
+
+    public Long getFirstPlayerId() {
+        Card twoOfClubs = new Card(Card.CLUBS, Card.TWO);
+
+        for (Long id : userIdToHand.keySet()) {
+            List<Card> hand = userIdToHand.get(id);
+
+            if (hand.contains(twoOfClubs))
+                return id;
+        }
+
+        // This should never happen
+        return null;
     }
 }

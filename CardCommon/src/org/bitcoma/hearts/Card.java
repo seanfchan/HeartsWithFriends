@@ -82,6 +82,15 @@ public class Card implements Comparable<Card> {
         return "Suit[" + suit + "]" + "Value[" + this.getRank() + "]";
     }
 
+    public boolean equals(Object o) {
+        if (this.getClass() == o.getClass()) {
+            Card other = (Card) o;
+            if (other.getValue() == getValue())
+                return true;
+        }
+        return false;
+    }
+
     @Override
     public int compareTo(Card o) {
         if (this.getRank() < o.getRank())

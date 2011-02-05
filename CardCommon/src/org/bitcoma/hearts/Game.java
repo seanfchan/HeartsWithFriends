@@ -10,8 +10,9 @@ public class Game {
 
     Map<Long, Byte> userIdToGameScore;
     Round currentRound;
+    IHeartsHandler handler;
 
-    public Game(Collection<Long> playerIds) {
+    public Game(Collection<Long> playerIds, IHeartsHandler handler) {
 
         userIdToGameScore = new HashMap<Long, Byte>();
 
@@ -21,8 +22,13 @@ public class Game {
 
         // TODO: @sean check if the number of players match the max number of
         // players in a game need to fill with botplayers.
+        this.handler = handler;
 
-        currentRound = new Round(userIdToGameScore);
+        currentRound = new Round(userIdToGameScore, this.handler);
+
+        if (this.handler != null) {
+            this.handler.handleRoundStarted(currentRound);
+        }
     }
 
     // Returns list of winners
@@ -66,15 +72,31 @@ public class Game {
             return null;
     }
 
-    public void startNewRound() {
-        currentRound = new Round(this.userIdToGameScore);
-    }
+    public boolean playCard(Long userId, List<Card> cardsToPlay) {
+        boolean result = false;
+        if (currentRound != null) {
+            result = currentRound.playCard(userId, cardsToPlay);
 
-    public void removeCard(Long userId, Card played) {
-        currentRound.removeCard(userId, played);
-    }
+            if (result) {
+                // Game is over so tell those who are listening
+                if (isGameOver()) {
+                    if (handler != null) {
+                        handler.handleGameEnded(this);
+                    }
+                } else if (currentRound.hasRoundEnded()) {
+                    // Round has ended so we need to start a new round
+                    if (handler != null) {
+                        handler.handleRoundEnded(currentRound);
+                    }
+                    currentRound = new Round(userIdToGameScore, handler);
 
-    public Map<Long, Byte> getUserIdToScoreInRound() {
-        return currentRound.getUserIdToScoreInRound();
+                    if (handler != null) {
+                        handler.handleRoundStarted(currentRound);
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 }

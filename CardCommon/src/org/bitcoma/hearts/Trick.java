@@ -37,6 +37,10 @@ public class Trick {
         return true;
     }
 
+    public int getNumCards() {
+        return playerIdToCardMap.size();
+    }
+
     public void makeMove(Long playerId, Card card) {
         synchronized (playerIdToCardMap) {
             playerIdToCardMap.put(playerId, card);
