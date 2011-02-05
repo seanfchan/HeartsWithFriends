@@ -31,9 +31,12 @@ public class Round {
             userIdToScoreInRound.put(userId, (byte) 0);
             userIdToHand.put(userId, new LinkedList<Card>());
         }
+
+        // Shuffle and deal out the cards
+        shuffle(userIdToScoreInGame.size());
     }
 
-    public void shuffle(int numOfPlayers) {
+    private void shuffle(int numOfPlayers) {
         LinkedList<Card> deck = new LinkedList<Card>();
         for (byte i = 0; i < cardsInADeck; ++i) {
             deck.add(new Card(i));
@@ -106,8 +109,8 @@ public class Round {
 
         int swapIndex = 0;
         Card tempCard = null;
-        for (byte i = (byte) (numOfCardsInDeck - 1); i > 0; --i) {
-            swapIndex = (byte) (rand.nextInt(i) % numOfCardsInDeck);
+        for (int i = numOfCardsInDeck - 1; i > 0; --i) {
+            swapIndex = rand.nextInt(i) % numOfCardsInDeck;
             tempCard = deck.set(swapIndex, deck.get(i));
             deck.set(i, tempCard);
         }
@@ -115,7 +118,7 @@ public class Round {
         deal(deck);
     }
 
-    public void deal(LinkedList<Card> deck) {
+    private void deal(LinkedList<Card> deck) {
         int start = 0;
         for (Long userId : userIdToHand.keySet()) {
             userIdToHand.get(userId).addAll(deck.subList(start, start + numOfCardsInHand));
