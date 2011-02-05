@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+//SMARTIE PANTS!
 public class BotPlay {
+    Long playerId;
 	HashMap<Card, Double> matrix = new HashMap<Card, Double>();
 	int myScore = 0;
 	HashMap<Integer, LinkedList<Card>> trickMemory = new HashMap<Integer, LinkedList<Card>>();
@@ -13,12 +15,23 @@ public class BotPlay {
 
 	boolean myTurn = false;
 
-	public BotPlay(LinkedList<Card> cards) {
-
+	public BotPlay(Long id, LinkedList<Card> cards) {
+	    playerId = id;
 		for (Card c : cards) {
 			matrix.put(c, new Double(0));
 		}
-
+		startComputing();
+	}
+	
+	public LinkedList<Card> getBotCards()
+	{
+	    Iterator<Card> cardIter = matrix.keySet().iterator();
+	    LinkedList<Card> result = new LinkedList<Card>();
+	    while (cardIter.hasNext())
+	    {
+	        result.add(cardIter.next());
+	    }
+	    return result;
 	}
 
 	public void startComputing() {
@@ -30,7 +43,7 @@ public class BotPlay {
 		// we would skip initialization if the bot replaced a person in the
 		// middle of the game, as then
 		// there is no way to have full memory of what is going on.
-		removeThree();
+		//removeThree();
 		initialize();
 	}
 
@@ -131,21 +144,20 @@ public class BotPlay {
 
 		boolean hasTwoClubs = false;
 		boolean hasQueenSpades = false;
+		Card holdTwoClubs = null;
+		Card holdSpadeQueen = null;
 
 		Iterator<Card> cardIter = matrix.keySet().iterator();
 		while (cardIter.hasNext()) {
 			Card temp = cardIter.next();
 			if (temp.getSuit() == Card.CLUBS && temp.getRank() == Card.TWO) {
-				matrix.remove(temp);
-
+			    holdTwoClubs = temp;
 				hasTwoClubs = true;
-
 			}
 
 			if (temp.getSuit() == Card.SPADES && temp.getRank() == Card.QUEEN) {
-				// very low probability - this is shit!
-				matrix.remove(temp);
-
+				// very low probability - this is shit!	
+			    holdSpadeQueen = temp;
 				hasQueenSpades = true;
 			}
 		}
@@ -154,16 +166,27 @@ public class BotPlay {
 		int remCards = length;
 
 		if (hasTwoClubs) {
+
+		    matrix.remove(holdTwoClubs);
 			remProb -= new Double(0.5);
 			remCards--;
 		}
 		if (hasQueenSpades) {
+		    matrix.remove(holdSpadeQueen);
 			remProb -= new Double(0.0001);
 			remCards--;
 		}
 
 		// depending on the values of the remaining cards, split probabilities.
-		Card[] remainingCards = (Card[]) matrix.keySet().toArray();
+		Card[] remainingCards = new Card[matrix.keySet().size()];
+		Iterator<Card> tempIter = matrix.keySet().iterator();
+		int counter = 0;
+		while (tempIter.hasNext())
+		{
+		    remainingCards[counter] = tempIter.next();
+		    counter++;
+		}
+		//Card[] remainingCards = (Card[]) matrix.keySet().toArray();
 		Card.sortCards(remainingCards);
 
 		int sumOfValues = 0;
@@ -215,7 +238,7 @@ public class BotPlay {
 			Iterator<Card> cardIter = matrix.keySet().iterator();
 			while (cardIter.hasNext()) {
 				Card considered = cardIter.next();
-				if (matrix.get(considered) > highestProb) {
+				if (matrix.get(considered) > highestProb) {				    
 					highestProb = matrix.get(considered);
 					selected = considered;
 				}
@@ -274,10 +297,19 @@ public class BotPlay {
 						for (Card s : suitCards1) {
 							suitCards.add(s);
 						}
-						Card[] arrCards = (Card[]) suitCards.toArray();
+                        Card[] arrCards = new Card[suitCards.size()];
+                        for (int count = 0; count < suitCards.size(); count++)
+                        {
+                            arrCards[count] = suitCards.get(count);
+                        }
 						selected = arrCards[arrCards.length - 1];
 					} else {
-						Card[] arrCards = (Card[]) suitCards.toArray();
+					    Card[] arrCards = new Card[suitCards.size()];
+					    for (int count = 0; count < suitCards.size(); count++)
+					    {
+					        arrCards[count] = suitCards.get(count);
+					    }
+						
 						Card.sortCards(arrCards);
 						selected = arrCards[arrCards.length - 1];
 					}

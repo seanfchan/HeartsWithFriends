@@ -8,21 +8,21 @@ import java.util.Map;
 
 public class Game {
 
-    Map<Long, Integer> playerIdToGameScore;
+    Map<Long, Byte> userIdToGameScore;
     Round currentRound;
 
     public Game(Collection<Long> playerIds) {
 
-        playerIdToGameScore = new HashMap<Long, Integer>();
+        userIdToGameScore = new HashMap<Long, Byte>();
 
         for (Long id : playerIds) {
-            playerIdToGameScore.put(id, 0);
+            userIdToGameScore.put(id, (byte) 0);
         }
 
         // TODO: @sean check if the number of players match the max number of
         // players in a game need to fill with botplayers.
 
-        currentRound = new Round(playerIdToGameScore);
+        currentRound = new Round(userIdToGameScore);
     }
 
     // Returns list of winners
@@ -31,14 +31,14 @@ public class Game {
         List<Long> winner = new LinkedList<Long>();
 
         // Finds all winners in a round
-        for (Long playerId : playerIdToGameScore.keySet()) {
+        for (Long playerId : userIdToGameScore.keySet()) {
             // There is no way this can go in the list
-            if (playerIdToGameScore.get(playerId) > minScore)
+            if (userIdToGameScore.get(playerId) > minScore)
                 continue;
 
             // Found a score that is smaller, clearing winners list
-            if (playerIdToGameScore.get(playerId) < minScore) {
-                minScore = playerIdToGameScore.get(playerId);
+            if (userIdToGameScore.get(playerId) < minScore) {
+                minScore = userIdToGameScore.get(playerId);
                 winner.clear();
             }
 
@@ -47,26 +47,34 @@ public class Game {
         return winner;
     }
 
+    // Looking for players with scores greater than or equal to 100
     public boolean isGameOver() {
 
-        for (Long id : playerIdToGameScore.keySet()) {
-            if (playerIdToGameScore.get(id) >= 100)
+        for (Long id : userIdToGameScore.keySet()) {
+            if (userIdToGameScore.get(id) >= 100)
                 return true;
         }
         return false;
     }
 
     // Get Hand of player by playerId
-    public List<Card> getUserHand(Long id) {
-        if (playerIdToGameScore.containsKey(id))
-            return null;
-        else
+    public LinkedList<Card> getUserHand(Long id) {
+        // If there is a player with this id in this game
+        if (userIdToGameScore.containsKey(id))
             return (new LinkedList<Card>(currentRound.getUserIdToHand().get(id)));
+        else
+            return null;
     }
 
-    // Play card(s) input: userid, list of cards
-    public void playCard(Long id, LinkedList<Card> cardsToPlay) {
-        // TODO
+    public void startNewRound() {
+        currentRound = new Round(this.userIdToGameScore);
     }
 
+    public void removeCard(Long userId, Card played) {
+        currentRound.removeCard(userId, played);
+    }
+
+    public Map<Long, Byte> getUserIdToScoreInRound() {
+        return currentRound.getUserIdToScoreInRound();
+    }
 }

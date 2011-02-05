@@ -2,6 +2,7 @@ package org.bitcoma.hearts;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -11,19 +12,21 @@ public class Round {
     private final byte cardsInADeck = 52;
     private byte numOfCardsInDeck;
     private byte numOfCardsInHand;
-    private Map<Long, Integer> userIdToScoreInRound;
-    private Map<Long, Integer> userIdToScoreInGame;
+    private Map<Long, Byte> userIdToScoreInRound;
+    private Map<Long, Byte> userIdToScoreInGame;
     private Map<Long, LinkedList<Card>> userIdToHand;
     private Long loserId = null;
+    private Trick currentTrick = null;
 
-    public Round(Map<Long, Integer> UserIdToScoreInGame) {
+    public Round(Map<Long, Byte> userIdToScoreInGame) {
         userIdToHand = new HashMap<Long, LinkedList<Card>>();
-        userIdToScoreInRound = new HashMap<Long, Integer>();
-        this.userIdToScoreInGame = UserIdToScoreInGame;
+        userIdToScoreInRound = new HashMap<Long, Byte>();
+        this.userIdToScoreInGame = userIdToScoreInGame;
+        currentTrick = new Trick();
 
         // Initializing score
         for (Long userId : userIdToScoreInGame.keySet()) {
-            userIdToScoreInRound.put(userId, 0);
+            userIdToScoreInRound.put(userId, (byte) 0);
             userIdToHand.put(userId, new LinkedList<Card>());
         }
     }
@@ -101,10 +104,8 @@ public class Round {
 
         int swapIndex = 0;
         Card tempCard = null;
-        System.out.println(numOfCardsInDeck);
-        for (byte i = (byte) (numOfCardsInDeck - 1); i > 0 ; --i) {
+        for (byte i = (byte) (numOfCardsInDeck - 1); i > 0; --i) {
             swapIndex = (byte) (rand.nextInt(i) % numOfCardsInDeck);
-            System.out.println(swapIndex);
             tempCard = deck.set(swapIndex, deck.get(i));
             deck.set(i, tempCard);
         }
@@ -139,11 +140,60 @@ public class Round {
         return true;
     }
 
+    public void removeCard(Long userId, Card played) {
+        // This is really simple compared to the code previously here.
+        LinkedList<Card> result = userIdToHand.get(userId);
+        if (result != null)
+            result.remove(played);
+    }
+
+    // Play card(s) input: userid, list of cards
+    public void playCard(Long id, LinkedList<Card> cardsToPlay) {
+        // Normal case of just playing cards
+        if (cardsToPlay.size() != 3) {
+            currentTrick.makeMove(id, cardsToPlay.getFirst());
+
+            removeCard(id, cardsToPlay.getFirst());
+        }
+        // Giving/receiving 3 card in the beginning of a round
+        else {
+            for (Card c : cardsToPlay)
+                removeCard(id, c);
+        }
+    }
+
+    public boolean playCard(Long id, Card singleCardToPlay) {
+        List<Card> playerCards = userIdToHand.get(id);
+        if (currentTrick.isMoveValid(singleCardToPlay, playerCards)) {
+            currentTrick.makeMove(id, singleCardToPlay);
+
+            removeCard(id, singleCardToPlay);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Updating scores in Round and Game, meant to be run after every trick
+    private void updateScores(Trick currentTrick) {
+        Long loser = currentTrick.getLoser();
+        userIdToScoreInRound.put(loser, (byte) (userIdToScoreInRound.get(loser) + currentTrick.computeScore()));
+
+        // If round ends update game score
+        if (hasRoundEnded()) {
+            userIdToScoreInGame.put(loser, (byte) (userIdToScoreInGame.get(loser) + userIdToScoreInRound.get(loser)));
+        }
+    }
+
     public Long getLoserId() {
         return loserId;
     }
 
     public Map<Long, LinkedList<Card>> getUserIdToHand() {
         return userIdToHand;
+    }
+
+    public Map<Long, Byte> getUserIdToScoreInRound() {
+        return userIdToScoreInRound;
     }
 }

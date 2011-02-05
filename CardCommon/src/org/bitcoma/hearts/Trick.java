@@ -67,6 +67,10 @@ public class Trick {
         return playerId;
     }
 
+    public Map<Long, Card> getPlayerIdToCardMap() {
+        return playerIdToCardMap;
+    }
+
     public int computeScore() {
         int totalScore = 0;
         synchronized (playerIdToCardMap) {
