@@ -1,5 +1,8 @@
 package org.bitcoma.heartserver;
 
+import java.util.Map;
+
+import org.bitcoma.hearts.Card;
 import org.bitcoma.hearts.model.transfered.GameProtos.GameInfo;
 import org.bitcoma.hearts.model.transfered.GameProtos.GameInfo.PlayerInfo;
 import org.bitcoma.hearts.model.transfered.GenericProtos.GenericResponse;
@@ -8,9 +11,11 @@ import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameResponse;
 import org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest;
 import org.bitcoma.hearts.model.transfered.LoginProtos.LoginRequest;
 import org.bitcoma.hearts.model.transfered.LoginProtos.LoginResponse;
+import org.bitcoma.hearts.model.transfered.OneMessageWrapper;
 import org.bitcoma.hearts.model.transfered.PlayCardProtos.PlayCardRequest;
 import org.bitcoma.hearts.model.transfered.SignupProtos.SignupRequest;
 import org.bitcoma.hearts.model.transfered.StartGameProtos.StartGameRequest;
+import org.bitcoma.hearts.model.transfered.StartGameProtos.StartGameResponse;
 import org.bitcoma.heartserver.game.GameInstance;
 import org.bitcoma.heartserver.model.database.User;
 import org.bitcoma.heartserver.utils.Encryptor;
@@ -183,12 +188,40 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
 
             // Can we successfully add this player to the game?
             if (getCurrentGame().addReadyPlayer()) {
-                if (getCurrentGame().getReadyNumPlayers() == getCurrentGame().getMaxPlayers()) {
-                    // Send back the dealt out cards and full game information.
-                    // TODO: @jon figure out what this should look like for
-                    // madiha
+                if (getCurrentGame().getGameState() == GameInstance.State.ACTIVE) {
 
-                    return null;
+                    // Send back the dealt out cards and full game information.
+                    Map<Long, User> userMap = getCurrentGame().getUserIdToUserMap();
+                    for (Long userId : userMap.keySet()) {
+
+                        // Give all players their hand when last person joins.
+                        // Person that joined last gets a response so we skip
+                        // them here.
+                        if (userId != getCurrentUser().getLongId()) {
+
+                            StartGameResponse.Builder response = StartGameResponse.newBuilder();
+                            // Add cards to the hand that is returned. Need to
+                            // do this card by card
+                            for (Card c : getCurrentGame().getUserHand(userId)) {
+                                response.addCards(org.bitcoma.hearts.model.transfered.CardProtos.Card.newBuilder()
+                                        .setValue(c.getValue()).build());
+                            }
+
+                            Channel channel = ServerState.userIdToChannelMap.get(userId);
+                            if (channel != null)
+                                channel.write(new OneMessageWrapper(0, response.build()));
+                        }
+                    }
+
+                    StartGameResponse.Builder response = StartGameResponse.newBuilder();
+                    // Add cards to the hand that is returned. Need to
+                    // do this card by card
+                    for (Card c : getCurrentGame().getUserHand(getCurrentUser().getLongId())) {
+                        response.addCards(org.bitcoma.hearts.model.transfered.CardProtos.Card.newBuilder()
+                                .setValue(c.getValue()).build());
+                    }
+
+                    return response.build();
                 } else {
                     // Not all players are ready so just send an ok in the mean
                     // time

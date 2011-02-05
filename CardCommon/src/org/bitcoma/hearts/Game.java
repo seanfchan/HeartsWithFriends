@@ -1,5 +1,6 @@
 package org.bitcoma.hearts;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,7 +11,7 @@ public class Game {
     Map<Long, Integer> playerIdToGameScore;
     Round currentRound;
 
-    public Game(List<Long> playerIds) {
+    public Game(Collection<Long> playerIds) {
 
         playerIdToGameScore = new HashMap<Long, Integer>();
 
@@ -47,7 +48,7 @@ public class Game {
     }
 
     public boolean isGameOver() {
-        
+
         for (Long id : playerIdToGameScore.keySet()) {
             if (playerIdToGameScore.get(id) >= 100)
                 return true;
@@ -56,7 +57,7 @@ public class Game {
     }
 
     // Get Hand of player by playerId
-    public LinkedList<Card> getUserHand(Long id) {
+    public List<Card> getUserHand(Long id) {
         if (playerIdToGameScore.containsKey(id))
             return null;
         else

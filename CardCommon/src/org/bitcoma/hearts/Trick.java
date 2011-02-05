@@ -11,7 +11,7 @@ public class Trick {
         suitOfTrick = (byte) 0xFF;
     }
 
-    public boolean isMoveValid(Long playerId, Card cardToPlay, List<Card> playerCards) {
+    public boolean isMoveValid(Card cardToPlay, List<Card> playerCards) {
         int numCardsPlayed;
         synchronized (playerIdToCardMap) {
             numCardsPlayed = playerIdToCardMap.size();

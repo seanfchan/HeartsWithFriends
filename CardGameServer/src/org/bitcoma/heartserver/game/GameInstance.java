@@ -1,9 +1,11 @@
 package org.bitcoma.heartserver.game;
 
-import javolution.util.FastList;
+import java.util.List;
+
 import javolution.util.FastMap;
 
 import org.bitcoma.hearts.Card;
+import org.bitcoma.hearts.Game;
 import org.bitcoma.heartserver.model.database.User;
 
 public class GameInstance {
@@ -17,10 +19,9 @@ public class GameInstance {
     private int maxPlayers;
     private State gameState;
 
+    private Game gameInfo;
+
     FastMap<Long, User> userIdToUserMap;
-    FastMap<Long, FastList<Card>> userIdToHandMap;
-    FastMap<Long, Byte> userIdToTotalScore;
-    FastMap<Long, Byte> userIdToRoundScore;
 
     public GameInstance(int inputMaxPlayers, State inputState) {
         if (inputMaxPlayers <= 0)
@@ -51,11 +52,7 @@ public class GameInstance {
         if (getCurrentNumPlayers() == getMaxPlayers()) {
             setGameState(State.ACTIVE);
 
-            // Only initialize this memory when the game is active.
-            // Not needed until then
-            userIdToHandMap = new FastMap<Long, FastList<Card>>(getMaxPlayers());
-            userIdToTotalScore = new FastMap<Long, Byte>(getMaxPlayers());
-            userIdToRoundScore = new FastMap<Long, Byte>(getMaxPlayers());
+            gameInfo = new Game(userIdToUserMap.keySet());
         }
 
         return true;
@@ -105,6 +102,14 @@ public class GameInstance {
 
     public FastMap<Long, User> getUserIdToUserMap() {
         return userIdToUserMap;
+    }
+
+    public List<Card> getUserHand(Long id) {
+        if (gameInfo != null) {
+            return gameInfo.getUserHand(id);
+        } else {
+            return null;
+        }
     }
 
 }
