@@ -11,20 +11,35 @@ public class Trick {
         suitOfTrick = (byte) 0xFF;
     }
 
-    public boolean isMoveValid(Card cardToPlay, List<Card> playerCards) {
+    public boolean isMoveValid(Card cardToPlay, List<Card> playerCards, boolean bHeartPlayed) {
         int numCardsPlayed;
         synchronized (playerIdToCardMap) {
             numCardsPlayed = playerIdToCardMap.size();
         }
-        
+
         // Check if you have two of clubs. This needs to be played.
         Card twoOfClubs = new Card(Card.CLUBS, Card.TWO);
-        if(playerCards.contains(twoOfClubs) && !cardToPlay.equals(twoOfClubs)) {
-        	return false;
+        if (playerCards.contains(twoOfClubs) && !cardToPlay.equals(twoOfClubs)) {
+            return false;
         }
 
         // Set the suit with the first played card
         if (numCardsPlayed == 0) {
+            // Heart played as first card of trick
+            if (cardToPlay.getSuit() == Card.HEARTS) {
+                if (bHeartPlayed) {
+                    // Playing heart after hearts are allowed
+                } else {
+                    for (Card c : playerCards) {
+                        // Played a heart to lead with other suits in hand.
+                        if (c.getSuit() != Card.HEARTS)
+                            return false;
+                    }
+
+                    // Played heart with only hearts in hand
+                }
+            }
+
             suitOfTrick = cardToPlay.getSuit();
             return true;
         } else {

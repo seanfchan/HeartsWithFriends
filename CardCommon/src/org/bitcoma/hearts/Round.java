@@ -43,6 +43,7 @@ public class Round {
     private Long loserId;
     private Trick currentTrick;
     private IHeartsHandler handler;
+    private boolean bHeartPlayed = false;
 
     public Round(Map<Long, Byte> userIdToScoreInGame, Map<Long, Long> userIdToUserIdPassingMap, IHeartsHandler handler) {
         if (userIdToScoreInGame == null) {
@@ -267,7 +268,7 @@ public class Round {
             // Single card played
             if (numCardsPlayed == 1 && passingCardsInfo == null) {
                 Card cardToPlay = cardsToPlay.get(0);
-                if (currentTrick.isMoveValid(cardToPlay, userIdToHand.get(id))) {
+                if (currentTrick.isMoveValid(cardToPlay, userIdToHand.get(id), bHeartPlayed)) {
 
                     // Check if it is the players turn
                     if (userIdTurnOrderList.size() > 0 && userIdTurnOrderList.get(0) == id) {
@@ -283,6 +284,10 @@ public class Round {
                     removeCard(id, cardToPlay);
                     allCardsPlayed.add(cardToPlay);
                     currentTrick.makeMove(id, cardToPlay);
+
+                    // Optimize checking for a heart has been played.
+                    if (cardToPlay.getSuit() == Card.HEARTS)
+                        bHeartPlayed = true;
 
                     if (handler != null) {
                         handler.handleSingleCardPlayed(id, cardToPlay);
@@ -307,6 +312,7 @@ public class Round {
 
                 } else {
                     // Invalid move played
+                    System.err.println("Player: " + id + " playing an invalid card: " + cardToPlay);
                     return false;
                 }
 
@@ -380,7 +386,7 @@ public class Round {
                         }
                     }
                 }
-                
+
                 return true;
             }
         }
