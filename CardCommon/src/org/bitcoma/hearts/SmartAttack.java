@@ -71,7 +71,7 @@ public class SmartAttack implements IHeartsHandler {
             }
 
             // Invalid card played
-            if (smartAttack.game.playCard(smartAttack.playerIds.get(PLAYER_IDX), cardsToPlay))
+            if (!smartAttack.game.playCard(smartAttack.playerIds.get(PLAYER_IDX), cardsToPlay))
                 continue;
             // Cards to pass have been excepted
             else

@@ -16,6 +16,12 @@ public class Trick {
         synchronized (playerIdToCardMap) {
             numCardsPlayed = playerIdToCardMap.size();
         }
+        
+        // Check if you have two of clubs. This needs to be played.
+        Card twoOfClubs = new Card(Card.CLUBS, Card.TWO);
+        if(playerCards.contains(twoOfClubs) && !cardToPlay.equals(twoOfClubs)) {
+        	return false;
+        }
 
         // Set the suit with the first played card
         if (numCardsPlayed == 0) {
