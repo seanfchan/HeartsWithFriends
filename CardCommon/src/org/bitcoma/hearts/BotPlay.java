@@ -112,7 +112,7 @@ public class BotPlay {
 
     public static Card playCard(byte suitOfTrick, Collection<Card> trickCards, Collection<Card> cards,
             Collection<Card> allPlayed) {
-
+        System.out.println("Bot's cards are " + cards);
         Card selected = null;
 
         if (trickCards.size() == 0) {
@@ -181,7 +181,18 @@ public class BotPlay {
                         // play the next highest card
                         // we know for sure that the bot has at least two cards
                         // still left.
-                        return sortedCards[sortedCards.length - 2];
+                        int start = sortedCards.length - 2;
+                        while (sortedCards[start].getSuit() == Card.HEARTS && start > 0)
+                            start--;
+                        if (start == 0)
+                        {
+                            // bot only has hearts
+                            return sortedCards[sortedCards.length -2];
+                        }
+                        if (start > 0)
+                            return sortedCards[start];
+                        if (start < 0)
+                            System.out.println("This should never happen");
                     }
                 } else {
                     // just play the highest card
