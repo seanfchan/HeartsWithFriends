@@ -93,6 +93,7 @@ public class BotPlay {
                 }
             }
             givenAway.add(removeMe);
+            cards.remove(removeMe);
         }
         return givenAway;
     }
