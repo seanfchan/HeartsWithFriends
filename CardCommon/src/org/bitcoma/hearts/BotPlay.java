@@ -67,8 +67,12 @@ public class BotPlay {
          * sure to have as much suit variety as possible. 3. Remove high cards
          * from the suit. TODO: @MADIHA weights to be added.
          */
-        LinkedList<Card> givenAway = new LinkedList<Card>();
-        Iterator<Card> cardIter = cards.iterator();
+    	LinkedList<Card> cardsCopy = new LinkedList<Card>(cards);
+        
+    	// Just to make sure we don't use it again.
+    	cards = null;
+    	LinkedList<Card> givenAway = new LinkedList<Card>();
+        Iterator<Card> cardIter = cardsCopy.iterator();
         while (cardIter.hasNext()) {
             Card considered = cardIter.next();
             if (considered.getSuit() == Card.SPADES && considered.getRank() == Card.QUEEN) {
@@ -81,8 +85,8 @@ public class BotPlay {
         // Discard the card of the most represented suit and one that has the
         // highest value.
         while (givenAway.size() < 3) {
-            int bestSuit = mostRepresentedSuit(cards);
-            LinkedList<Card> suitCards = getSuitCards(bestSuit, cards);
+            int bestSuit = mostRepresentedSuit(cardsCopy);
+            LinkedList<Card> suitCards = getSuitCards(bestSuit, cardsCopy);
             int bestRank = 0;
             Card removeMe = null;
             // find highest value in the suit
@@ -92,8 +96,8 @@ public class BotPlay {
                     removeMe = c;
                 }
             }
+            cardsCopy.remove(removeMe);
             givenAway.add(removeMe);
-            cards.remove(removeMe);
         }
         return givenAway;
     }
