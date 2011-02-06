@@ -150,7 +150,7 @@ public class BotPlay {
                 // TODO: check with Jon - if the lowest card is a heart, should
                 // it be skipped?
                 int index = 0;
-                while (sortedCards[index].getSuit() == Card.HEARTS) {
+                while (index < sortedCards.length && sortedCards[index].getSuit() == Card.HEARTS) {
                     index++;
                 }
                 // if you have all hearts left - then you play a lower heart
