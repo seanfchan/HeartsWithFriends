@@ -3,6 +3,8 @@ package org.bitcoma.hearts;
 import java.util.List;
 import java.util.Map;
 
+import org.bitcoma.hearts.model.PassingCardsInfo;
+
 public interface IHeartsHandler {
 
     /**
@@ -25,7 +27,7 @@ public interface IHeartsHandler {
      * @param cardsPassed
      *            List of cards that are being passed.
      */
-    public void handleCardsPassed(Long srcId, Long destId, List<Card> cardsPassed);
+    public void handleCardsPassed(List<PassingCardsInfo> passingCardInfo);
 
     /**
      * Called when scores are updated (End of every trick, possible penalties

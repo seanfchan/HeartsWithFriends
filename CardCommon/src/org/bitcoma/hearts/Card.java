@@ -79,7 +79,7 @@ public class Card implements Comparable<Card> {
             suit = "Unknown";
             break;
         }
-        return "Suit[" + suit + "]" + "Value[" + this.getRank() + "]";
+        return suit + "[" + getRank() + "]";
     }
 
     public boolean equals(Object o) {

@@ -75,6 +75,10 @@ public class Trick {
         return playerIdToCardMap;
     }
 
+    public byte getSuitOfTrick() {
+        return suitOfTrick;
+    }
+
     public int computeScore() {
         int totalScore = 0;
         synchronized (playerIdToCardMap) {

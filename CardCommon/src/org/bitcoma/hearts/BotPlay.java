@@ -1,13 +1,11 @@
 package org.bitcoma.hearts;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 //SMARTIE PANT-STATICA!
 public class BotPlay {
-
 
     public static boolean isBot(Long playerId) {
         if (playerId > 0 && playerId <= 10) {
@@ -16,7 +14,7 @@ public class BotPlay {
         return false;
     }
 
-    public static int[] suitVariety(Collection<Card> cards) {
+    private static int[] suitVariety(Collection<Card> cards) {
         // computes the variety of suits for the existing cards.
         Iterator<Card> cardIter = cards.iterator();
         int[] suitRep = new int[4];
@@ -35,7 +33,7 @@ public class BotPlay {
         return suitRep;
     }
 
-    public static int mostRepresentedSuit(Collection<Card> cards) {
+    private static int mostRepresentedSuit(Collection<Card> cards) {
         int[] suitRep = suitVariety(cards);
         int max = 0;
         int best = -1;
@@ -48,7 +46,7 @@ public class BotPlay {
         return best;
     }
 
-    public static LinkedList<Card> getSuitCards(int s, Collection<Card> cards) {
+    private static LinkedList<Card> getSuitCards(int s, Collection<Card> cards) {
         // gives you cards of the suit
         LinkedList<Card> result = new LinkedList<Card>();
         Iterator<Card> cardIter = cards.iterator();
@@ -99,11 +97,11 @@ public class BotPlay {
         return givenAway;
     }
 
-    public static boolean hasQueen(Collection<Card> cards) {
+    private static boolean hasQueen(Collection<Card> cards) {
         return (getSuitCards(Card.SPADES, cards).contains(new Card(Card.SPADES, Card.QUEEN)));
     }
 
-    public static boolean hasTwoClubs(Collection<Card> cards) {
+    private static boolean hasTwoClubs(Collection<Card> cards) {
         return (getSuitCards(Card.CLUBS, cards).contains(new Card(Card.CLUBS, Card.TWO)));
     }
 

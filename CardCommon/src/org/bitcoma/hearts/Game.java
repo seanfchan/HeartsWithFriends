@@ -11,24 +11,30 @@ public class Game {
     Map<Long, Byte> userIdToGameScore;
     Round currentRound;
     IHeartsHandler handler;
+    Map<Long, Long> userIdToUserIdPassingMap;
 
     public Game(Collection<Long> playerIds, IHeartsHandler handler) {
 
         userIdToGameScore = new HashMap<Long, Byte>();
+        userIdToUserIdPassingMap = new HashMap<Long, Long>();
 
         for (Long id : playerIds) {
             userIdToGameScore.put(id, (byte) 0);
+        }
+
+        Long[] idArr = new Long[playerIds.size()];
+        idArr = playerIds.toArray(idArr);
+        for (int i = 0; i < idArr.length; i++) {
+            int idx = i;
+            int nextIdx = (i + 1) % idArr.length;
+            userIdToUserIdPassingMap.put(idArr[idx], idArr[nextIdx]);
         }
 
         // TODO: @sean check if the number of players match the max number of
         // players in a game need to fill with botplayers.
         this.handler = handler;
 
-        currentRound = new Round(userIdToGameScore, this.handler);
-
-        if (this.handler != null) {
-            this.handler.handleRoundStarted(currentRound);
-        }
+        currentRound = new Round(userIdToGameScore, userIdToUserIdPassingMap, this.handler);
     }
 
     // Returns list of winners
@@ -88,11 +94,9 @@ public class Game {
                     if (handler != null) {
                         handler.handleRoundEnded(currentRound);
                     }
-                    currentRound = new Round(userIdToGameScore, handler);
 
-                    if (handler != null) {
-                        handler.handleRoundStarted(currentRound);
-                    }
+                    currentRound = new Round(userIdToGameScore, userIdToUserIdPassingMap, handler);
+
                 }
             }
         }
