@@ -67,16 +67,17 @@ public class BotPlay {
          * sure to have as much suit variety as possible. 3. Remove high cards
          * from the suit. TODO: @MADIHA weights to be added.
          */
-    	LinkedList<Card> cardsCopy = new LinkedList<Card>(cards);
-        
-    	// Just to make sure we don't use it again.
-    	cards = null;
-    	LinkedList<Card> givenAway = new LinkedList<Card>();
+        LinkedList<Card> cardsCopy = new LinkedList<Card>(cards);
+
+        // Just to make sure we don't use it again.
+        cards = null;
+        LinkedList<Card> givenAway = new LinkedList<Card>();
         Iterator<Card> cardIter = cardsCopy.iterator();
         while (cardIter.hasNext()) {
             Card considered = cardIter.next();
             if (considered.getSuit() == Card.SPADES && considered.getRank() == Card.QUEEN) {
                 // explicit search for queen of spades
+                cardsCopy.remove(considered);
                 givenAway.add(considered);
                 break;
             }
@@ -184,10 +185,9 @@ public class BotPlay {
                         int start = sortedCards.length - 2;
                         while (sortedCards[start].getSuit() == Card.HEARTS && start > 0)
                             start--;
-                        if (start == 0)
-                        {
+                        if (start == 0) {
                             // bot only has hearts
-                            return sortedCards[sortedCards.length -2];
+                            return sortedCards[sortedCards.length - 2];
                         }
                         if (start > 0)
                             return sortedCards[start];
