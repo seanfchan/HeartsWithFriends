@@ -103,8 +103,12 @@ public class BotPlay {
         return givenAway;
     }
 
-    private static boolean hasQueen(Collection<Card> cards) {
-        return (getSuitCards(Card.SPADES, cards).contains(new Card(Card.SPADES, Card.QUEEN)));
+    private static Card findQueen(Collection<Card> cards) {
+        for (Card c : cards)
+            if (c.getSuit() == Card.SPADES && c.getRank() == Card.QUEEN)
+                return c;
+
+        return null;
     }
 
     private static boolean hasTwoClubs(Collection<Card> cards) {
@@ -211,45 +215,53 @@ public class BotPlay {
             LinkedList<Card> suitCards = getSuitCards(suitOfTrick, cards);
 
             if (suitCards.size() != 0) {
-                if (suitOfTrick == Card.SPADES && hasQueen(cards)) {
-                    Iterator<Card> trickIter = trickCards.iterator();
-                    while (trickIter.hasNext()) {
-                        Card look = trickIter.next();
-                        if (look.getRank() > Card.QUEEN) {
-                            return look;
-                        }
-                    }
-                } else {
-                    // find highest card of the suit but possibly lower than the
-                    // trick cards played already.
-                    // sort the suit cards
-                    Card[] sortedCards = new Card[suitCards.size()];
-                    for (int i = 0; i < suitCards.size(); i++)
-                        sortedCards[i] = suitCards.get(i);
-                    Card.sortCards(sortedCards);
-                    boolean lookMore = false;
-                    for (int i = sortedCards.length - 1; i >= 0; i--) {
-                        Iterator<Card> trickIter = trickCards.iterator();
-                        lookMore = false;
-                        while (trickIter.hasNext()) {
-                            if (sortedCards[i].getRank() < trickIter.next().getRank()) {
-                                // keep going
-                            } else {
-                                // this was the highest card that is higher than
-                                // the trick cards played.
-                                // so let's try a lower card
-                                lookMore = true;
-                                break;
-                            }
-                            if (!lookMore)
-                                return sortedCards[i];
-                        }
-                    }
-                    // none of the cards were lower than all of the trick cards
-                    // played so far. So let's play the lowest card
-                    return sortedCards[0];
 
+                // Play queen of spades if there is a spade higher than queen
+                // and we have queen
+                Card queenOfSpades = findQueen(cards);
+                if (suitOfTrick == Card.SPADES && queenOfSpades != null) {
+                    boolean aboveQueenSpades = false;
+                    for (Card c : trickCards) {
+                        if (c.getSuit() == Card.SPADES && c.getRank() > Card.QUEEN) {
+                            aboveQueenSpades = true;
+                            break;
+                        }
+                    }
+
+                    if (aboveQueenSpades) {
+                        return queenOfSpades;
+                    }
                 }
+
+                // find highest card of the suit but possibly lower than the
+                // trick cards played already.
+                // sort the suit cards
+                Card[] sortedCards = new Card[suitCards.size()];
+                for (int i = 0; i < suitCards.size(); i++)
+                    sortedCards[i] = suitCards.get(i);
+                Card.sortCards(sortedCards);
+                boolean lookMore = false;
+                for (int i = sortedCards.length - 1; i >= 0; i--) {
+                    Iterator<Card> trickIter = trickCards.iterator();
+                    lookMore = false;
+                    while (trickIter.hasNext()) {
+                        if (sortedCards[i].getRank() < trickIter.next().getRank()) {
+                            // keep going
+                        } else {
+                            // this was the highest card that is higher than
+                            // the trick cards played.
+                            // so let's try a lower card
+                            lookMore = true;
+                            break;
+                        }
+                        if (!lookMore)
+                            return sortedCards[i];
+                    }
+                }
+                // none of the cards were lower than all of the trick cards
+                // played so far. So let's play the lowest card
+                return sortedCards[0];
+
             } else {
                 /*
                  * If you do not have the suit being played then you have
@@ -259,42 +271,40 @@ public class BotPlay {
                  */
                 suitCards = getSuitCards(Card.SPADES, cards);
 
-                if (hasQueen(suitCards)) {
-                    for (Card c : suitCards) {
-                        if (c.getRank() == Card.QUEEN)
-                            return c;
-                    }
-                } else {
-                    suitCards = getSuitCards(Card.HEARTS, cards);
-                    // have no hearts cards
-                    if (suitCards.size() == 0) {
-                        LinkedList<Card> suitCards1 = getSuitCards(Card.DIAMONDS, cards);
-                        suitCards = suitCards1;
-                        suitCards1 = getSuitCards(Card.CLUBS, cards);
-                        for (Card s : suitCards1) {
-                            suitCards.add(s);
-                        }
-                        suitCards1 = getSuitCards(Card.SPADES, cards);
-                        for (Card s : suitCards1) {
-                            suitCards.add(s);
-                        }
-                        Card[] arrCards = new Card[suitCards.size()];
-                        for (int count = 0; count < suitCards.size(); count++) {
-                            arrCards[count] = suitCards.get(count);
-                        }
-                        return arrCards[arrCards.length - 1];
+                Card queenOfSpades = findQueen(cards);
+                if (queenOfSpades != null) {
+                    return queenOfSpades;
+                }
 
+                suitCards = getSuitCards(Card.HEARTS, cards);
+                // have no hearts cards
+                if (suitCards.size() == 0) {
+                    LinkedList<Card> suitCards1 = getSuitCards(Card.DIAMONDS, cards);
+                    suitCards = suitCards1;
+                    suitCards1 = getSuitCards(Card.CLUBS, cards);
+                    for (Card s : suitCards1) {
+                        suitCards.add(s);
                     }
-                    // have hearts to throw
-                    else {
-                        Card[] arrCards = new Card[suitCards.size()];
-                        for (int count = 0; count < suitCards.size(); count++) {
-                            arrCards[count] = suitCards.get(count);
-                        }
+                    suitCards1 = getSuitCards(Card.SPADES, cards);
+                    for (Card s : suitCards1) {
+                        suitCards.add(s);
+                    }
+                    Card[] arrCards = new Card[suitCards.size()];
+                    for (int count = 0; count < suitCards.size(); count++) {
+                        arrCards[count] = suitCards.get(count);
+                    }
+                    return arrCards[arrCards.length - 1];
 
-                        Card.sortCards(arrCards);
-                        return arrCards[arrCards.length - 1];
+                }
+                // have hearts to throw
+                else {
+                    Card[] arrCards = new Card[suitCards.size()];
+                    for (int count = 0; count < suitCards.size(); count++) {
+                        arrCards[count] = suitCards.get(count);
                     }
+
+                    Card.sortCards(arrCards);
+                    return arrCards[arrCards.length - 1];
                 }
             }
 
