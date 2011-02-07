@@ -234,29 +234,29 @@ public class BotPlay {
                 }
 
                 // find highest card of the suit but possibly lower than the
-                // trick cards played already.
+                // highest trick cards played already.
                 // sort the suit cards
                 Card[] sortedCards = new Card[suitCards.size()];
                 for (int i = 0; i < suitCards.size(); i++)
                     sortedCards[i] = suitCards.get(i);
                 Card.sortCards(sortedCards);
-                boolean lookMore = false;
+
+                // sort the trick cards:
+                Iterator<Card> trickCheck = trickCards.iterator();
+                Card[] sortTrick = new Card[trickCards.size()];
+                int tCount = 0;
+                while (trickCheck.hasNext()) {
+                    sortTrick[tCount] = trickCheck.next();
+                    tCount++;
+                }
+                Card.sortCards(sortTrick);
+
                 for (int i = sortedCards.length - 1; i >= 0; i--) {
-                    Iterator<Card> trickIter = trickCards.iterator();
-                    lookMore = false;
-                    while (trickIter.hasNext()) {
-                        if (sortedCards[i].getRank() < trickIter.next().getRank()) {
-                            // keep going
-                        } else {
-                            // this was the highest card that is higher than
-                            // the trick cards played.
-                            // so let's try a lower card
-                            lookMore = true;
-                            break;
-                        }
-                        if (!lookMore)
+                    for (int j = sortTrick.length - 1; j >= 0; j--) {
+                        if (sortedCards[i].getRank() < sortTrick[j].getRank())
                             return sortedCards[i];
                     }
+
                 }
                 // none of the cards were lower than all of the trick cards
                 // played so far. So let's play the lowest card
