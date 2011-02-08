@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.bitcoma.hearts.model.PassingCardsInfo;
 
-public interface IHeartsHandler {
+public interface IHeartsGameHandler {
 
     /**
      * Called when a player plays a card
@@ -20,14 +20,12 @@ public interface IHeartsHandler {
     /**
      * Called when a player passes a card to another player
      * 
-     * @param srcId
-     *            User id of who is passing the cards
-     * @param destId
-     *            User id of who is receiving the cards
-     * @param cardsPassed
-     *            List of cards that are being passed.
+     * @param passingCardInfo
+     *            List of source to destination cards being passed
+     * @param firstPlayerId
+     *            User id of first player from this round
      */
-    public void handleCardsPassed(List<PassingCardsInfo> passingCardInfo);
+    public void handleCardsPassed(List<PassingCardsInfo> passingCardInfo, Long firstPlayerId);
 
     /**
      * Called when scores are updated (End of every trick, possible penalties

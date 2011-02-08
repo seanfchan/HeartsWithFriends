@@ -286,13 +286,13 @@ public final class FindGameRoomsProtos {
       extends com.google.protobuf.MessageOrBuilder {
     
     // repeated .hearts.GameRoomInfo game_room_infos = 1;
-    java.util.List<org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo> 
+    java.util.List<org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo> 
         getGameRoomInfosList();
-    org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo getGameRoomInfos(int index);
+    org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo getGameRoomInfos(int index);
     int getGameRoomInfosCount();
-    java.util.List<? extends org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfoOrBuilder> 
+    java.util.List<? extends org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfoOrBuilder> 
         getGameRoomInfosOrBuilderList();
-    org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfoOrBuilder getGameRoomInfosOrBuilder(
+    org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfoOrBuilder getGameRoomInfosOrBuilder(
         int index);
   }
   public static final class FindGameRoomsResponse extends
@@ -325,21 +325,21 @@ public final class FindGameRoomsProtos {
     
     // repeated .hearts.GameRoomInfo game_room_infos = 1;
     public static final int GAME_ROOM_INFOS_FIELD_NUMBER = 1;
-    private java.util.List<org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo> gameRoomInfos_;
-    public java.util.List<org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo> getGameRoomInfosList() {
+    private java.util.List<org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo> gameRoomInfos_;
+    public java.util.List<org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo> getGameRoomInfosList() {
       return gameRoomInfos_;
     }
-    public java.util.List<? extends org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfoOrBuilder> 
+    public java.util.List<? extends org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfoOrBuilder> 
         getGameRoomInfosOrBuilderList() {
       return gameRoomInfos_;
     }
     public int getGameRoomInfosCount() {
       return gameRoomInfos_.size();
     }
-    public org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo getGameRoomInfos(int index) {
+    public org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo getGameRoomInfos(int index) {
       return gameRoomInfos_.get(index);
     }
-    public org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfoOrBuilder getGameRoomInfosOrBuilder(
+    public org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfoOrBuilder getGameRoomInfosOrBuilder(
         int index) {
       return gameRoomInfos_.get(index);
     }
@@ -623,7 +623,7 @@ public final class FindGameRoomsProtos {
               break;
             }
             case 10: {
-              org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo.Builder subBuilder = org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo.newBuilder();
+              org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo.Builder subBuilder = org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addGameRoomInfos(subBuilder.buildPartial());
               break;
@@ -635,19 +635,19 @@ public final class FindGameRoomsProtos {
       private int bitField0_;
       
       // repeated .hearts.GameRoomInfo game_room_infos = 1;
-      private java.util.List<org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo> gameRoomInfos_ =
+      private java.util.List<org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo> gameRoomInfos_ =
         java.util.Collections.emptyList();
       private void ensureGameRoomInfosIsMutable() {
         if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          gameRoomInfos_ = new java.util.ArrayList<org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo>(gameRoomInfos_);
+          gameRoomInfos_ = new java.util.ArrayList<org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo>(gameRoomInfos_);
           bitField0_ |= 0x00000001;
          }
       }
       
       private com.google.protobuf.RepeatedFieldBuilder<
-          org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo, org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo.Builder, org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfoOrBuilder> gameRoomInfosBuilder_;
+          org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo, org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo.Builder, org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfoOrBuilder> gameRoomInfosBuilder_;
       
-      public java.util.List<org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo> getGameRoomInfosList() {
+      public java.util.List<org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo> getGameRoomInfosList() {
         if (gameRoomInfosBuilder_ == null) {
           return java.util.Collections.unmodifiableList(gameRoomInfos_);
         } else {
@@ -661,7 +661,7 @@ public final class FindGameRoomsProtos {
           return gameRoomInfosBuilder_.getCount();
         }
       }
-      public org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo getGameRoomInfos(int index) {
+      public org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo getGameRoomInfos(int index) {
         if (gameRoomInfosBuilder_ == null) {
           return gameRoomInfos_.get(index);
         } else {
@@ -669,7 +669,7 @@ public final class FindGameRoomsProtos {
         }
       }
       public Builder setGameRoomInfos(
-          int index, org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo value) {
+          int index, org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo value) {
         if (gameRoomInfosBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -683,7 +683,7 @@ public final class FindGameRoomsProtos {
         return this;
       }
       public Builder setGameRoomInfos(
-          int index, org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo.Builder builderForValue) {
+          int index, org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo.Builder builderForValue) {
         if (gameRoomInfosBuilder_ == null) {
           ensureGameRoomInfosIsMutable();
           gameRoomInfos_.set(index, builderForValue.build());
@@ -693,7 +693,7 @@ public final class FindGameRoomsProtos {
         }
         return this;
       }
-      public Builder addGameRoomInfos(org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo value) {
+      public Builder addGameRoomInfos(org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo value) {
         if (gameRoomInfosBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -707,7 +707,7 @@ public final class FindGameRoomsProtos {
         return this;
       }
       public Builder addGameRoomInfos(
-          int index, org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo value) {
+          int index, org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo value) {
         if (gameRoomInfosBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -721,7 +721,7 @@ public final class FindGameRoomsProtos {
         return this;
       }
       public Builder addGameRoomInfos(
-          org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo.Builder builderForValue) {
+          org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo.Builder builderForValue) {
         if (gameRoomInfosBuilder_ == null) {
           ensureGameRoomInfosIsMutable();
           gameRoomInfos_.add(builderForValue.build());
@@ -732,7 +732,7 @@ public final class FindGameRoomsProtos {
         return this;
       }
       public Builder addGameRoomInfos(
-          int index, org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo.Builder builderForValue) {
+          int index, org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo.Builder builderForValue) {
         if (gameRoomInfosBuilder_ == null) {
           ensureGameRoomInfosIsMutable();
           gameRoomInfos_.add(index, builderForValue.build());
@@ -743,7 +743,7 @@ public final class FindGameRoomsProtos {
         return this;
       }
       public Builder addAllGameRoomInfos(
-          java.lang.Iterable<? extends org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo> values) {
+          java.lang.Iterable<? extends org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo> values) {
         if (gameRoomInfosBuilder_ == null) {
           ensureGameRoomInfosIsMutable();
           super.addAll(values, gameRoomInfos_);
@@ -773,18 +773,18 @@ public final class FindGameRoomsProtos {
         }
         return this;
       }
-      public org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo.Builder getGameRoomInfosBuilder(
+      public org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo.Builder getGameRoomInfosBuilder(
           int index) {
         return getGameRoomInfosFieldBuilder().getBuilder(index);
       }
-      public org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfoOrBuilder getGameRoomInfosOrBuilder(
+      public org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfoOrBuilder getGameRoomInfosOrBuilder(
           int index) {
         if (gameRoomInfosBuilder_ == null) {
           return gameRoomInfos_.get(index);  } else {
           return gameRoomInfosBuilder_.getMessageOrBuilder(index);
         }
       }
-      public java.util.List<? extends org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfoOrBuilder> 
+      public java.util.List<? extends org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfoOrBuilder> 
            getGameRoomInfosOrBuilderList() {
         if (gameRoomInfosBuilder_ != null) {
           return gameRoomInfosBuilder_.getMessageOrBuilderList();
@@ -792,25 +792,25 @@ public final class FindGameRoomsProtos {
           return java.util.Collections.unmodifiableList(gameRoomInfos_);
         }
       }
-      public org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo.Builder addGameRoomInfosBuilder() {
+      public org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo.Builder addGameRoomInfosBuilder() {
         return getGameRoomInfosFieldBuilder().addBuilder(
-            org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo.getDefaultInstance());
+            org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo.getDefaultInstance());
       }
-      public org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo.Builder addGameRoomInfosBuilder(
+      public org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo.Builder addGameRoomInfosBuilder(
           int index) {
         return getGameRoomInfosFieldBuilder().addBuilder(
-            index, org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo.getDefaultInstance());
+            index, org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo.getDefaultInstance());
       }
-      public java.util.List<org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo.Builder> 
+      public java.util.List<org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo.Builder> 
            getGameRoomInfosBuilderList() {
         return getGameRoomInfosFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilder<
-          org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo, org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo.Builder, org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfoOrBuilder> 
+          org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo, org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo.Builder, org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfoOrBuilder> 
           getGameRoomInfosFieldBuilder() {
         if (gameRoomInfosBuilder_ == null) {
           gameRoomInfosBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo, org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfo.Builder, org.bitcoma.hearts.model.transfered.GameProtos.GameRoomInfoOrBuilder>(
+              org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo, org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfo.Builder, org.bitcoma.hearts.model.transfered.GameStructProtos.GameRoomInfoOrBuilder>(
                   gameRoomInfos_,
                   ((bitField0_ & 0x00000001) == 0x00000001),
                   getParentForChildren(),
@@ -850,11 +850,12 @@ public final class FindGameRoomsProtos {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\023FindGameRooms.proto\022\006hearts\032\nGame.prot" +
-      "o\"\026\n\024FindGameRoomsRequest\"F\n\025FindGameRoo" +
-      "msResponse\022-\n\017game_room_infos\030\001 \003(\0132\024.he" +
-      "arts.GameRoomInfoB<\n#org.bitcoma.hearts." +
-      "model.transferedB\023FindGameRoomsProtosH\001"
+      "\n\023FindGameRooms.proto\022\006hearts\032\020GameStruc" +
+      "t.proto\"\026\n\024FindGameRoomsRequest\"F\n\025FindG" +
+      "ameRoomsResponse\022-\n\017game_room_infos\030\001 \003(" +
+      "\0132\024.hearts.GameRoomInfoB<\n#org.bitcoma.h" +
+      "earts.model.transferedB\023FindGameRoomsPro" +
+      "tosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -883,7 +884,7 @@ public final class FindGameRoomsProtos {
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          org.bitcoma.hearts.model.transfered.GameProtos.getDescriptor(),
+          org.bitcoma.hearts.model.transfered.GameStructProtos.getDescriptor(),
         }, assigner);
   }
   

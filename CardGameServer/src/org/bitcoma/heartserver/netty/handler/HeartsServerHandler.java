@@ -83,21 +83,6 @@ public class HeartsServerHandler extends SimpleChannelHandler {
             e.getChannel().write(new OneMessageWrapper(msg.getMessageId(), response));
             break;
 
-        // NOTE: Currently not supported as this functionality is not
-        // needed.
-        // case FIND_GAMES_REQUEST:
-        // logger.info("Server: Find Games Request seen");
-        // FindGamesRequest findGamesRequest = msg.getFindGamesRequest();
-        // response = api.findGames(findGamesRequest);
-        // e.getChannel().write(response);
-        // break;
-
-        // case FIND_GAME_ROOMS_REQUEST:
-        // System.out.println("Server: Find Game Rooms Request seen");
-        // FindGameRoomsRequest findGameRoomsRequest = msg
-        // .getFindGameRoomsRequest();
-        // break;
-
         // Unrecognized messages.
         default:
             logger.info("Server: Unrecognized/unexpected message seen");

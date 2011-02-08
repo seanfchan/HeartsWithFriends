@@ -14,6 +14,10 @@ import "ResetPassword.proto";
 import "PlayCard.proto";
 import "StartGame.proto";
 import "LeaveGame.proto";
+import "Game.proto";
+import "Round.proto";
+import "ScoreUpdate.proto";
+import "Trick.proto";
 
 message OneMessage {
   enum Type { 
@@ -30,8 +34,14 @@ message OneMessage {
     PLAY_CARD_REQUEST         = 11;
     JOIN_GAME_RESPONSE        = 12;
     START_GAME_REQUEST        = 13;
-    START_GAME_RESPONSE       = 14;
     LEAVE_GAME_REQUEST        = 15;
+    GAME_ENDED_RESPONSE       = 16;
+    ROUND_STARTED_RESPONSE    = 17;
+    ROUND_ENDED_RESPONSE      = 18;
+    TRICK_ENDED_RESPONSE      = 19;
+    SCORE_UPDATE_RESPONSE     = 20;
+    PLAY_SINGLE_CARD_RESPONSE = 21;
+    PASS_CARDS_RESPONSE       = 22;
   }
 
   // Identifier for message. Responses will have same message_id
@@ -42,19 +52,25 @@ message OneMessage {
   required Type type = 2;
 
   // One of the following will be filled in.
-  optional LoginRequest login_request                      = 3;
-  optional SignupRequest signup_request                    = 4;
-  optional JoinGameRequest join_game_request               = 5;
-  optional GenericResponse generic_response                = 6;
-  optional FindGamesRequest find_games_request             = 7;
-  optional FindGamesResponse find_games_response           = 8;
-  optional FindGameRoomsRequest find_game_rooms_request    = 9;
-  optional FindGameRoomsResponse find_game_rooms_response  = 10;
-  optional ResetPasswordRequest reset_password_request     = 11;
-  optional LoginResponse login_response                    = 12;
-  optional PlayCardRequest play_card_request               = 13;
-  optional JoinGameResponse join_game_response             = 14;
-  optional StartGameRequest start_game_request             = 15;
-  optional StartGameResponse start_game_response           = 16;
-  optional LeaveGameRequest leave_game_reqeuest            = 17;
+  optional LoginRequest login_request                         = 3;
+  optional SignupRequest signup_request                    	  = 4;
+  optional JoinGameRequest join_game_request                  = 5;
+  optional GenericResponse generic_response                   = 6;
+  optional FindGamesRequest find_games_request                = 7;
+  optional FindGamesResponse find_games_response              = 8;
+  optional FindGameRoomsRequest find_game_rooms_request       = 9;
+  optional FindGameRoomsResponse find_game_rooms_response     = 10;
+  optional ResetPasswordRequest reset_password_request        = 11;
+  optional LoginResponse login_response                       = 12;
+  optional PlayCardRequest play_card_request                  = 13;
+  optional JoinGameResponse join_game_response                = 14;
+  optional StartGameRequest start_game_request                = 15;
+  optional LeaveGameRequest leave_game_reqeuest               = 17;
+  optional GameEndedResponse game_ended_response              = 18;
+  optional RoundStartedResponse round_started_response        = 19;
+  optional RoundEndedResponse round_ended_response            = 20;
+  optional TrickEndedResponse trick_ended_response            = 21;
+  optional ScoreUpdateResponse score_update_response          = 22;
+  optional PlaySingleCardResponse play_single_card_response   = 23;
+  optional PassCardsResponse pass_cards_response              = 24;
 }

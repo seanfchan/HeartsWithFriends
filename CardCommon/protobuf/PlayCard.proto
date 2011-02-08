@@ -10,19 +10,25 @@ message PlayCardRequest {
 	repeated Card cards = 1;
 }
 
-message PlayCardResponse {
-
-	enum TurnType {
-		PASSING = 0;
-		ONE_DOWN = 1;
-	}
+message PlaySingleCardResponse {
 
 	// User that played the card
 	optional uint64 src_user_id = 1;
-	
-	optional TurnType turn_type = 2;
 
-	// Cards to be played or received.
-	repeated Card cards = 3;
+	// Cards to be played
+	optional Card card_played = 2;
+}
+
+message PassCardsResponse {
+
+	// User id of first player of this round
+	optional uint64 first_player_id = 1;
+
+	// Cards passed from this player
+	optional uint64 src_user_id = 2;
+	// Cards passed to this player
+	optional uint64 dst_user_id = 3;
 	
+	// Cards that were passed.
+	repeated Card cards_passed = 4;
 }

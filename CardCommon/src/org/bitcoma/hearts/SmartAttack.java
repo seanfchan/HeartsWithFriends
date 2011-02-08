@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 import org.bitcoma.hearts.model.PassingCardsInfo;
 
-public class SmartAttack implements IHeartsHandler {
+public class SmartAttack implements IHeartsGameHandler {
 
     public SmartAttack() {
         // nothing
@@ -113,7 +113,7 @@ public class SmartAttack implements IHeartsHandler {
     }
 
     @Override
-    public void handleCardsPassed(List<PassingCardsInfo> passingCardInfo) {
+    public void handleCardsPassed(List<PassingCardsInfo> passingCardInfo, Long firstPlayerId) {
         System.out.println("Card passing complete.");
         System.out.println("Your new cards are: " + game.getUserHand(playerIds.get(PLAYER_IDX)));
     }

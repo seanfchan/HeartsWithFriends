@@ -42,10 +42,11 @@ public class Round {
 
     private Long loserId;
     private Trick currentTrick;
-    private IHeartsHandler handler;
+    private IHeartsGameHandler handler;
     private boolean bHeartPlayed = false;
 
-    public Round(Map<Long, Byte> userIdToScoreInGame, Map<Long, Long> userIdToUserIdPassingMap, IHeartsHandler handler) {
+    public Round(Map<Long, Byte> userIdToScoreInGame, Map<Long, Long> userIdToUserIdPassingMap,
+            IHeartsGameHandler handler) {
         if (userIdToScoreInGame == null) {
             throw new IllegalArgumentException("userIdToScoreInGame must be non-null");
         }
@@ -364,7 +365,7 @@ public class Round {
                     setPlayerTurnOrder(getFirstPlayerId());
 
                     if (handler != null)
-                        handler.handleCardsPassed(passingCardsInfo);
+                        handler.handleCardsPassed(passingCardsInfo, getFirstPlayerId());
 
                     // Free up some memory
                     passingCardsInfo.clear();
@@ -423,6 +424,10 @@ public class Round {
 
     public Map<Long, LinkedList<Card>> getUserIdToHand() {
         return userIdToHand;
+    }
+
+    public Map<Long, Long> getUserIdToUserIdPassingMap() {
+        return userIdToUserIdPassingMap;
     }
 
     public Map<Long, Byte> getUserIdToScoreInRound() {

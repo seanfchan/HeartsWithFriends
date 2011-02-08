@@ -1,0 +1,21 @@
+package hearts;
+
+option java_package = "org.bitcoma.hearts.model.transfered";
+option java_outer_classname = "GameStructProtos";
+option optimize_for = SPEED;
+
+message GameInfo {
+	message PlayerInfo {
+		optional uint64 user_id = 1;
+		optional string user_name = 2;
+	};
+    optional uint64 game_id = 1;
+    optional string game_name = 2;
+    repeated PlayerInfo players = 3;
+    optional uint32 max_number_of_players = 4;
+}
+
+message GameRoomInfo {
+    optional uint64 game_room_id = 1;
+    optional string game_room_name = 2;
+}
