@@ -149,17 +149,17 @@ public class GameInstance implements IHeartsGameHandler {
     public void handleCardsPassed(List<PassingCardsInfo> passingCardInfo, Long firstPlayerId) {
 
         // Send cards to client that is destination
-        PassCardsResponse.Builder response = PassCardsResponse.newBuilder();
+        PassCardsResponse.Builder builder = PassCardsResponse.newBuilder();
         for (PassingCardsInfo pic : passingCardInfo) {
-            response.setSrcUserId(pic.srcId);
-            response.setDstUserId(pic.dstId);
-            response.setFirstPlayerId(firstPlayerId);
+            builder.setSrcUserId(pic.srcId);
+            builder.setDstUserId(pic.dstId);
+            builder.setFirstPlayerId(firstPlayerId);
 
             for (Card c : pic.cards) {
-                response.addCardsPassed(org.bitcoma.hearts.model.transfered.CardProtos.Card.newBuilder()
+                builder.addCardsPassed(org.bitcoma.hearts.model.transfered.CardProtos.Card.newBuilder()
                         .setValue(c.getValue()).build());
             }
-            ServerState.sendToClient(pic.dstId, response);
+            ServerState.sendToClient(pic.dstId, builder.build());
         }
 
     }
