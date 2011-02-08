@@ -1,19 +1,21 @@
 package org.bitcoma.heartsClient;
 
-import org.bitcoma.hearts.model.transfered.FindGameRoomsProtos.FindGameRoomsRequest;
-import org.bitcoma.hearts.model.transfered.FindGameRoomsProtos.FindGameRoomsResponse;
-import org.bitcoma.hearts.model.transfered.FindGamesProtos.FindGamesRequest;
-import org.bitcoma.hearts.model.transfered.FindGamesProtos.FindGamesResponse;
+import org.bitcoma.hearts.model.transfered.GameProtos.GameEndedResponse;
 import org.bitcoma.hearts.model.transfered.GenericProtos.GenericResponse;
 import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameRequest;
 import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameResponse;
 import org.bitcoma.hearts.model.transfered.LoginProtos.LoginRequest;
 import org.bitcoma.hearts.model.transfered.LoginProtos.LoginResponse;
+import org.bitcoma.hearts.model.transfered.PlayCardProtos.PassCardsResponse;
 import org.bitcoma.hearts.model.transfered.PlayCardProtos.PlayCardRequest;
+import org.bitcoma.hearts.model.transfered.PlayCardProtos.PlaySingleCardResponse;
 import org.bitcoma.hearts.model.transfered.ResetPasswordProtos.ResetPasswordRequest;
+import org.bitcoma.hearts.model.transfered.RoundProtos.RoundEndedResponse;
+import org.bitcoma.hearts.model.transfered.RoundProtos.RoundStartedResponse;
+import org.bitcoma.hearts.model.transfered.ScoreUpdateProtos.ScoreUpdateResponse;
 import org.bitcoma.hearts.model.transfered.SignupProtos.SignupRequest;
 import org.bitcoma.hearts.model.transfered.StartGameProtos.StartGameRequest;
-import org.bitcoma.hearts.model.transfered.StartGameProtos.StartGameResponse;
+import org.bitcoma.hearts.model.transfered.TrickProtos.TrickEndedResponse;
 
 import com.google.protobuf.MessageLite;
 
@@ -94,23 +96,31 @@ public abstract class HeartsProtoHandler {
         defaultHandler(request);
     }
 
-    public void handleStartGameResponse(StartGameResponse response, MessageLite origRequest) {
+    public void handleGameEndedResponse(GameEndedResponse response, MessageLite origRequest) {
         defaultHandler(response);
     }
 
-    public void handleFindGamesRequest(FindGamesRequest request) {
-        defaultHandler(request);
-    }
-
-    public void handleFindGamesResponse(FindGamesResponse response, MessageLite origRequest) {
+    public void handleRoundStartedResponse(RoundStartedResponse response, MessageLite origRequest) {
         defaultHandler(response);
     }
 
-    public void handleFindGameRoomsRequest(FindGameRoomsRequest request) {
-        defaultHandler(request);
+    public void handleRoundEndedResponse(RoundEndedResponse response, MessageLite origRequest) {
+        defaultHandler(response);
     }
 
-    public void handleFindGameRoomsResponse(FindGameRoomsResponse response, MessageLite origRequest) {
+    public void handleTrickEndedResponse(TrickEndedResponse response, MessageLite origRequest) {
+        defaultHandler(response);
+    }
+
+    public void handleScoreUpdateResponse(ScoreUpdateResponse response, MessageLite origRequest) {
+        defaultHandler(response);
+    }
+
+    public void handlePlaySingleCardResponse(PlaySingleCardResponse response, MessageLite origRequest) {
+        defaultHandler(response);
+    }
+
+    public void handlePassCardsResponse(PassCardsResponse response, MessageLite origRequest) {
         defaultHandler(response);
     }
 

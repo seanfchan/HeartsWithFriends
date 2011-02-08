@@ -1,0 +1,27 @@
+package hearts;
+
+option java_package = "org.bitcoma.hearts.model.transfered";
+option java_outer_classname = "RoundProtos";
+option optimize_for = SPEED;
+
+import "Card.proto";
+
+message RoundStartedResponse {
+
+	// User id of who you are passing cards to.
+	// User id is not present if this is a non-passing round.
+	optional uint64 passed_to_user_id = 1;
+
+	// User id of whose cards these are
+	optional uint64 user_id = 2;
+	
+	// Cards for this player
+	repeated Card cards = 3;
+}
+
+message RoundEndedResponse {
+
+	// Not sure what to put here.
+	// Just an indicator I think to show full game scores.
+
+}

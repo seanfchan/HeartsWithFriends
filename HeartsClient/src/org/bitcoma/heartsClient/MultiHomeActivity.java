@@ -1,6 +1,6 @@
 package org.bitcoma.heartsClient;
 
-import org.bitcoma.hearts.model.transfered.GameProtos.GameInfo;
+import org.bitcoma.hearts.model.transfered.GameStructProtos.GameInfo;
 import org.bitcoma.hearts.model.transfered.GenericProtos.GenericResponse;
 import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameRequest;
 import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameResponse;

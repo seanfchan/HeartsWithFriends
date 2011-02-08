@@ -10,10 +10,10 @@ public class Game {
 
     Map<Long, Byte> userIdToGameScore;
     Round currentRound;
-    IHeartsHandler handler;
+    IHeartsGameHandler handler;
     Map<Long, Long> userIdToUserIdPassingMap;
 
-    public Game(Collection<Long> playerIds, IHeartsHandler handler) {
+    public Game(Collection<Long> playerIds, IHeartsGameHandler handler) {
 
         userIdToGameScore = new HashMap<Long, Byte>();
         userIdToUserIdPassingMap = new HashMap<Long, Long>();

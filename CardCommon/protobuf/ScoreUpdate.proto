@@ -1,0 +1,15 @@
+package hearts;
+
+option java_package = "org.bitcoma.hearts.model.transfered";
+option java_outer_classname = "ScoreUpdateProtos";
+option optimize_for = SPEED;
+
+message ScoreUpdateResponse {
+	message ScoreInfo {
+		optional uint64 user_id = 1;
+		optional uint32 round_score = 2;
+		optional uint32 game_score = 3;
+	}
+	
+	repeated ScoreInfo user_scores = 1;
+}

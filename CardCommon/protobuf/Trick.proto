@@ -1,11 +1,11 @@
 package hearts;
 
 option java_package = "org.bitcoma.hearts.model.transfered";
-option java_outer_classname = "StartGameProtos";
+option java_outer_classname = "TrickProtos";
 option optimize_for = SPEED;
 
-message StartGameRequest {
+message TrickEndedResponse {
 
-    optional uint64 game_id = 1;
-
+	optional uint64 loser_id = 1;	
+	
 }

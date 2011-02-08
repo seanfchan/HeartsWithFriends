@@ -4,7 +4,7 @@ option java_package = "org.bitcoma.hearts.model.transfered";
 option java_outer_classname = "FindGamesProtos";
 option optimize_for = SPEED;
 
-import "Game.proto";
+import "GameStruct.proto";
 
 message FindGamesRequest {
 
