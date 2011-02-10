@@ -17,7 +17,9 @@ public class SmartAttack implements IHeartsGameHandler {
     public LinkedList<Long> playerIds;
     public Map<Long, String> names;
     public Game game;
+    public boolean isPassingCards = true;
 
+    public static final int NUM_CARDS_PASSED = 3;
     public static final int PLAYER_IDX = 3;
 
     public void constructGame() {
@@ -45,66 +47,67 @@ public class SmartAttack implements IHeartsGameHandler {
         smartAttack.names.put(smartAttack.playerIds.get(PLAYER_IDX), playerName);
 
         smartAttack.constructGame();
-        while (true) {
-            // setting player 4 to be you - the NON BOT
-            int i = 0;
-
-            System.out.println("Please enter the index numbers of the cards you want to pass:");
-            int index1 = scan.nextInt();
-            int index2 = scan.nextInt();
-            int index3 = scan.nextInt();
-
-            List<Card> cardsToPlay = new LinkedList<Card>();
-            for (Card c : smartAttack.game.getUserHand(smartAttack.playerIds.get(PLAYER_IDX))) {
-                if (i == index1 || i == index2 || i == index3) {
-                    cardsToPlay.add(c);
-
-                    if (cardsToPlay.size() == 3)
-                        break;
-                }
-                i++;
-            }
-            // Card not found
-            if (cardsToPlay.size() != 3) {
-                cardsToPlay.clear();
-                continue;
-            }
-
-            // Invalid card played
-            if (!smartAttack.game.playCard(smartAttack.playerIds.get(PLAYER_IDX), cardsToPlay))
-                continue;
-            // Cards to pass have been excepted
-            else
-                break;
-        }
 
         while (!smartAttack.game.isGameOver()) {
 
-            // setting player 4 to be you - the NON BOT
-            int i = 0;
+            // Turn where cards are passed.
+            if (smartAttack.isPassingCards) {
 
-            System.out
-                    .println("Your cards are: " + smartAttack.game.getUserHand(smartAttack.playerIds.get(PLAYER_IDX)));
-            System.out.println("Please enter the index number of the card you want to play:");
-            int index = scan.nextInt();
+                // setting player 4 to be you - the NON BOT
+                int i = 0;
 
-            List<Card> cardsToPlay = new LinkedList<Card>();
-            for (Card c : smartAttack.game.getUserHand(smartAttack.playerIds.get(PLAYER_IDX))) {
-                if (i == index) {
-                    cardsToPlay.add(c);
-                    break;
+                System.out.println("Please enter the index numbers of the cards you want to pass:");
+                int index1 = scan.nextInt();
+                int index2 = scan.nextInt();
+                int index3 = scan.nextInt();
+
+                List<Card> cardsToPlay = new LinkedList<Card>();
+                for (Card c : smartAttack.game.getUserHand(smartAttack.playerIds.get(PLAYER_IDX))) {
+                    if (i == index1 || i == index2 || i == index3) {
+                        cardsToPlay.add(c);
+
+                        if (cardsToPlay.size() == NUM_CARDS_PASSED)
+                            break;
+                    }
+                    i++;
                 }
-                i++;
+                // Card not found
+                if (cardsToPlay.size() != NUM_CARDS_PASSED) {
+                    cardsToPlay.clear();
+                    continue;
+                }
+
+                // Invalid card played
+                if (!smartAttack.game.playCard(smartAttack.playerIds.get(PLAYER_IDX), cardsToPlay))
+                    continue;
             }
-            // Card not found
-            if (i == smartAttack.game.getUserHand(smartAttack.playerIds.get(PLAYER_IDX)).size())
-                continue;
+            // Normal turn where a single card is played.
+            else {
 
-            // Invalid card played
-            if (smartAttack.game.playCard(smartAttack.playerIds.get(PLAYER_IDX), cardsToPlay))
-                continue;
+                // setting player 4 to be you - the NON BOT
+                int i = 0;
+                System.out.println("Your cards are: "
+                        + smartAttack.game.getUserHand(smartAttack.playerIds.get(PLAYER_IDX)));
+                System.out.println("Please enter the index number of the card you want to play:");
+                int index = scan.nextInt();
+
+                List<Card> cardsToPlay = new LinkedList<Card>();
+                for (Card c : smartAttack.game.getUserHand(smartAttack.playerIds.get(PLAYER_IDX))) {
+                    if (i == index) {
+                        cardsToPlay.add(c);
+                        break;
+                    }
+                    i++;
+                }
+                // Card not found
+                if (i == smartAttack.game.getUserHand(smartAttack.playerIds.get(PLAYER_IDX)).size())
+                    continue;
+
+                // Invalid card played
+                if (smartAttack.game.playCard(smartAttack.playerIds.get(PLAYER_IDX), cardsToPlay))
+                    continue;
+            }
         }
-
     }
 
     @Override
@@ -115,6 +118,7 @@ public class SmartAttack implements IHeartsGameHandler {
 
     @Override
     public void handleCardsPassed(List<PassingCardsInfo> passingCardInfo, Long firstPlayerId) {
+        isPassingCards = false;
         System.out.println("Card passing complete.");
         System.out.println("Your new cards are: " + game.getUserHand(playerIds.get(PLAYER_IDX)));
     }
@@ -145,6 +149,8 @@ public class SmartAttack implements IHeartsGameHandler {
             System.out.println("Player " + names.get(playerId) + " cards : " + userIdCardsMap.get(playerId));
         }
         System.out.println();
+
+        isPassingCards = true;
     }
 
     @Override

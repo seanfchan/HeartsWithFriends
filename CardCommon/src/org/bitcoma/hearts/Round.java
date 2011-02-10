@@ -1,6 +1,8 @@
 package org.bitcoma.hearts;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,7 +14,7 @@ import org.bitcoma.hearts.model.PassingCardsInfo;
 public class Round {
 
     // True when playing 4 player hearts
-    private final byte cardsInADeck = 52;
+    private static final byte CARDS_IN_DECK = 52;
     private byte numOfCardsInDeck;
     private byte numOfCardsInHand;
     private Map<Long, Byte> userIdToScoreInRound;
@@ -97,8 +99,8 @@ public class Round {
     }
 
     private void shuffle(int numOfPlayers) {
-        LinkedList<Card> deck = new LinkedList<Card>();
-        for (byte i = 0; i < cardsInADeck; ++i) {
+        List<Card> deck = new ArrayList<Card>(CARDS_IN_DECK);
+        for (byte i = 0; i < CARDS_IN_DECK; ++i) {
             deck.add(new Card(i));
         }
 
@@ -178,10 +180,13 @@ public class Round {
         deal(deck);
     }
 
-    private void deal(LinkedList<Card> deck) {
+    private void deal(List<Card> deck) {
         int start = 0;
         for (Long userId : userIdToHand.keySet()) {
-            userIdToHand.get(userId).addAll(deck.subList(start, start + numOfCardsInHand));
+            List<Card> subList = deck.subList(start, start + numOfCardsInHand);
+            Collections.sort(subList);
+
+            userIdToHand.get(userId).addAll(subList);
             start += numOfCardsInHand;
         }
     }

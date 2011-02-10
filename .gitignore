@@ -11,3 +11,5 @@ CardGameServer/bin/**/*
 
 HeartsClient/bin/*
 HeartsClient/bin/**/*
+HeartsClient/gen/*
+HeartsClient/gen/**/*

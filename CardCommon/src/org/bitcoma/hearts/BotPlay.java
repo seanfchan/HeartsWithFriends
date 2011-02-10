@@ -117,7 +117,6 @@ public class BotPlay {
 
     public static Card playCard(byte suitOfTrick, Collection<Card> trickCards, Collection<Card> cards,
             Collection<Card> allPlayed) {
-        System.out.println("Bot's cards are " + cards);
         Card selected = null;
 
         if (trickCards.size() == 0) {
