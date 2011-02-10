@@ -149,4 +149,76 @@ public class BotPlayTest {
 
         assertTrue("Should play a card in our hand", botHand.contains(botCardToPlay));
     }
+
+    @Test
+    public void testLeadingTrickWithHighHearts() {
+        List<Card> botHand = new LinkedList<Card>();
+        List<Card> allCardsPlayed = new LinkedList<Card>();
+        List<Card> trickCards = new LinkedList<Card>();
+
+        allCardsPlayed.add(new Card(Card.CLUBS, Card.TWO));
+        allCardsPlayed.add(new Card(Card.CLUBS, Card.TEN));
+        allCardsPlayed.add(new Card(Card.CLUBS, Card.NINE));
+        allCardsPlayed.add(new Card(Card.CLUBS, Card.QUEEN));
+        allCardsPlayed.add(new Card(Card.DIAMONDS, Card.TWO));
+        allCardsPlayed.add(new Card(Card.DIAMONDS, Card.JACK));
+        allCardsPlayed.add(new Card(Card.DIAMONDS, Card.EIGHT));
+        allCardsPlayed.add(new Card(Card.DIAMONDS, Card.TEN));
+        allCardsPlayed.add(new Card(Card.SPADES, Card.ACE));
+        allCardsPlayed.add(new Card(Card.SPADES, Card.TEN));
+        allCardsPlayed.add(new Card(Card.SPADES, Card.QUEEN));
+        allCardsPlayed.add(new Card(Card.SPADES, Card.SEVEN));
+
+        botHand.add(new Card(Card.HEARTS, Card.THREE));
+        botHand.add(new Card(Card.HEARTS, Card.FIVE));
+        botHand.add(new Card(Card.CLUBS, Card.FIVE));
+        botHand.add(new Card(Card.SPADES, Card.FIVE));
+        botHand.add(new Card(Card.CLUBS, Card.SIX));
+        botHand.add(new Card(Card.CLUBS, Card.SEVEN));
+        botHand.add(new Card(Card.SPADES, Card.NINE));
+        botHand.add(new Card(Card.CLUBS, Card.TEN));
+        botHand.add(new Card(Card.HEARTS, Card.QUEEN));
+        botHand.add(new Card(Card.CLUBS, Card.KING));
+        botHand.add(new Card(Card.HEARTS, Card.ACE));
+        botHand.add(new Card(Card.DIAMONDS, Card.QUEEN));
+
+        Card botCardToPlay = BotPlay.playCard(Card.SPADES, trickCards, botHand, allCardsPlayed);
+
+        assertTrue("Should play a card in our hand", botHand.contains(botCardToPlay));
+        // This check is done in is move valid. Should be figured into picking a
+        // bot card as well.
+        assertTrue("Should not be a heart. No hearts played and we lead the trick with other cards to play.",
+                botCardToPlay.getSuit() != Card.HEARTS);
+    }
+
+    @Test
+    public void testLeadingTrickWithOnlyHearts() {
+        List<Card> botHand = new LinkedList<Card>();
+        List<Card> allCardsPlayed = new LinkedList<Card>();
+        List<Card> trickCards = new LinkedList<Card>();
+
+        allCardsPlayed.add(new Card(Card.CLUBS, Card.TWO));
+        allCardsPlayed.add(new Card(Card.CLUBS, Card.TEN));
+        allCardsPlayed.add(new Card(Card.CLUBS, Card.NINE));
+        allCardsPlayed.add(new Card(Card.CLUBS, Card.QUEEN));
+        allCardsPlayed.add(new Card(Card.DIAMONDS, Card.TWO));
+        allCardsPlayed.add(new Card(Card.DIAMONDS, Card.JACK));
+        allCardsPlayed.add(new Card(Card.DIAMONDS, Card.EIGHT));
+        allCardsPlayed.add(new Card(Card.DIAMONDS, Card.TEN));
+        allCardsPlayed.add(new Card(Card.SPADES, Card.ACE));
+        allCardsPlayed.add(new Card(Card.SPADES, Card.TEN));
+        allCardsPlayed.add(new Card(Card.SPADES, Card.QUEEN));
+        allCardsPlayed.add(new Card(Card.SPADES, Card.SEVEN));
+
+        botHand.add(new Card(Card.HEARTS, Card.FIVE));
+        botHand.add(new Card(Card.HEARTS, Card.SEVEN));
+        botHand.add(new Card(Card.HEARTS, Card.EIGHT));
+
+        // Should play a heart even though no hearts have been played
+        Card botCardToPlay = BotPlay.playCard(Card.SPADES, trickCards, botHand, allCardsPlayed);
+
+        assertTrue("Should play a card in our hand", botHand.contains(botCardToPlay));
+        assertTrue("Should be a heart. No hearts played and we lead the trick with only hearts to play.",
+                botCardToPlay.getSuit() == Card.HEARTS);
+    }
 }

@@ -32,7 +32,7 @@ public class SmartAttack implements IHeartsGameHandler {
         smartAttack.playerIds = new LinkedList<Long>();
         smartAttack.playerIds.add((long) 1);
         smartAttack.playerIds.add((long) 2);
-        smartAttack.playerIds.add((long) PLAYER_IDX);
+        smartAttack.playerIds.add((long) 3);
         smartAttack.playerIds.add((long) 25);
 
         smartAttack.names = new HashMap<Long, String>();

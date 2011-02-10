@@ -133,15 +133,7 @@ public class BotPlay {
             }
 
             Card[] sortedCards = new Card[cards.size()];
-            Iterator<Card> cardIter = cards.iterator();
-            int cardI = 0;
-
-            while (cardIter.hasNext()) {
-                Card c = cardIter.next();
-                sortedCards[cardI] = c;
-                cardI++;
-
-            }
+            sortedCards = cards.toArray(sortedCards);
 
             // sort all the cards by value and throw the highest value if hearts
             // has not been played so far.
@@ -198,8 +190,17 @@ public class BotPlay {
                             System.out.println("This should never happen");
                     }
                 } else {
-                    // just play the highest card
-                    return sortedCards[sortedCards.length - 1];
+                    // No hearts played and we lead the trick. So we have to
+                    // make sure to not play a heart unless that is the only
+                    // card we have in our hand.
+                    for (int i = sortedCards.length - 1; i >= 0; --i) {
+                        if (sortedCards[i].getSuit() != Card.HEARTS)
+                            return sortedCards[i];
+                    }
+
+                    // just play the lowest card since we only have hearts and
+                    // this will enable others to give us points.
+                    return sortedCards[0];
                 }
             }
 
