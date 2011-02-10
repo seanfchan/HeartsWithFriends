@@ -12,11 +12,16 @@ message PlayCardRequest {
 
 message PlaySingleCardResponse {
 
+	// User id of the next player of this trick
+	// At the end of a trick this should be the same id
+	// as is present in the trick ended message
+	optional uint64 next_player_id = 1;
+
 	// User that played the card
-	optional uint64 src_user_id = 1;
+	optional uint64 src_user_id = 2;
 
 	// Cards to be played
-	optional Card card_played = 2;
+	optional Card card_played = 3;
 }
 
 message PassCardsResponse {

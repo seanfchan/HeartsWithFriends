@@ -560,11 +560,15 @@ public final class PlayCardProtos {
   public interface PlaySingleCardResponseOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
-    // optional uint64 src_user_id = 1;
+    // optional uint64 next_player_id = 1;
+    boolean hasNextPlayerId();
+    long getNextPlayerId();
+    
+    // optional uint64 src_user_id = 2;
     boolean hasSrcUserId();
     long getSrcUserId();
     
-    // optional .hearts.Card card_played = 2;
+    // optional .hearts.Card card_played = 3;
     boolean hasCardPlayed();
     org.bitcoma.hearts.model.transfered.CardProtos.Card getCardPlayed();
     org.bitcoma.hearts.model.transfered.CardProtos.CardOrBuilder getCardPlayedOrBuilder();
@@ -598,21 +602,31 @@ public final class PlayCardProtos {
     }
     
     private int bitField0_;
-    // optional uint64 src_user_id = 1;
-    public static final int SRC_USER_ID_FIELD_NUMBER = 1;
+    // optional uint64 next_player_id = 1;
+    public static final int NEXT_PLAYER_ID_FIELD_NUMBER = 1;
+    private long nextPlayerId_;
+    public boolean hasNextPlayerId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public long getNextPlayerId() {
+      return nextPlayerId_;
+    }
+    
+    // optional uint64 src_user_id = 2;
+    public static final int SRC_USER_ID_FIELD_NUMBER = 2;
     private long srcUserId_;
     public boolean hasSrcUserId() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
+      return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     public long getSrcUserId() {
       return srcUserId_;
     }
     
-    // optional .hearts.Card card_played = 2;
-    public static final int CARD_PLAYED_FIELD_NUMBER = 2;
+    // optional .hearts.Card card_played = 3;
+    public static final int CARD_PLAYED_FIELD_NUMBER = 3;
     private org.bitcoma.hearts.model.transfered.CardProtos.Card cardPlayed_;
     public boolean hasCardPlayed() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
+      return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     public org.bitcoma.hearts.model.transfered.CardProtos.Card getCardPlayed() {
       return cardPlayed_;
@@ -622,6 +636,7 @@ public final class PlayCardProtos {
     }
     
     private void initFields() {
+      nextPlayerId_ = 0L;
       srcUserId_ = 0L;
       cardPlayed_ = org.bitcoma.hearts.model.transfered.CardProtos.Card.getDefaultInstance();
     }
@@ -638,10 +653,13 @@ public final class PlayCardProtos {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeUInt64(1, srcUserId_);
+        output.writeUInt64(1, nextPlayerId_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeMessage(2, cardPlayed_);
+        output.writeUInt64(2, srcUserId_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeMessage(3, cardPlayed_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -654,11 +672,15 @@ public final class PlayCardProtos {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(1, srcUserId_);
+          .computeUInt64Size(1, nextPlayerId_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, cardPlayed_);
+          .computeUInt64Size(2, srcUserId_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, cardPlayed_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -783,14 +805,16 @@ public final class PlayCardProtos {
       
       public Builder clear() {
         super.clear();
-        srcUserId_ = 0L;
+        nextPlayerId_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000001);
+        srcUserId_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000002);
         if (cardPlayedBuilder_ == null) {
           cardPlayed_ = org.bitcoma.hearts.model.transfered.CardProtos.Card.getDefaultInstance();
         } else {
           cardPlayedBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
       
@@ -832,9 +856,13 @@ public final class PlayCardProtos {
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.srcUserId_ = srcUserId_;
+        result.nextPlayerId_ = nextPlayerId_;
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
+        }
+        result.srcUserId_ = srcUserId_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
         }
         if (cardPlayedBuilder_ == null) {
           result.cardPlayed_ = cardPlayed_;
@@ -857,6 +885,9 @@ public final class PlayCardProtos {
       
       public Builder mergeFrom(org.bitcoma.hearts.model.transfered.PlayCardProtos.PlaySingleCardResponse other) {
         if (other == org.bitcoma.hearts.model.transfered.PlayCardProtos.PlaySingleCardResponse.getDefaultInstance()) return this;
+        if (other.hasNextPlayerId()) {
+          setNextPlayerId(other.getNextPlayerId());
+        }
         if (other.hasSrcUserId()) {
           setSrcUserId(other.getSrcUserId());
         }
@@ -896,10 +927,15 @@ public final class PlayCardProtos {
             }
             case 8: {
               bitField0_ |= 0x00000001;
+              nextPlayerId_ = input.readUInt64();
+              break;
+            }
+            case 16: {
+              bitField0_ |= 0x00000002;
               srcUserId_ = input.readUInt64();
               break;
             }
-            case 18: {
+            case 26: {
               org.bitcoma.hearts.model.transfered.CardProtos.Card.Builder subBuilder = org.bitcoma.hearts.model.transfered.CardProtos.Card.newBuilder();
               if (hasCardPlayed()) {
                 subBuilder.mergeFrom(getCardPlayed());
@@ -914,33 +950,54 @@ public final class PlayCardProtos {
       
       private int bitField0_;
       
-      // optional uint64 src_user_id = 1;
+      // optional uint64 next_player_id = 1;
+      private long nextPlayerId_ ;
+      public boolean hasNextPlayerId() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public long getNextPlayerId() {
+        return nextPlayerId_;
+      }
+      public Builder setNextPlayerId(long value) {
+        bitField0_ |= 0x00000001;
+        nextPlayerId_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearNextPlayerId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        nextPlayerId_ = 0L;
+        onChanged();
+        return this;
+      }
+      
+      // optional uint64 src_user_id = 2;
       private long srcUserId_ ;
       public boolean hasSrcUserId() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       public long getSrcUserId() {
         return srcUserId_;
       }
       public Builder setSrcUserId(long value) {
-        bitField0_ |= 0x00000001;
+        bitField0_ |= 0x00000002;
         srcUserId_ = value;
         onChanged();
         return this;
       }
       public Builder clearSrcUserId() {
-        bitField0_ = (bitField0_ & ~0x00000001);
+        bitField0_ = (bitField0_ & ~0x00000002);
         srcUserId_ = 0L;
         onChanged();
         return this;
       }
       
-      // optional .hearts.Card card_played = 2;
+      // optional .hearts.Card card_played = 3;
       private org.bitcoma.hearts.model.transfered.CardProtos.Card cardPlayed_ = org.bitcoma.hearts.model.transfered.CardProtos.Card.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           org.bitcoma.hearts.model.transfered.CardProtos.Card, org.bitcoma.hearts.model.transfered.CardProtos.Card.Builder, org.bitcoma.hearts.model.transfered.CardProtos.CardOrBuilder> cardPlayedBuilder_;
       public boolean hasCardPlayed() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       public org.bitcoma.hearts.model.transfered.CardProtos.Card getCardPlayed() {
         if (cardPlayedBuilder_ == null) {
@@ -959,7 +1016,7 @@ public final class PlayCardProtos {
         } else {
           cardPlayedBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000004;
         return this;
       }
       public Builder setCardPlayed(
@@ -970,12 +1027,12 @@ public final class PlayCardProtos {
         } else {
           cardPlayedBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000004;
         return this;
       }
       public Builder mergeCardPlayed(org.bitcoma.hearts.model.transfered.CardProtos.Card value) {
         if (cardPlayedBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) == 0x00000002) &&
+          if (((bitField0_ & 0x00000004) == 0x00000004) &&
               cardPlayed_ != org.bitcoma.hearts.model.transfered.CardProtos.Card.getDefaultInstance()) {
             cardPlayed_ =
               org.bitcoma.hearts.model.transfered.CardProtos.Card.newBuilder(cardPlayed_).mergeFrom(value).buildPartial();
@@ -986,7 +1043,7 @@ public final class PlayCardProtos {
         } else {
           cardPlayedBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000004;
         return this;
       }
       public Builder clearCardPlayed() {
@@ -996,11 +1053,11 @@ public final class PlayCardProtos {
         } else {
           cardPlayedBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
       public org.bitcoma.hearts.model.transfered.CardProtos.Card.Builder getCardPlayedBuilder() {
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000004;
         onChanged();
         return getCardPlayedFieldBuilder().getBuilder();
       }
@@ -1785,13 +1842,14 @@ public final class PlayCardProtos {
     java.lang.String[] descriptorData = {
       "\n\016PlayCard.proto\022\006hearts\032\nCard.proto\".\n\017" +
       "PlayCardRequest\022\033\n\005cards\030\001 \003(\0132\014.hearts." +
-      "Card\"P\n\026PlaySingleCardResponse\022\023\n\013src_us" +
-      "er_id\030\001 \001(\004\022!\n\013card_played\030\002 \001(\0132\014.heart" +
-      "s.Card\"z\n\021PassCardsResponse\022\027\n\017first_pla" +
-      "yer_id\030\001 \001(\004\022\023\n\013src_user_id\030\002 \001(\004\022\023\n\013dst" +
-      "_user_id\030\003 \001(\004\022\"\n\014cards_passed\030\004 \003(\0132\014.h" +
-      "earts.CardB7\n#org.bitcoma.hearts.model.t" +
-      "ransferedB\016PlayCardProtosH\001"
+      "Card\"h\n\026PlaySingleCardResponse\022\026\n\016next_p" +
+      "layer_id\030\001 \001(\004\022\023\n\013src_user_id\030\002 \001(\004\022!\n\013c" +
+      "ard_played\030\003 \001(\0132\014.hearts.Card\"z\n\021PassCa" +
+      "rdsResponse\022\027\n\017first_player_id\030\001 \001(\004\022\023\n\013" +
+      "src_user_id\030\002 \001(\004\022\023\n\013dst_user_id\030\003 \001(\004\022\"" +
+      "\n\014cards_passed\030\004 \003(\0132\014.hearts.CardB7\n#or" +
+      "g.bitcoma.hearts.model.transferedB\016PlayC" +
+      "ardProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1811,7 +1869,7 @@ public final class PlayCardProtos {
           internal_static_hearts_PlaySingleCardResponse_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_hearts_PlaySingleCardResponse_descriptor,
-              new java.lang.String[] { "SrcUserId", "CardPlayed", },
+              new java.lang.String[] { "NextPlayerId", "SrcUserId", "CardPlayed", },
               org.bitcoma.hearts.model.transfered.PlayCardProtos.PlaySingleCardResponse.class,
               org.bitcoma.hearts.model.transfered.PlayCardProtos.PlaySingleCardResponse.Builder.class);
           internal_static_hearts_PassCardsResponse_descriptor =

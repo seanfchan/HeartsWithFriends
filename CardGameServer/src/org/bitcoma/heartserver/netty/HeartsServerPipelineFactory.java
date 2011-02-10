@@ -20,6 +20,13 @@ public class HeartsServerPipelineFactory implements ChannelPipelineFactory {
 
     private OrderedMemoryAwareThreadPoolExecutor executor;
 
+    // Static encoders. One for all pipelines
+    private static final OneMessageEncoder ONE_MESSAGE_ENCODER = new OneMessageEncoder();
+    private static final ProtobufEncoder PROTOBUF_ENCODER = new ProtobufEncoder();
+    private static final ProtobufDecoder PROTOBUF_DECODER = new ProtobufDecoder(
+            OneMessageProtos.OneMessage.getDefaultInstance());
+    private static final ProtobufVarint32LengthFieldPrepender PROTOBUF_LENGTH_PREPENDER = new ProtobufVarint32LengthFieldPrepender();
+
     public HeartsServerPipelineFactory(OrderedMemoryAwareThreadPoolExecutor executor) {
         this.executor = executor;
     }
@@ -30,11 +37,11 @@ public class HeartsServerPipelineFactory implements ChannelPipelineFactory {
 
         pipeline.addLast("logger", new LoggingHandler(InternalLogLevel.INFO, true));
         pipeline.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
-        pipeline.addLast("protobufDecoder", new ProtobufDecoder(OneMessageProtos.OneMessage.getDefaultInstance()));
+        pipeline.addLast("protobufDecoder", PROTOBUF_DECODER);
 
-        pipeline.addLast("frameEncoder", new ProtobufVarint32LengthFieldPrepender());
-        pipeline.addLast("protobufEncoder", new ProtobufEncoder());
-        pipeline.addLast("oneMessageEncoder", new OneMessageEncoder());
+        pipeline.addLast("frameEncoder", PROTOBUF_LENGTH_PREPENDER);
+        pipeline.addLast("protobufEncoder", PROTOBUF_ENCODER);
+        pipeline.addLast("oneMessageEncoder", ONE_MESSAGE_ENCODER);
 
         pipeline.addLast("executor", new ExecutionHandler(executor));
         pipeline.addLast("mainHandler", new HeartsServerHandler());

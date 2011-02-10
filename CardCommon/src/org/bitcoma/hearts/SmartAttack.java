@@ -108,8 +108,9 @@ public class SmartAttack implements IHeartsGameHandler {
     }
 
     @Override
-    public void handleSingleCardPlayed(Long srcId, Card cardPlayed) {
+    public void handleSingleCardPlayed(Long srcId, Card cardPlayed, Long nextPlayerId) {
         System.out.println("Player " + names.get(srcId) + " played : " + cardPlayed);
+        System.out.println("It is now Player: " + nextPlayerId + "s turn.");
     }
 
     @Override

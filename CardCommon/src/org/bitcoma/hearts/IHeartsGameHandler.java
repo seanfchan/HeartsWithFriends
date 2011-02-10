@@ -14,8 +14,10 @@ public interface IHeartsGameHandler {
      *            User id of who played the card
      * @param cardPlayed
      *            Card that was played
+     * @param nextPlayerId
+     *            User id of the next player to take a turn
      */
-    public void handleSingleCardPlayed(Long srcId, Card cardPlayed);
+    public void handleSingleCardPlayed(Long srcId, Card cardPlayed, Long nextPlayerId);
 
     /**
      * Called when a player passes a card to another player

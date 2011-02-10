@@ -290,12 +290,14 @@ public class Round {
                     if (cardToPlay.getSuit() == Card.HEARTS)
                         bHeartPlayed = true;
 
-                    if (handler != null) {
-                        handler.handleSingleCardPlayed(id, cardToPlay);
-                    }
-
                     // Trick has ended
                     if (currentTrick.getNumCards() == userIdToScoreInRound.size()) {
+
+                        // Trick has ended so nextPlayerId is loser of trick
+                        if (handler != null) {
+                            handler.handleSingleCardPlayed(id, cardToPlay, currentTrick.getLoser());
+                        }
+
                         updateScores(currentTrick);
 
                         // Send updates to handle since trick has ended.
@@ -308,7 +310,18 @@ public class Round {
                         setPlayerTurnOrder(currentTrick.getLoser());
 
                         currentTrick = new Trick();
+                    } else {
+                        // Trick is still in session so use next player in list
+                        // for nextPlayerId
+                        if (handler != null) {
+                            if (userIdTurnOrderList.size() > 0)
+                                handler.handleSingleCardPlayed(id, cardToPlay, userIdTurnOrderList.get(0));
+                            else
+                                System.err
+                                        .println("Should be another player in turn list as trick is not over. This is BAD!!!");
+                        }
                     }
+
                     return true;
 
                 } else {

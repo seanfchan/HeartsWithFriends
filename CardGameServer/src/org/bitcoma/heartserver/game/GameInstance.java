@@ -132,13 +132,14 @@ public class GameInstance implements IHeartsGameHandler {
     }
 
     @Override
-    public void handleSingleCardPlayed(Long srcId, Card cardPlayed) {
+    public void handleSingleCardPlayed(Long srcId, Card cardPlayed, Long nextPlayerId) {
         // Send card played to all clients
         PlaySingleCardResponse response = PlaySingleCardResponse
                 .newBuilder()
                 .setCardPlayed(
                         org.bitcoma.hearts.model.transfered.CardProtos.Card.newBuilder()
-                                .setValue(cardPlayed.getValue())).setSrcUserId(srcId).build();
+                                .setValue(cardPlayed.getValue())).setSrcUserId(srcId).setNextPlayerId(nextPlayerId)
+                .build();
 
         for (Long userId : userIdToUserMap.keySet()) {
             ServerState.sendToClient(userId, response);
