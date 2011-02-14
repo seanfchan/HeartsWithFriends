@@ -17,7 +17,7 @@ import org.junit.Test;
 
 public class FullGameTest implements IHeartsGameHandler {
 
-    private static final int NUM_GAMES = 100;
+    private static final int NUM_GAMES = 10000;
     private List<Long> playerIds;
     private int roundCount;
     private int gameCount;

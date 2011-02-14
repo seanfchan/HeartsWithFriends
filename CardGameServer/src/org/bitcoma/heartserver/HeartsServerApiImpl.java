@@ -148,13 +148,11 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
         if (getCurrentUser() == null) {
             // Need to be logged in at this point
             return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.UNAUTHORIZED).build();
+        } else if (getCurrentGame() == null) {
+            // Not in a game so this is unexpected.
+            return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.UNEXPECTED_REQUEST)
+                    .build();
         } else if (request != null && request.hasGameId()) {
-
-            if (getCurrentGame() == null) {
-                // Not in a game so this is unexpected.
-                return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.UNEXPECTED_REQUEST)
-                        .build();
-            }
 
             // Remove the user from the game they are in.
             setCurrentGame(null);
@@ -170,9 +168,12 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
     @Override
     public MessageLite startGame(StartGameRequest request) {
 
-        if (getCurrentUser() == null || getCurrentGame() == null) {
+        if (getCurrentUser() == null) {
             // Need to be logged in at this point
             return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.UNAUTHORIZED).build();
+        } else if (getCurrentGame() == null) {
+            return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.UNEXPECTED_REQUEST)
+                    .build();
         } else if (request != null && request.hasGameId()) {
 
             if (request.getGameId() != getCurrentGame().getId()) {
@@ -302,9 +303,12 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
     @Override
     public MessageLite playCard(PlayCardRequest request) {
 
-        if (getCurrentUser() == null || getCurrentGame() == null) {
+        if (getCurrentUser() == null) {
             // Need to be logged in at this point
             return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.UNAUTHORIZED).build();
+        } else if (getCurrentGame() == null) {
+            return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.UNEXPECTED_REQUEST)
+                    .build();
         } else if (request != null && request.getCardsCount() > 0) {
 
             // TODO: @jon implement the cards going to the game logic

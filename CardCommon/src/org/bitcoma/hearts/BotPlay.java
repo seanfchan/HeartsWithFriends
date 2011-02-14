@@ -105,7 +105,7 @@ public class BotPlay {
 
     private static Card findQueen(Collection<Card> cards) {
         for (Card c : cards)
-            if (c.getSuit() == Card.SPADES && c.getRank() == Card.QUEEN)
+            if (c.equals(Card.QUEEN_SPADES))
                 return c;
 
         return null;
@@ -117,7 +117,6 @@ public class BotPlay {
 
     public static Card playCard(byte suitOfTrick, Collection<Card> trickCards, Collection<Card> cards,
             Collection<Card> allPlayed) {
-        Card selected = null;
 
         if (trickCards.size() == 0) {
 
@@ -154,54 +153,23 @@ public class BotPlay {
                 return sortedCards[index];
             } else {
                 // play higher cards as you won't get points
-                // however if the highest card is a Queen of Spades, check if
-                // King and Ace have been played already
-                if (sortedCards[sortedCards.length - 1].getSuit() == Card.SPADES
-                        && sortedCards[sortedCards.length - 1].getRank() == Card.QUEEN) {
-                    Iterator<Card> allPlayedIter = allPlayed.iterator();
-
-                    boolean kingSPlayed = false;
-                    boolean aceSPlayed = false;
-
-                    while (allPlayedIter.hasNext()) {
-                        Card temp = allPlayedIter.next();
-                        if (temp.getRank() == Card.KING && temp.getSuit() == Card.SPADES)
-                            kingSPlayed = true;
-                        if (temp.getRank() == Card.ACE && temp.getSuit() == Card.SPADES)
-                            aceSPlayed = true;
-                    }
-                    // both true, feel free to play the QUEEN
-                    if (kingSPlayed && aceSPlayed)
-                        return sortedCards[sortedCards.length - 1];
-                    else {
-                        // play the next highest card
-                        // we know for sure that the bot has at least two cards
-                        // still left.
-                        int start = sortedCards.length - 2;
-                        while (sortedCards[start].getSuit() == Card.HEARTS && start > 0)
-                            start--;
-                        if (start == 0) {
-                            // bot only has hearts
-                            return sortedCards[sortedCards.length - 2];
-                        }
-                        if (start > 0)
-                            return sortedCards[start];
-                        if (start < 0)
-                            System.out.println("This should never happen");
-                    }
-                } else {
-                    // No hearts played and we lead the trick. So we have to
-                    // make sure to not play a heart unless that is the only
-                    // card we have in our hand.
-                    for (int i = sortedCards.length - 1; i >= 0; --i) {
-                        if (sortedCards[i].getSuit() != Card.HEARTS)
-                            return sortedCards[i];
-                    }
-
-                    // just play the lowest card since we only have hearts and
-                    // this will enable others to give us points.
-                    return sortedCards[0];
+                // No hearts played and we lead the trick. So we have to
+                // make sure to not play a heart or queen of spades unless that
+                // is the only
+                // card we have in our hand.
+                for (int i = sortedCards.length - 1; i >= 0; --i) {
+                    if (sortedCards[i].getSuit() != Card.HEARTS && !sortedCards[i].equals(Card.QUEEN_SPADES))
+                        return sortedCards[i];
                 }
+
+                // Play queen if we have it. REQUIRED.
+                Card queenOfSpades = findQueen(cards);
+                if (queenOfSpades != null)
+                    return queenOfSpades;
+
+                // just play the lowest card since we only have hearts and
+                // this will enable others to give us points.
+                return sortedCards[0];
             }
 
         } else {
@@ -307,9 +275,6 @@ public class BotPlay {
                     return arrCards[arrCards.length - 1];
                 }
             }
-
         }
-        System.out.println("Never reach this situation");
-        return selected;
     }
 }
