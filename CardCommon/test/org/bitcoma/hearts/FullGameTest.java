@@ -17,7 +17,7 @@ import org.junit.Test;
 
 public class FullGameTest implements IHeartsGameHandler {
 
-    private static final int NUM_GAMES = 30;
+    private static final int NUM_GAMES = 100;
     private List<Long> playerIds;
     private int roundCount;
     private int gameCount;
@@ -173,7 +173,7 @@ public class FullGameTest implements IHeartsGameHandler {
         checkPlayerIdsAreSame(userScoreMap.keySet());
         checkPlayerIdsAreSame(finishedGame.getTableOrderList());
 
-        System.out.println("Game " + gameCount + " Summary");
+        System.out.println("Game " + gameCount + " Summary: Num Rounds " + roundCount);
         for (Long id : userScoreMap.keySet()) {
             System.out.print(id + ": " + userScoreMap.get(id) + " ");
         }
