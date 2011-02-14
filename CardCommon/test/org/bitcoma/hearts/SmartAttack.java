@@ -17,7 +17,7 @@ public class SmartAttack implements IHeartsGameHandler {
     public LinkedList<Long> playerIds;
     public Map<Long, String> names;
     public Game game;
-    public boolean isPassingCards = true;
+    public boolean isPassingCards = false;
 
     public static final int NUM_CARDS_PASSED = 3;
     public static final int PLAYER_IDX = 3;
@@ -150,7 +150,10 @@ public class SmartAttack implements IHeartsGameHandler {
         }
         System.out.println();
 
-        isPassingCards = true;
+        if (startedRound.isPassingRound())
+            isPassingCards = false;
+        else
+            isPassingCards = true;
     }
 
     @Override
@@ -159,8 +162,8 @@ public class SmartAttack implements IHeartsGameHandler {
 
         System.out.println("~~Game Summary~~");
 
-        for (Long id : finishedGame.userIdToGameScore.keySet()) {
-            System.out.println(names.get(id) + ": " + finishedGame.userIdToGameScore.get(id));
+        for (Long id : finishedGame.getUserIdToGameScore().keySet()) {
+            System.out.println(names.get(id) + ": " + finishedGame.getUserIdToGameScore().get(id));
         }
 
         System.out.println("Winners are " + finishedGame.findWinner());

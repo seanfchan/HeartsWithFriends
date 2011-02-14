@@ -119,6 +119,14 @@ public class GameInstance implements IHeartsGameHandler {
         return maxPlayers;
     }
 
+    public List<Long> getTableOrderList() {
+        if (gameInfo != null) {
+            return gameInfo.getTableOrderList();
+        } else {
+            return null;
+        }
+    }
+
     public FastMap<Long, User> getUserIdToUserMap() {
         return userIdToUserMap;
     }
@@ -210,7 +218,8 @@ public class GameInstance implements IHeartsGameHandler {
         for (Long userId : handMap.keySet()) {
             RoundStartedResponse.Builder builder = RoundStartedResponse.newBuilder();
 
-            // Show who you are passing to.
+            // Show who you are passing to. Passing map is null if this is a
+            // non-passing round.
             if (passingMap != null)
                 builder.setPassedToUserId(passingMap.get(userId));
 
