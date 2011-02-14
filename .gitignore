@@ -1,5 +1,6 @@
 *.class
 .*.swp
+*.orig
 
 CardCommon/bin/*
 CardCommon/bin/**/*
