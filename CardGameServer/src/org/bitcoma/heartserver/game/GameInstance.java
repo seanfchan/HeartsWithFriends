@@ -22,6 +22,7 @@ import org.bitcoma.hearts.model.transfered.ScoreUpdateProtos.ScoreUpdateResponse
 import org.bitcoma.hearts.model.transfered.TrickProtos.TrickEndedResponse;
 import org.bitcoma.heartserver.ServerState;
 import org.bitcoma.heartserver.model.database.User;
+import org.jboss.netty.util.Timeout;
 
 public class GameInstance implements IHeartsGameHandler {
     public static enum State {
@@ -33,8 +34,14 @@ public class GameInstance implements IHeartsGameHandler {
     private int readyNumPlayers;
     private int maxPlayers;
     private State gameState;
-
     private Game gameInfo;
+
+    /**
+     * Used for two different reasons. If the game is in waiting state, then
+     * this is the task for adding bots. If the game is in playing state, then
+     * this is the task to penalize an inactive player
+     */
+    private Timeout timeout;
 
     FastMap<Long, User> userIdToUserMap;
 
@@ -59,12 +66,15 @@ public class GameInstance implements IHeartsGameHandler {
 
     public synchronized boolean addPlayer(User user) {
         // Make sure there is room for the player
-        if (getCurrentNumPlayers() >= getMaxPlayers())
+        if (isFull())
             return false;
 
         userIdToUserMap.put(user.getLongId(), user);
 
         if (getCurrentNumPlayers() == getMaxPlayers()) {
+
+            // TODO: @Jon add bots to number of ready players
+
             setGameState(State.SYNCING_START);
         }
 
@@ -83,6 +93,14 @@ public class GameInstance implements IHeartsGameHandler {
 
     public synchronized int getCurrentNumPlayers() {
         return userIdToUserMap.size();
+    }
+
+    public int getMaxPlayers() {
+        return maxPlayers;
+    }
+
+    public boolean isFull() {
+        return getCurrentNumPlayers() >= getMaxPlayers();
     }
 
     public synchronized State getGameState() {
@@ -115,18 +133,6 @@ public class GameInstance implements IHeartsGameHandler {
         return id;
     }
 
-    public int getMaxPlayers() {
-        return maxPlayers;
-    }
-
-    public List<Long> getTableOrderList() {
-        if (gameInfo != null) {
-            return gameInfo.getTableOrderList();
-        } else {
-            return null;
-        }
-    }
-
     public FastMap<Long, User> getUserIdToUserMap() {
         return userIdToUserMap;
     }
@@ -137,6 +143,14 @@ public class GameInstance implements IHeartsGameHandler {
         } else {
             return null;
         }
+    }
+
+    public void setTimeout(Timeout timeout) {
+        this.timeout = timeout;
+    }
+
+    public Timeout getTimeout() {
+        return timeout;
     }
 
     @Override

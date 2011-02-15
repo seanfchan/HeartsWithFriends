@@ -2,12 +2,11 @@ package org.bitcoma.heartserver;
 
 import javolution.util.FastMap;
 
-import org.bitcoma.hearts.model.transfered.GameStructProtos.GameInfo;
-import org.bitcoma.hearts.model.transfered.GameStructProtos.GameInfo.PlayerInfo;
-import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameResponse;
 import org.bitcoma.heartserver.game.GameInstance;
 import org.bitcoma.heartserver.game.GameInstance.State;
 import org.bitcoma.heartserver.model.database.User;
+import org.bitcoma.heartserver.netty.model.transfered.JoinGameResponseHelper;
+import org.jboss.netty.util.Timeout;
 
 public class GameLobby {
 
@@ -31,27 +30,24 @@ public class GameLobby {
             // Did we successfully add a player?
             if (game.addPlayer(user)) {
 
-                FastMap<Long, User> userIdToUserMap = game.getUserIdToUserMap();
-                // Loop through the player ids
-                for (FastMap.Entry<Long, User> temp = userIdToUserMap.head(); temp != FastMap.Entry.NULL; temp = temp
-                        .getNext()) {
+                JoinGameResponseHelper.sendResponses(game);
 
-                    GameInfo.Builder tempGameInfo = GameInfo.newBuilder().setGameId(game.getId())
-                            .setMaxNumberOfPlayers(game.getMaxPlayers());
-                    // Construct players to send to the client
-                    for (User u : game.getUserIdToUserMap().values()) {
-                        tempGameInfo.addPlayers(PlayerInfo.newBuilder().setUserId(u.getLongId())
-                                .setUserName(u.getString("user_name")).build());
-                    }
-
-                    ServerState.sendToClient(temp.getKey(), JoinGameResponse.newBuilder().setGameInfo(tempGameInfo)
-                            .build());
+                // Remove tasks to add bots
+                // Need to remove as there is no way to just increase timer.
+                Timeout timeout = game.getTimeout();
+                if (timeout != null) {
+                    timeout.cancel();
+                    game.setTimeout(null);
                 }
 
                 // Need to switch from waiting to active if game full
-                if (game.getCurrentNumPlayers() == game.getMaxPlayers()) {
+                if (game.isFull()) {
                     waitingGames.remove(i.getKey());
                     activeGames.put(i.getKey(), i.getValue());
+                }
+                // Add task to add bots since game is not full
+                else {
+                    // TODO: @Jon add timer task to add bots.
                 }
 
                 return game;
@@ -86,6 +82,8 @@ public class GameLobby {
 
         if (temp == FastMap.Entry.NULL)
             return null;
+
+        // TODO: @Jon Add timer task to add bots
 
         return game;
     }
