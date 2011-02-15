@@ -1,26 +1,37 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:paddingTop="40px"
-    android:background="#228b22">
+    android:background="@drawable/apphomeback">
 
-    <Button
-    	android:id="@+id/singlePlay"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Single Player Mode"/>
+	<RelativeLayout 
+        	android:id="@+id/InnerRelativeLayout"
+    	    android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+        	android:layout_alignParentBottom="true">
+    	<Button
+    		android:id="@+id/singlePlay"
+   			android:background = "@drawable/buttonback"
+	        android:layout_width="fill_parent"
+        	android:layout_height="60px"
+        	android:text="Single Player Mode"/>
 
-    <Button
-        android:id="@+id/multiPlay"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Multi Player Mode"/>
+    	<Button
+        	android:id="@+id/multiPlay"
+    		android:background = "@drawable/buttonback"
+        	android:layout_width="fill_parent"
+        	android:layout_height="60px"
+        	android:layout_below="@id/singlePlay"
+        	android:text="Multi Player Mode"/>
 
-    <Button
-        android:id="@+id/instruction"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Instructions"/>
+    	<Button
+        	android:id="@+id/instruction"
+    		android:background = "@drawable/buttonback"
+        	android:layout_width="fill_parent"
+        	android:layout_height="60px"
+        	android:layout_below="@id/multiPlay"
+        	android:text="Instructions"/>
+	</RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>
