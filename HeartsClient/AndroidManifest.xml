@@ -3,7 +3,7 @@
       package="org.bitcoma.heartsClient"
       android:versionCode="1"
       android:versionName="1.0">
-    <application android:icon="@drawable/icon" android:label="@string/app_name">
+    <application android:icon="@drawable/appicon" android:label="@string/app_name">
         <activity android:name=".SplashActivity"
                   android:label="@string/app_name"
                   android:theme="@android:style/Theme.NoTitleBar">
@@ -13,11 +13,11 @@
             </intent-filter>
         </activity>
 
-    <activity android:name="AppHomeActivity" android:label="AppHome" android:theme="@android:style/Theme.NoTitleBar"></activity>
-<activity android:name="AuthActivity" android:label="Authentication" android:theme="@android:style/Theme.NoTitleBar"></activity>
-<activity android:name="InstructionsActivity" android:label="Instructions" android:theme="@android:style/Theme.NoTitleBar"></activity>
-<activity android:name="MultiHomeActivity" android:label="MultiPlayer" android:theme="@android:style/Theme.NoTitleBar"></activity>
-<activity android:name="SinglePlayerGameRoom" android:label="SingleGame" android:theme="@android:style/Theme.NoTitleBar"></activity>
+<activity android:name="AppHomeActivity" android:label="AppHome" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+<activity android:name="AuthActivity" android:label="Authentication" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+<activity android:name="InstructionsActivity" android:label="Instructions" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+<activity android:name="MultiHomeActivity" android:label="MultiPlayer" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+<activity android:name="SinglePlayerGameRoom" android:label="SingleGame" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
 </application>
     <uses-sdk android:minSdkVersion="7" />
 
