@@ -71,7 +71,7 @@ public class GameInstance implements IHeartsGameHandler {
 
         userIdToUserMap.put(user.getLongId(), user);
 
-        if (getCurrentNumPlayers() == getMaxPlayers()) {
+        if (isFull()) {
 
             // TODO: @Jon add bots to number of ready players
 
