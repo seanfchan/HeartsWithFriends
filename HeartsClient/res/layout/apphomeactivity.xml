@@ -14,23 +14,37 @@
     		android:id="@+id/singlePlay"
    			android:background = "@drawable/buttonback"
 	        android:layout_width="fill_parent"
-        	android:layout_height="60px"
+        	android:layout_height="52px"
         	android:text="Single Player Mode"/>
-
+		<TextView
+			android:id="@+id/gap"
+			android:layout_width="fill_parent"
+			android:layout_height="8px"
+			android:text=""
+			android:layout_below="@id/singlePlay"
+		/>
     	<Button
         	android:id="@+id/multiPlay"
     		android:background = "@drawable/buttonback"
         	android:layout_width="fill_parent"
-        	android:layout_height="60px"
-        	android:layout_below="@id/singlePlay"
+			android:layout_height="52px"
+        	android:layout_below="@id/gap"
         	android:text="Multi Player Mode"/>
+        	
+        <TextView
+			android:id="@+id/gap2"
+			android:layout_width="fill_parent"
+			android:layout_height="8px"
+			android:text=""
+			android:layout_below="@id/multiPlay"
+		/>
 
     	<Button
         	android:id="@+id/instruction"
     		android:background = "@drawable/buttonback"
         	android:layout_width="fill_parent"
-        	android:layout_height="60px"
-        	android:layout_below="@id/multiPlay"
+        	android:layout_height="52px"
+        	android:layout_below="@id/gap2"
         	android:text="Instructions"/>
 	</RelativeLayout>
 

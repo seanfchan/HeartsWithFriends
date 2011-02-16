@@ -33,7 +33,7 @@ public class SplashActivity extends Activity {
             public void run() {
                 try {
                     int waited = 0;
-                    while (waited < 5000) {
+                    while (waited < 3000) {
                         sleep(100);
                         waited += 100;
                     }
