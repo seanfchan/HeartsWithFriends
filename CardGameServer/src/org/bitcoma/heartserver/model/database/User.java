@@ -23,7 +23,7 @@ public class User extends Model {
             (User) new User().setInteger("id", 7).setString("user_name", "bot7"),
             (User) new User().setInteger("id", 8).setString("user_name", "bot8"),
             (User) new User().setInteger("id", 9).setString("user_name", "bot9"),
-            (User) new User().setInteger("id", 10).setString("user_name", "bot10") };
+            (User) new User().setInteger("id", 10).setString("user_name", "bot10"), };
 
     /**
      * Returns a random bot that is not already in the list of user ids.
