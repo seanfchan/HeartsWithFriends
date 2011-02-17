@@ -28,7 +28,7 @@ public class JoinGameResponseHelper {
 
         FastMap<Long, User> userIdToUserMap = gameInstance.getUserIdToUserMap();
         // Loop through the player ids
-        for (FastMap.Entry<Long, User> temp = userIdToUserMap.head(); temp != FastMap.Entry.NULL; temp = temp.getNext()) {
+        for (Long id : userIdToUserMap.keySet()) {
 
             GameInfo.Builder tempGameInfo = GameInfo.newBuilder().setGameId(gameInstance.getId())
                     .setMaxNumberOfPlayers(gameInstance.getMaxPlayers());
@@ -38,7 +38,7 @@ public class JoinGameResponseHelper {
                         .setUserName(u.getString("user_name")).build());
             }
 
-            ServerState.sendToClient(temp.getKey(), JoinGameResponse.newBuilder().setGameInfo(tempGameInfo).build());
+            ServerState.sendToClient(id, JoinGameResponse.newBuilder().setGameInfo(tempGameInfo).build());
         }
     }
 

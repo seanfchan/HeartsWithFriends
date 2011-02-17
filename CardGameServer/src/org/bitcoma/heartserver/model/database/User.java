@@ -47,7 +47,7 @@ public class User extends Model {
 
             int botChosen = (int) (long) botIdsCopy.get(choice);
 
-            return BOTS[botChosen];
+            return BOTS[botChosen - 1];
         }
     }
 

@@ -29,9 +29,8 @@ public class GameLobby {
      */
     public static GameInstance joinGame(User user, FastMap<Long, GameInstance> waitingGames,
             FastMap<Long, GameInstance> activeGames) {
-        for (FastMap.Entry<Long, GameInstance> i = waitingGames.head(), end = waitingGames.tail(); i != end; i = i
-                .getNext()) {
-            GameInstance game = i.getValue();
+        for (Long gameId : waitingGames.keySet()) {
+            GameInstance game = waitingGames.get(gameId);
 
             // Did we successfully add a player?
             if (game.addPlayer(user)) {
@@ -50,8 +49,8 @@ public class GameLobby {
                 if (game.isFull()) {
                     logger.info("GameInstance: {} is full. Changing to active game.", game);
 
-                    waitingGames.remove(i.getKey());
-                    activeGames.put(i.getKey(), i.getValue());
+                    waitingGames.remove(gameId);
+                    activeGames.put(gameId, game);
                 }
                 // Add task to add bots since game is not full
                 else {

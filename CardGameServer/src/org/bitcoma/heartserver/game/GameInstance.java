@@ -65,8 +65,9 @@ public class GameInstance implements IHeartsGameHandler {
     }
 
     public synchronized boolean addPlayer(User user) {
-        // Make sure there is room for the player
-        if (isFull())
+        // Make sure there is room for the player and player isn't in game
+        // already
+        if (isFull() || userIdToUserMap.containsKey(user.getLongId()))
             return false;
 
         userIdToUserMap.put(user.getLongId(), user);
