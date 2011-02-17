@@ -39,7 +39,7 @@ public class GameLobbyTimeOutTask implements TimerTask {
 
         // Remove GameInstance from the waiting games map
         // Check to make sure this still needs bots added
-        if (ServerState.waitingGames.remove(gameInstance.getId()) != null) {
+        if (ServerState.waitingGames.remove(gameInstance.getId()) != null || gameInstance.getTimeout() == null) {
 
             // Remove timeout as it is no longer needed
             gameInstance.setTimeout(null);

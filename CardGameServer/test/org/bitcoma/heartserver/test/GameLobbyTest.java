@@ -1,5 +1,6 @@
 package org.bitcoma.heartserver.test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.LinkedList;
@@ -35,8 +36,39 @@ public class GameLobbyTest {
     }
 
     @Test
-    public void testJoinGame() {
+    public void testJoinGame() throws InterruptedException {
 
+        GameInstance game = new GameInstance(4, GameInstance.State.WAITING);
+        ServerState.waitingGames.put(game.getId(), game);
+
+        LinkedList<Long> botIds = new LinkedList<Long>();
+        User bot1 = User.selectRandomBot(botIds);
+        botIds.add(bot1.getLongId());
+        User bot2 = User.selectRandomBot(botIds);
+        botIds.add(bot2.getLongId());
+        User bot3 = User.selectRandomBot(botIds);
+        botIds.add(bot3.getLongId());
+        User bot4 = User.selectRandomBot(botIds);
+        botIds.add(bot4.getLongId());
+
+        GameInstance joinedGame = GameLobby.joinGame(bot1, ServerState.waitingGames, ServerState.activeGames);
+        assertEquals("Game created and game joined should match.", game, joinedGame);
+        assertEquals("Game should have one player", 1, joinedGame.getCurrentNumPlayers());
+
+        joinedGame = GameLobby.joinGame(bot2, ServerState.waitingGames, ServerState.activeGames);
+        assertEquals("Game created and game joined should match.", game, joinedGame);
+        assertEquals("Game should have two players", 2, joinedGame.getCurrentNumPlayers());
+
+        // Allow time for timer to run out and fill with bots.
+        Thread.sleep(timeoutDelayMs);
+
+        assertTrue("Game should be full after timeout task", game.isFull());
+        for (Long id : game.getUserIdToUserMap().keySet()) {
+            assertTrue("All players should be bots.", BotPlay.isBot(id));
+        }
+
+        assertTrue("Game should now be considered active.", ServerState.activeGames.containsKey(game.getId()));
+        assertTrue("Game should be in the SYNCING_START state", GameInstance.State.SYNCING_START == game.getGameState());
     }
 
     @Test
@@ -53,5 +85,8 @@ public class GameLobbyTest {
         for (Long id : game.getUserIdToUserMap().keySet()) {
             assertTrue("All players should be bots.", BotPlay.isBot(id));
         }
+
+        assertTrue("Game should now be considered active.", ServerState.activeGames.containsKey(game.getId()));
+        assertTrue("Game should be in the SYNCING_START state", GameInstance.State.SYNCING_START == game.getGameState());
     }
 }

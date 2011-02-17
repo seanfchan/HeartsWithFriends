@@ -29,7 +29,7 @@ public class GameInstance implements IHeartsGameHandler {
         PLAYING, SYNCING_START, WAITING
     };
 
-    public static long gameCounter = 0;
+    public static long gameCounter = 1;
     private long id;
     private int readyNumPlayers;
     private int maxPlayers;
@@ -59,7 +59,7 @@ public class GameInstance implements IHeartsGameHandler {
 
     private synchronized Long getNextId() {
         if (gameCounter == Long.MAX_VALUE)
-            gameCounter = 0;
+            gameCounter = 1;
 
         return gameCounter++;
     }

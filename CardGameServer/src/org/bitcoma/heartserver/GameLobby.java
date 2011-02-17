@@ -54,8 +54,8 @@ public class GameLobby {
                 }
                 // Add task to add bots since game is not full
                 else {
-                    TimeOutTaskCreator.createTask(new GameLobbyTimeOutTask(game), GameLobbyTimeOutTask.DELAY,
-                            GameLobbyTimeOutTask.UNIT);
+                    game.setTimeout(TimeOutTaskCreator.createTask(new GameLobbyTimeOutTask(game),
+                            GameLobbyTimeOutTask.DELAY, GameLobbyTimeOutTask.UNIT));
                 }
 
                 JoinGameResponseHelper.sendResponses(game);
@@ -99,8 +99,8 @@ public class GameLobby {
             return null;
 
         // Add task to add bots
-        TimeOutTaskCreator.createTask(new GameLobbyTimeOutTask(game), GameLobbyTimeOutTask.DELAY,
-                GameLobbyTimeOutTask.UNIT);
+        game.setTimeout(TimeOutTaskCreator.createTask(new GameLobbyTimeOutTask(game), GameLobbyTimeOutTask.DELAY,
+                GameLobbyTimeOutTask.UNIT));
 
         return game;
     }
