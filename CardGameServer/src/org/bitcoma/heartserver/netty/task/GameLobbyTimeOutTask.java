@@ -39,10 +39,10 @@ public class GameLobbyTimeOutTask implements TimerTask {
 
         // Remove GameInstance from the waiting games map
         // Check to make sure this still needs bots added
-        if (ServerState.waitingGames.remove(gameInstance.getId()) != null || gameInstance.getTimeout() == null) {
+        if (ServerState.waitingGames.remove(gameInstance.getId()) != null && gameInstance.getTimeout() == this) {
 
             // Remove timeout as it is no longer needed
-            gameInstance.setTimeout(null);
+            gameInstance.setTimeout(null, false);
 
             int numBotsAdded = 0;
 
@@ -55,11 +55,11 @@ public class GameLobbyTimeOutTask implements TimerTask {
                     numBotsAdded++;
             }
 
-            // Add GameInstance to the active games map.
-            ServerState.activeGames.put(gameInstance.getId(), gameInstance);
-
             if (numBotsAdded > 0) {
                 logger.info("Timeout task added {} bots.", numBotsAdded);
+
+                // Add GameInstance to the active games map.
+                ServerState.activeGames.put(gameInstance.getId(), gameInstance);
 
                 // Send the updates to the users.
                 JoinGameResponseHelper.sendResponses(gameInstance);

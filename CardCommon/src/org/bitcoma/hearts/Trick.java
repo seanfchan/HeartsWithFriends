@@ -13,9 +13,6 @@ public class Trick {
 
     public boolean isMoveValid(Card cardToPlay, List<Card> playerCards, boolean bHeartPlayed) {
         int numCardsPlayed;
-        System.out.println("Options: " + playerCards);
-        System.out.println("Suit of this trick is " + suitOfTrick);
-        System.out.println("Card played: " + cardToPlay);
         synchronized (playerIdToCardMap) {
             numCardsPlayed = playerIdToCardMap.size();
         }
@@ -93,6 +90,17 @@ public class Trick {
         }
 
         return playerId;
+    }
+
+    public boolean replacePlayer(Long oldUserId, Long newUserId) {
+        if (!playerIdToCardMap.containsKey(oldUserId)) {
+            return false;
+        }
+
+        Card card = playerIdToCardMap.remove(oldUserId);
+        playerIdToCardMap.put(newUserId, card);
+
+        return true;
     }
 
     public Map<Long, Card> getPlayerIdToCardMap() {

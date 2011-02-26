@@ -8,7 +8,6 @@ import org.bitcoma.heartserver.model.database.User;
 import org.bitcoma.heartserver.netty.model.transfered.JoinGameResponseHelper;
 import org.bitcoma.heartserver.netty.task.GameLobbyTimeOutTask;
 import org.bitcoma.heartserver.netty.task.TimeOutTaskCreator;
-import org.jboss.netty.util.Timeout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,11 +38,7 @@ public class GameLobby {
 
                 // Remove tasks to add bots
                 // Need to remove as there is no way to just increase timer.
-                Timeout timeout = game.getTimeout();
-                if (timeout != null) {
-                    timeout.cancel();
-                    game.setTimeout(null);
-                }
+                game.setTimeout(null);
 
                 // Need to switch from waiting to active if game full
                 if (game.isFull()) {

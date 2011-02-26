@@ -14,6 +14,7 @@ import org.bitcoma.hearts.model.transfered.OneMessageProtos.OneMessage;
 import org.bitcoma.hearts.model.transfered.PlayCardProtos.PassCardsResponse;
 import org.bitcoma.hearts.model.transfered.PlayCardProtos.PlayCardRequest;
 import org.bitcoma.hearts.model.transfered.PlayCardProtos.PlaySingleCardResponse;
+import org.bitcoma.hearts.model.transfered.ReplacePlayerProtos.ReplacePlayerResponse;
 import org.bitcoma.hearts.model.transfered.ResetPasswordProtos.ResetPasswordRequest;
 import org.bitcoma.hearts.model.transfered.RoundProtos.RoundEndedResponse;
 import org.bitcoma.hearts.model.transfered.RoundProtos.RoundStartedResponse;
@@ -119,6 +120,9 @@ public class OneMessageWrapper {
         } else if (msg instanceof PassCardsResponse) {
             return builder.setType(OneMessage.Type.PASS_CARDS_RESPONSE).setPassCardsResponse((PassCardsResponse) msg)
                     .build();
+        } else if (msg instanceof ReplacePlayerResponse) {
+            return builder.setType(OneMessage.Type.REPLACE_PLAYER_RESPONSE)
+                    .setReplacePlayerResponse((ReplacePlayerResponse) msg).build();
         } else {
             return null;
         }

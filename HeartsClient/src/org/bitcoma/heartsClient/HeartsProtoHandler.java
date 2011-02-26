@@ -9,6 +9,7 @@ import org.bitcoma.hearts.model.transfered.LoginProtos.LoginResponse;
 import org.bitcoma.hearts.model.transfered.PlayCardProtos.PassCardsResponse;
 import org.bitcoma.hearts.model.transfered.PlayCardProtos.PlayCardRequest;
 import org.bitcoma.hearts.model.transfered.PlayCardProtos.PlaySingleCardResponse;
+import org.bitcoma.hearts.model.transfered.ReplacePlayerProtos.ReplacePlayerResponse;
 import org.bitcoma.hearts.model.transfered.ResetPasswordProtos.ResetPasswordRequest;
 import org.bitcoma.hearts.model.transfered.RoundProtos.RoundEndedResponse;
 import org.bitcoma.hearts.model.transfered.RoundProtos.RoundStartedResponse;
@@ -96,31 +97,35 @@ public abstract class HeartsProtoHandler {
         defaultHandler(request);
     }
 
-    public void handleGameEndedResponse(GameEndedResponse response, MessageLite origRequest) {
+    public void handleGameEndedResponse(GameEndedResponse response) {
         defaultHandler(response);
     }
 
-    public void handleRoundStartedResponse(RoundStartedResponse response, MessageLite origRequest) {
+    public void handleRoundStartedResponse(RoundStartedResponse response) {
         defaultHandler(response);
     }
 
-    public void handleRoundEndedResponse(RoundEndedResponse response, MessageLite origRequest) {
+    public void handleRoundEndedResponse(RoundEndedResponse response) {
         defaultHandler(response);
     }
 
-    public void handleTrickEndedResponse(TrickEndedResponse response, MessageLite origRequest) {
+    public void handleTrickEndedResponse(TrickEndedResponse response) {
         defaultHandler(response);
     }
 
-    public void handleScoreUpdateResponse(ScoreUpdateResponse response, MessageLite origRequest) {
+    public void handleScoreUpdateResponse(ScoreUpdateResponse response) {
         defaultHandler(response);
     }
 
-    public void handlePlaySingleCardResponse(PlaySingleCardResponse response, MessageLite origRequest) {
+    public void handlePlaySingleCardResponse(PlaySingleCardResponse response) {
         defaultHandler(response);
     }
 
-    public void handlePassCardsResponse(PassCardsResponse response, MessageLite origRequest) {
+    public void handlePassCardsResponse(PassCardsResponse response) {
+        defaultHandler(response);
+    }
+
+    public void handleReplacePlayerResponse(ReplacePlayerResponse response) {
         defaultHandler(response);
     }
 

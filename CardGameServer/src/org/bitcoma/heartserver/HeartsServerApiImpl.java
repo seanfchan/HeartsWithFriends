@@ -1,7 +1,10 @@
 package org.bitcoma.heartserver;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.bitcoma.hearts.Card;
 import org.bitcoma.hearts.model.transfered.GameStructProtos.GameInfo;
-import org.bitcoma.hearts.model.transfered.GameStructProtos.GameInfo.PlayerInfo;
 import org.bitcoma.hearts.model.transfered.GenericProtos.GenericResponse;
 import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameRequest;
 import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameResponse;
@@ -9,6 +12,7 @@ import org.bitcoma.hearts.model.transfered.LeaveGameProtos.LeaveGameRequest;
 import org.bitcoma.hearts.model.transfered.LoginProtos.LoginRequest;
 import org.bitcoma.hearts.model.transfered.LoginProtos.LoginResponse;
 import org.bitcoma.hearts.model.transfered.PlayCardProtos.PlayCardRequest;
+import org.bitcoma.hearts.model.transfered.PlayerStructProtos.PlayerInfo;
 import org.bitcoma.hearts.model.transfered.SignupProtos.SignupRequest;
 import org.bitcoma.hearts.model.transfered.StartGameProtos.StartGameRequest;
 import org.bitcoma.heartserver.game.GameInstance;
@@ -311,8 +315,23 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
                     .build();
         } else if (request != null && request.getCardsCount() > 0) {
 
-            // TODO: @jon implement the cards going to the game logic
-            return null;
+            // Convert transferred card objects to GameLogic Card objects
+            List<Card> cardsToPlay = new LinkedList<Card>();
+            for (org.bitcoma.hearts.model.transfered.CardProtos.Card card : request.getCardsList()) {
+                cardsToPlay.add(new Card((byte) card.getValue()));
+            }
+
+            boolean result = getCurrentGame().playCard(getCurrentUser().getLongId(), cardsToPlay);
+
+            // Valid card played
+            if (result) {
+                return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.OK).build();
+            }
+            // Invalid card played
+            else {
+                return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.INVALID_PARAMS)
+                        .build();
+            }
         } else {
             // Parameters were not as expected
             return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.MISSING_PARAMS).build();

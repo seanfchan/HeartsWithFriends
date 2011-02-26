@@ -112,7 +112,7 @@ public class BotPlay {
     }
 
     private static boolean hasTwoClubs(Collection<Card> cards) {
-        return (getSuitCards(Card.CLUBS, cards).contains(new Card(Card.CLUBS, Card.TWO)));
+        return cards.contains(Card.TWO_CLUBS);
     }
 
     public static Card playCard(byte suitOfTrick, Collection<Card> trickCards, Collection<Card> cards,
@@ -138,7 +138,6 @@ public class BotPlay {
             // has not been played so far.
             Card.sortCards(sortedCards);
 
-
             if (getSuitCards(Card.HEARTS, allPlayed).size() != 0) {
                 // play lower cards to avoid getting points because hearts has
                 // been played
@@ -153,7 +152,7 @@ public class BotPlay {
                     index = 0;
                 return sortedCards[index];
             } else {
-                
+
                 // play higher cards as you won't get points
                 // No hearts played and we lead the trick. So we have to
                 // make sure to not play a heart or queen of spades unless that

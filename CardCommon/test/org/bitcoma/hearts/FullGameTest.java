@@ -129,7 +129,7 @@ public class FullGameTest implements IHeartsGameHandler {
             assertNotNull("Should have a passing map.", finishedRound.getUserIdToUserIdPassingMap());
             checkPlayerIdsAreSame(finishedRound.getUserIdToUserIdPassingMap().keySet());
         } else {
-            assertFalse("This should not be a passing round.", finishedRound.isPassingRound());
+            assertFalse("This should not be a passing round.", finishedRound.isPassingTurn());
             assertNull("Should not have a passing map.", finishedRound.getUserIdToUserIdPassingMap());
         }
 
@@ -144,11 +144,11 @@ public class FullGameTest implements IHeartsGameHandler {
         trickEndedCount = 0;
 
         if (roundCount % 4 != 0) {
-            assertTrue("This should be a passing round.", startedRound.isPassingRound());
+            assertTrue("This should be a passing round.", startedRound.isPassingTurn());
             assertNotNull("Should have a passing map.", startedRound.getUserIdToUserIdPassingMap());
             checkPlayerIdsAreSame(startedRound.getUserIdToUserIdPassingMap().keySet());
         } else {
-            assertFalse("This should not be a passing round.", startedRound.isPassingRound());
+            assertFalse("This should not be a passing round.", startedRound.isPassingTurn());
             assertNull("Should not have a passing map.", startedRound.getUserIdToUserIdPassingMap());
         }
 

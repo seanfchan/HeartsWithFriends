@@ -138,98 +138,64 @@ public class HeartsClientHandler extends SimpleChannelUpstreamHandler {
 
         case PLAY_SINGLE_CARD_RESPONSE:
             if (msg.hasPlaySingleCardResponse()) {
-
-                MessageLite origRequest;
-                synchronized (pendingRequests) {
-                    origRequest = pendingRequests.remove(msg.getMessageId());
-                }
-
                 for (HeartsProtoHandler handler : handlers) {
-                    handler.handlePlaySingleCardResponse(msg.getPlaySingleCardResponse(), origRequest);
+                    handler.handlePlaySingleCardResponse(msg.getPlaySingleCardResponse());
                 }
             }
             break;
 
         case PASS_CARDS_RESPONSE:
             if (msg.hasPassCardsResponse()) {
-
-                MessageLite origRequest;
-                synchronized (pendingRequests) {
-                    origRequest = pendingRequests.remove(msg.getMessageId());
-                }
-
                 for (HeartsProtoHandler handler : handlers) {
-                    handler.handlePassCardsResponse(msg.getPassCardsResponse(), origRequest);
+                    handler.handlePassCardsResponse(msg.getPassCardsResponse());
                 }
             }
             break;
 
         case GAME_ENDED_RESPONSE:
             if (msg.hasGameEndedResponse()) {
-
-                MessageLite origRequest;
-                synchronized (pendingRequests) {
-                    origRequest = pendingRequests.remove(msg.getMessageId());
-                }
-
                 for (HeartsProtoHandler handler : handlers) {
-                    handler.handleGameEndedResponse(msg.getGameEndedResponse(), origRequest);
+                    handler.handleGameEndedResponse(msg.getGameEndedResponse());
                 }
             }
             break;
 
         case ROUND_ENDED_RESPONSE:
             if (msg.hasRoundEndedResponse()) {
-
-                MessageLite origRequest;
-                synchronized (pendingRequests) {
-                    origRequest = pendingRequests.remove(msg.getMessageId());
-                }
-
                 for (HeartsProtoHandler handler : handlers) {
-                    handler.handleRoundEndedResponse(msg.getRoundEndedResponse(), origRequest);
+                    handler.handleRoundEndedResponse(msg.getRoundEndedResponse());
                 }
             }
             break;
 
         case ROUND_STARTED_RESPONSE:
             if (msg.hasRoundStartedResponse()) {
-
-                MessageLite origRequest;
-                synchronized (pendingRequests) {
-                    origRequest = pendingRequests.remove(msg.getMessageId());
-                }
-
                 for (HeartsProtoHandler handler : handlers) {
-                    handler.handleRoundStartedResponse(msg.getRoundStartedResponse(), origRequest);
+                    handler.handleRoundStartedResponse(msg.getRoundStartedResponse());
                 }
             }
             break;
 
         case TRICK_ENDED_RESPONSE:
             if (msg.hasTrickEndedResponse()) {
-
-                MessageLite origRequest;
-                synchronized (pendingRequests) {
-                    origRequest = pendingRequests.remove(msg.getMessageId());
-                }
-
                 for (HeartsProtoHandler handler : handlers) {
-                    handler.handleTrickEndedResponse(msg.getTrickEndedResponse(), origRequest);
+                    handler.handleTrickEndedResponse(msg.getTrickEndedResponse());
                 }
             }
             break;
 
         case SCORE_UPDATE_RESPONSE:
             if (msg.hasScoreUpdateResponse()) {
-
-                MessageLite origRequest;
-                synchronized (pendingRequests) {
-                    origRequest = pendingRequests.remove(msg.getMessageId());
-                }
-
                 for (HeartsProtoHandler handler : handlers) {
-                    handler.handleScoreUpdateResponse(msg.getScoreUpdateResponse(), origRequest);
+                    handler.handleScoreUpdateResponse(msg.getScoreUpdateResponse());
+                }
+            }
+            break;
+
+        case REPLACE_PLAYER_RESPONSE:
+            if (msg.hasReplacePlayerResponse()) {
+                for (HeartsProtoHandler handler : handlers) {
+                    handler.handleReplacePlayerResponse(msg.getReplacePlayerResponse());
                 }
             }
             break;

@@ -150,7 +150,7 @@ public class SmartAttack implements IHeartsGameHandler {
         }
         System.out.println();
 
-        if (startedRound.isPassingRound())
+        if (startedRound.isPassingTurn())
             isPassingCards = false;
         else
             isPassingCards = true;

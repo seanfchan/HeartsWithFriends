@@ -28,7 +28,10 @@ public class Card implements Comparable<Card> {
     private static final byte NUM_RANKS = 13;
     private byte value;
 
+    // Specialty cards so we don't construct them multiple times
     public static final Card QUEEN_SPADES = new Card(SPADES, QUEEN);
+    public static final Card TWO_CLUBS = new Card(CLUBS, TWO);
+    public static final Card JACK_DIAMONDS = new Card(DIAMONDS, JACK);
 
     public Card(byte suit, byte rank) {
         value = (byte) (suit * NUM_RANKS + rank - 2);

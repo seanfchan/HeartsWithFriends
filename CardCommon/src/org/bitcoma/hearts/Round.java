@@ -88,27 +88,22 @@ public class Round {
             handler.handleRoundStarted(this);
 
         // Have bot players pass their cards now.
-        if (isPassingRound()) {
+        if (isPassingTurn()) {
             for (Long userId : userIdTableOrderList) {
                 if (BotPlay.isBot(userId)) {
-                    List<Card> botCards = BotPlay.removeThree(userIdToHand.get(userId));
-                    playCard(userId, botCards);
+                    playCard(userId, getBotCardsToPlay(userId));
                 }
             }
         } else {
 
             // No passing so set first player.
-            Long firstPlayerId = getFirstPlayerId();
+            Long firstPlayerId = getFirstTurnPlayerId();
             setPlayerTurnOrder(firstPlayerId);
 
             // Bot plays if they are first to play
             if (BotPlay.isBot(firstPlayerId)) {
                 // Grab bots cards and play them
-                Card botCard = BotPlay.playCard(currentTrick.getSuitOfTrick(), currentTrick.getPlayerIdToCardMap()
-                        .values(), userIdToHand.get(firstPlayerId), allCardsPlayed);
-                List<Card> botCards = new LinkedList<Card>();
-                botCards.add(botCard);
-                playCard(firstPlayerId, botCards);
+                playCard(firstPlayerId, getBotCardsToPlay(firstPlayerId));
             }
         }
     }
@@ -229,14 +224,14 @@ public class Round {
         return true;
     }
 
-    public void addCard(Long userId, Card cardToAdd) {
+    private void addCard(Long userId, Card cardToAdd) {
         // This is really simple compared to the code previously here.
         LinkedList<Card> result = userIdToHand.get(userId);
         if (result != null)
             result.add(cardToAdd);
     }
 
-    public void removeCard(Long userId, Card cardToRemove) {
+    private void removeCard(Long userId, Card cardToRemove) {
         // This is really simple compared to the code previously here.
         LinkedList<Card> result = userIdToHand.get(userId);
         if (result != null)
@@ -250,32 +245,25 @@ public class Round {
      * @param cardsToPlay
      * @return
      */
-    public boolean playCard(Long id, List<Card> cardsToPlay) {
+    public synchronized boolean playCard(Long id, List<Card> cardsToPlay) {
 
         boolean result = playCardInternal(id, cardsToPlay);
 
-        if (userIdTurnIdx >= 0) {
-            Long nextPlayerId = userIdTableOrderList.get(userIdTurnIdx);
+        Long nextPlayerId = getCurrentTurnPlayerId();
 
-            if (!hasRoundEnded()) {
-                // Next player is a bot so make their turn
-                if (BotPlay.isBot(nextPlayerId)) {
-
-                    // Grab bots cards and play them
-                    Card botCard = BotPlay.playCard(currentTrick.getSuitOfTrick(), currentTrick.getPlayerIdToCardMap()
-                            .values(), userIdToHand.get(nextPlayerId), allCardsPlayed);
-                    List<Card> botCards = new LinkedList<Card>();
-                    botCards.add(botCard);
-                    playCard(nextPlayerId, botCards);
-                }
-                // Next player has already played their card. So play it now to
-                // keep
-                // order.
-                else if (userIdToPendingCardPlayed.containsKey(nextPlayerId)) {
-                    List<Card> playerCards = new LinkedList<Card>();
-                    playerCards.add(userIdToPendingCardPlayed.remove(nextPlayerId));
-                    playCard(nextPlayerId, playerCards);
-                }
+        if (nextPlayerId != null && !hasRoundEnded()) {
+            // Next player is a bot so make their turn
+            if (BotPlay.isBot(nextPlayerId)) {
+                // Grab bots cards and play them
+                playCard(nextPlayerId, getBotCardsToPlay(nextPlayerId));
+            }
+            // Next player has already played their card. So play it now to
+            // keep
+            // order.
+            else if (userIdToPendingCardPlayed.containsKey(nextPlayerId)) {
+                List<Card> playerCards = new LinkedList<Card>();
+                playerCards.add(userIdToPendingCardPlayed.remove(nextPlayerId));
+                playCard(nextPlayerId, playerCards);
             }
         }
 
@@ -299,7 +287,7 @@ public class Round {
                 if (currentTrick.isMoveValid(cardToPlay, userIdToHand.get(id), bHeartPlayed)) {
 
                     // Check if it is the players turn
-                    if (userIdTurnIdx >= 0 && userIdTableOrderList.get(userIdTurnIdx) == id) {
+                    if (getCurrentTurnPlayerId() == id) {
                         userIdTurnIdx = (userIdTurnIdx + 1) % getNumPlayers();
                     } else {
                         // Card is valid, but out of order. Save here to play in
@@ -325,11 +313,11 @@ public class Round {
                             handler.handleSingleCardPlayed(id, cardToPlay, currentTrick.getLoser());
                         }
 
+                        // Update scores and send updates to clients
                         updateScores(currentTrick);
 
                         // Send updates to handle since trick has ended.
                         if (handler != null) {
-                            handler.handleScoreUpdate(userIdToScoreInGame, userIdToScoreInRound);
                             handler.handleTrickEnded(currentTrick);
                         }
 
@@ -402,26 +390,22 @@ public class Round {
                     }
 
                     // Set up the order that players should be playing in.
-                    setPlayerTurnOrder(getFirstPlayerId());
+                    setPlayerTurnOrder(getFirstTurnPlayerId());
 
                     if (handler != null)
-                        handler.handleCardsPassed(passingCardsInfo, getFirstPlayerId());
+                        handler.handleCardsPassed(passingCardsInfo, getFirstTurnPlayerId());
 
                     // Free up some memory
                     passingCardsInfo.clear();
                     passingCardsInfo = null;
 
-                    // Bot player got 2 of spades. Have them make the first move
-                    if (userIdTurnIdx > 0) {
-                        long nextUserId = userIdTableOrderList.get(userIdTurnIdx);
-                        if (BotPlay.isBot(nextUserId)) {
-                            // Grab bots cards and play them
-                            Card botCard = BotPlay.playCard(currentTrick.getSuitOfTrick(), currentTrick
-                                    .getPlayerIdToCardMap().values(), userIdToHand.get(nextUserId), allCardsPlayed);
-                            List<Card> botCards = new LinkedList<Card>();
-                            botCards.add(botCard);
-                            playCard(nextUserId, botCards);
-                        }
+                    Long nextUserId = getCurrentTurnPlayerId();
+
+                    // Bot player got 2 of spades. Have them make the first
+                    // move
+                    if (BotPlay.isBot(nextUserId)) {
+                        // Grab bots cards and play them
+                        playCard(nextUserId, getBotCardsToPlay(nextUserId));
                     }
                 }
 
@@ -441,8 +425,56 @@ public class Round {
         Long loser = currentTrick.getLoser();
         int scoreFromTrick = currentTrick.computeScore();
 
-        userIdToScoreInRound.put(loser, (byte) (userIdToScoreInRound.get(loser) + scoreFromTrick));
-        userIdToScoreInGame.put(loser, (byte) (userIdToScoreInGame.get(loser) + scoreFromTrick));
+        addToScore(loser, (byte) scoreFromTrick);
+    }
+
+    public void addToScore(Long playerId, byte scoreToAdd) {
+        if (playerId != null) {
+            userIdToScoreInRound.put(playerId, (byte) (userIdToScoreInRound.get(playerId) + scoreToAdd));
+            userIdToScoreInGame.put(playerId, (byte) (userIdToScoreInGame.get(playerId) + scoreToAdd));
+
+            if (handler != null) {
+                handler.handleScoreUpdate(userIdToScoreInGame, userIdToScoreInRound);
+            }
+        }
+    }
+
+    public boolean replacePlayer(Long oldUserId, Long newUserId) {
+        if (!userIdToHand.containsKey(oldUserId)) {
+            return false;
+        }
+
+        boolean result = false;
+
+        // Update internal structures and then update trick
+
+        // Table order list is already updated from Game
+        // User id to score in game already updated in Game
+        LinkedList<Card> hand = userIdToHand.remove(oldUserId);
+        userIdToHand.put(newUserId, hand);
+
+        if (userIdToPendingCardPlayed.containsKey(oldUserId)) {
+            Card cardPlayed = userIdToPendingCardPlayed.get(oldUserId);
+            userIdToPendingCardPlayed.put(newUserId, cardPlayed);
+        }
+
+        Byte roundScore = userIdToScoreInRound.get(oldUserId);
+        userIdToScoreInRound.put(newUserId, roundScore);
+
+        if (currentTrick != null) {
+            result = currentTrick.replacePlayer(oldUserId, newUserId);
+        }
+
+        // Play bots cards here if new player is a bot and it is
+        // there turn as everyone is waiting on them.
+        if (getCurrentTurnPlayerId() == newUserId) {
+            // Next player is a bot so make their turn
+            if (BotPlay.isBot(newUserId)) {
+                playCard(newUserId, getBotCardsToPlay(newUserId));
+            }
+        }
+
+        return result;
     }
 
     public Long getLoserId() {
@@ -457,25 +489,70 @@ public class Round {
         return userIdToUserIdPassingMap;
     }
 
+    /**
+     * Determines if this round has passing in it.
+     * 
+     * @return true if there was passing this round
+     */
     public boolean isPassingRound() {
         return getUserIdToUserIdPassingMap() != null;
+    }
+
+    /**
+     * Determines if the current turn should be passing
+     * 
+     * @return true if the current turn is a passing turn.
+     */
+    public boolean isPassingTurn() {
+        return getPassingCardsInfo() != null;
     }
 
     public Map<Long, Byte> getUserIdToScoreInRound() {
         return userIdToScoreInRound;
     }
 
-    public Long getFirstPlayerId() {
-        Card twoOfClubs = new Card(Card.CLUBS, Card.TWO);
+    public List<PassingCardsInfo> getPassingCardsInfo() {
+        return passingCardsInfo;
+    }
 
+    public List<Card> getAllCardsPlayed() {
+        return allCardsPlayed;
+    }
+
+    public Trick getCurrentTrick() {
+        return currentTrick;
+    }
+
+    public Long getFirstTurnPlayerId() {
         for (Long id : userIdToHand.keySet()) {
             List<Card> hand = userIdToHand.get(id);
 
-            if (hand.contains(twoOfClubs))
+            if (hand.contains(Card.TWO_CLUBS))
                 return id;
         }
 
         // This should never happen
         return null;
+    }
+
+    public Long getCurrentTurnPlayerId() {
+        if (userIdTurnIdx >= 0) {
+            return userIdTableOrderList.get(userIdTurnIdx);
+        } else {
+            return null;
+        }
+    }
+
+    private List<Card> getBotCardsToPlay(Long userId) {
+        if (isPassingTurn()) {
+            return BotPlay.removeThree(userIdToHand.get(userId));
+        } else {
+            // Grab bots cards and play them
+            Card botCard = BotPlay.playCard(currentTrick.getSuitOfTrick(),
+                    currentTrick.getPlayerIdToCardMap().values(), userIdToHand.get(userId), allCardsPlayed);
+            List<Card> botCards = new LinkedList<Card>();
+            botCards.add(botCard);
+            return botCards;
+        }
     }
 }

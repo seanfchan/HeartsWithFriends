@@ -1,0 +1,14 @@
+package hearts;
+
+option java_package = "org.bitcoma.hearts.model.transfered";
+option java_outer_classname = "ReplacePlayerProtos";
+option optimize_for = SPEED;
+
+import "PlayerStruct.proto";
+
+message ReplacePlayerResponse {
+	
+	optional PlayerInfo removed_player = 1;
+	optional PlayerInfo added_player = 2;
+
+};

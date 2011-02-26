@@ -30,8 +30,6 @@ public class Game {
             userIdToGameScore.put(id, (byte) 0);
         }
 
-        // TODO: @sean check if the number of players match the max number of
-        // players in a game need to fill with botplayers.
         this.handler = handler;
 
         createRound();
@@ -54,14 +52,14 @@ public class Game {
         } while (currentRound.hasRoundEnded());
     }
 
-    public int getNumPlayers() {
+    public synchronized int getNumPlayers() {
         return tableOrderList.size();
     }
 
     private void createRound() {
         roundNumber++;
 
-        // Free up some memory
+        // Zero out previous passing rounds
         if (userIdToUserIdPassingMap != null)
             userIdToUserIdPassingMap.clear();
         userIdToUserIdPassingMap = null;
@@ -85,11 +83,11 @@ public class Game {
             }
         }
 
-        currentRound = new Round(tableOrderList, userIdToGameScore, userIdToUserIdPassingMap, this.handler);
+        currentRound = new Round(tableOrderList, userIdToGameScore, userIdToUserIdPassingMap, handler);
     }
 
     // Returns list of winners
-    public List<Long> findWinner() {
+    public synchronized List<Long> findWinner() {
         int minScore = 100;
         List<Long> winner = new LinkedList<Long>();
 
@@ -111,8 +109,7 @@ public class Game {
     }
 
     // Looking for players with scores greater than or equal to 100
-    public boolean isGameOver() {
-
+    public synchronized boolean isGameOver() {
         for (Long id : userIdToGameScore.keySet()) {
             if (userIdToGameScore.get(id) >= 100)
                 return true;
@@ -121,23 +118,65 @@ public class Game {
     }
 
     // Get Hand of player by playerId
-    public LinkedList<Card> getUserHand(Long id) {
+    public synchronized LinkedList<Card> getUserHand(Long id) {
         // If there is a player with this id in this game
         if (userIdToGameScore.containsKey(id))
-            return (new LinkedList<Card>(currentRound.getUserIdToHand().get(id)));
+            return currentRound.getUserIdToHand().get(id);
         else
             return null;
     }
 
-    public List<Long> getTableOrderList() {
+    public synchronized List<Long> getTableOrderList() {
         return tableOrderList;
     }
 
-    public Map<Long, Byte> getUserIdToGameScore() {
+    public synchronized Map<Long, Byte> getUserIdToGameScore() {
         return userIdToGameScore;
     }
 
-    public boolean playCard(Long userId, List<Card> cardsToPlay) {
+    public synchronized Round getCurrentRound() {
+        return currentRound;
+    }
+
+    public boolean replacePlayer(Long oldUserId, Long newUserId) {
+        if (!userIdToGameScore.containsKey(oldUserId)) {
+            return false;
+        }
+
+        boolean result = false;
+
+        synchronized (this) {
+            // Update internal game info and then update round.
+            int oldTablePosition = tableOrderList.indexOf(oldUserId);
+            tableOrderList.set(oldTablePosition, newUserId);
+
+            byte gameScore = userIdToGameScore.remove(oldUserId);
+            Long userToPassTo = userIdToUserIdPassingMap.remove(oldUserId);
+
+            userIdToGameScore.put(newUserId, gameScore);
+            userIdToUserIdPassingMap.put(newUserId, userToPassTo);
+
+            if (currentRound != null) {
+                result = currentRound.replacePlayer(oldUserId, newUserId);
+            }
+        }
+
+        // Handler doesn't handle this case as it is needed only for server and
+        // server specific info is needed.
+
+        return result;
+    }
+
+    public synchronized boolean addToScore(Long userId, byte scoreToAdd) {
+        if (currentRound != null) {
+            currentRound.addToScore(userId, scoreToAdd);
+            return true;
+        }
+
+        return false;
+    }
+
+    public synchronized boolean playCard(Long userId, List<Card> cardsToPlay) {
         boolean result = false;
         if (currentRound != null) {
             result = currentRound.playCard(userId, cardsToPlay);

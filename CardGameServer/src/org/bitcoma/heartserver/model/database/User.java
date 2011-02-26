@@ -13,6 +13,8 @@ public class User extends Model {
     public static final int ACTIVE = 1;
     public static final int SUSPENDED = 2;
 
+    public static final int BOT_PENALTY = 2;
+
     public static final Collection<Long> BOT_IDS = new LinkedList<Long>();
     public static final User[] BOTS = { (User) new User().setInteger("id", 1).setString("user_name", "bot1"),
             (User) new User().setInteger("id", 2).setString("user_name", "bot2"),

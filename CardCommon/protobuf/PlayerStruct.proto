@@ -1,0 +1,10 @@
+package hearts;
+
+option java_package = "org.bitcoma.hearts.model.transfered";
+option java_outer_classname = "PlayerStructProtos";
+option optimize_for = SPEED;
+
+message PlayerInfo {
+	optional uint64 user_id = 1;
+	optional string user_name = 2;
+};
