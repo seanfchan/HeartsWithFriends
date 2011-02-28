@@ -15,11 +15,15 @@ public final class RoundProtos {
     boolean hasPassedToUserId();
     long getPassedToUserId();
     
-    // optional uint64 user_id = 2;
+    // optional uint64 first_player_id = 2;
+    boolean hasFirstPlayerId();
+    long getFirstPlayerId();
+    
+    // optional uint64 user_id = 3;
     boolean hasUserId();
     long getUserId();
     
-    // repeated .hearts.Card cards = 3;
+    // repeated .hearts.Card cards = 4;
     java.util.List<org.bitcoma.hearts.model.transfered.CardProtos.Card> 
         getCardsList();
     org.bitcoma.hearts.model.transfered.CardProtos.Card getCards(int index);
@@ -68,18 +72,28 @@ public final class RoundProtos {
       return passedToUserId_;
     }
     
-    // optional uint64 user_id = 2;
-    public static final int USER_ID_FIELD_NUMBER = 2;
+    // optional uint64 first_player_id = 2;
+    public static final int FIRST_PLAYER_ID_FIELD_NUMBER = 2;
+    private long firstPlayerId_;
+    public boolean hasFirstPlayerId() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public long getFirstPlayerId() {
+      return firstPlayerId_;
+    }
+    
+    // optional uint64 user_id = 3;
+    public static final int USER_ID_FIELD_NUMBER = 3;
     private long userId_;
     public boolean hasUserId() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
+      return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     public long getUserId() {
       return userId_;
     }
     
-    // repeated .hearts.Card cards = 3;
-    public static final int CARDS_FIELD_NUMBER = 3;
+    // repeated .hearts.Card cards = 4;
+    public static final int CARDS_FIELD_NUMBER = 4;
     private java.util.List<org.bitcoma.hearts.model.transfered.CardProtos.Card> cards_;
     public java.util.List<org.bitcoma.hearts.model.transfered.CardProtos.Card> getCardsList() {
       return cards_;
@@ -101,6 +115,7 @@ public final class RoundProtos {
     
     private void initFields() {
       passedToUserId_ = 0L;
+      firstPlayerId_ = 0L;
       userId_ = 0L;
       cards_ = java.util.Collections.emptyList();
     }
@@ -120,10 +135,13 @@ public final class RoundProtos {
         output.writeUInt64(1, passedToUserId_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeUInt64(2, userId_);
+        output.writeUInt64(2, firstPlayerId_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeUInt64(3, userId_);
       }
       for (int i = 0; i < cards_.size(); i++) {
-        output.writeMessage(3, cards_.get(i));
+        output.writeMessage(4, cards_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -140,11 +158,15 @@ public final class RoundProtos {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(2, userId_);
+          .computeUInt64Size(2, firstPlayerId_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt64Size(3, userId_);
       }
       for (int i = 0; i < cards_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, cards_.get(i));
+          .computeMessageSize(4, cards_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -271,11 +293,13 @@ public final class RoundProtos {
         super.clear();
         passedToUserId_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000001);
-        userId_ = 0L;
+        firstPlayerId_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000002);
+        userId_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000004);
         if (cardsBuilder_ == null) {
           cards_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000008);
         } else {
           cardsBuilder_.clear();
         }
@@ -324,11 +348,15 @@ public final class RoundProtos {
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
+        result.firstPlayerId_ = firstPlayerId_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
         result.userId_ = userId_;
         if (cardsBuilder_ == null) {
-          if (((bitField0_ & 0x00000004) == 0x00000004)) {
+          if (((bitField0_ & 0x00000008) == 0x00000008)) {
             cards_ = java.util.Collections.unmodifiableList(cards_);
-            bitField0_ = (bitField0_ & ~0x00000004);
+            bitField0_ = (bitField0_ & ~0x00000008);
           }
           result.cards_ = cards_;
         } else {
@@ -353,6 +381,9 @@ public final class RoundProtos {
         if (other.hasPassedToUserId()) {
           setPassedToUserId(other.getPassedToUserId());
         }
+        if (other.hasFirstPlayerId()) {
+          setFirstPlayerId(other.getFirstPlayerId());
+        }
         if (other.hasUserId()) {
           setUserId(other.getUserId());
         }
@@ -360,7 +391,7 @@ public final class RoundProtos {
           if (!other.cards_.isEmpty()) {
             if (cards_.isEmpty()) {
               cards_ = other.cards_;
-              bitField0_ = (bitField0_ & ~0x00000004);
+              bitField0_ = (bitField0_ & ~0x00000008);
             } else {
               ensureCardsIsMutable();
               cards_.addAll(other.cards_);
@@ -373,7 +404,7 @@ public final class RoundProtos {
               cardsBuilder_.dispose();
               cardsBuilder_ = null;
               cards_ = other.cards_;
-              bitField0_ = (bitField0_ & ~0x00000004);
+              bitField0_ = (bitField0_ & ~0x00000008);
               cardsBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getCardsFieldBuilder() : null;
@@ -420,10 +451,15 @@ public final class RoundProtos {
             }
             case 16: {
               bitField0_ |= 0x00000002;
+              firstPlayerId_ = input.readUInt64();
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000004;
               userId_ = input.readUInt64();
               break;
             }
-            case 26: {
+            case 34: {
               org.bitcoma.hearts.model.transfered.CardProtos.Card.Builder subBuilder = org.bitcoma.hearts.model.transfered.CardProtos.Card.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addCards(subBuilder.buildPartial());
@@ -456,34 +492,55 @@ public final class RoundProtos {
         return this;
       }
       
-      // optional uint64 user_id = 2;
+      // optional uint64 first_player_id = 2;
+      private long firstPlayerId_ ;
+      public boolean hasFirstPlayerId() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public long getFirstPlayerId() {
+        return firstPlayerId_;
+      }
+      public Builder setFirstPlayerId(long value) {
+        bitField0_ |= 0x00000002;
+        firstPlayerId_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearFirstPlayerId() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        firstPlayerId_ = 0L;
+        onChanged();
+        return this;
+      }
+      
+      // optional uint64 user_id = 3;
       private long userId_ ;
       public boolean hasUserId() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       public long getUserId() {
         return userId_;
       }
       public Builder setUserId(long value) {
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000004;
         userId_ = value;
         onChanged();
         return this;
       }
       public Builder clearUserId() {
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000004);
         userId_ = 0L;
         onChanged();
         return this;
       }
       
-      // repeated .hearts.Card cards = 3;
+      // repeated .hearts.Card cards = 4;
       private java.util.List<org.bitcoma.hearts.model.transfered.CardProtos.Card> cards_ =
         java.util.Collections.emptyList();
       private void ensureCardsIsMutable() {
-        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
           cards_ = new java.util.ArrayList<org.bitcoma.hearts.model.transfered.CardProtos.Card>(cards_);
-          bitField0_ |= 0x00000004;
+          bitField0_ |= 0x00000008;
          }
       }
       
@@ -599,7 +656,7 @@ public final class RoundProtos {
       public Builder clearCards() {
         if (cardsBuilder_ == null) {
           cards_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000008);
           onChanged();
         } else {
           cardsBuilder_.clear();
@@ -655,7 +712,7 @@ public final class RoundProtos {
           cardsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               org.bitcoma.hearts.model.transfered.CardProtos.Card, org.bitcoma.hearts.model.transfered.CardProtos.Card.Builder, org.bitcoma.hearts.model.transfered.CardProtos.CardOrBuilder>(
                   cards_,
-                  ((bitField0_ & 0x00000004) == 0x00000004),
+                  ((bitField0_ & 0x00000008) == 0x00000008),
                   getParentForChildren(),
                   isClean());
           cards_ = null;
@@ -967,12 +1024,12 @@ public final class RoundProtos {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\013Round.proto\022\006hearts\032\nCard.proto\"_\n\024Rou" +
+      "\n\013Round.proto\022\006hearts\032\nCard.proto\"x\n\024Rou" +
       "ndStartedResponse\022\031\n\021passed_to_user_id\030\001" +
-      " \001(\004\022\017\n\007user_id\030\002 \001(\004\022\033\n\005cards\030\003 \003(\0132\014.h" +
-      "earts.Card\"\024\n\022RoundEndedResponseB4\n#org." +
-      "bitcoma.hearts.model.transferedB\013RoundPr" +
-      "otosH\001"
+      " \001(\004\022\027\n\017first_player_id\030\002 \001(\004\022\017\n\007user_id" +
+      "\030\003 \001(\004\022\033\n\005cards\030\004 \003(\0132\014.hearts.Card\"\024\n\022R" +
+      "oundEndedResponseB4\n#org.bitcoma.hearts." +
+      "model.transferedB\013RoundProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -984,7 +1041,7 @@ public final class RoundProtos {
           internal_static_hearts_RoundStartedResponse_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_hearts_RoundStartedResponse_descriptor,
-              new java.lang.String[] { "PassedToUserId", "UserId", "Cards", },
+              new java.lang.String[] { "PassedToUserId", "FirstPlayerId", "UserId", "Cards", },
               org.bitcoma.hearts.model.transfered.RoundProtos.RoundStartedResponse.class,
               org.bitcoma.hearts.model.transfered.RoundProtos.RoundStartedResponse.Builder.class);
           internal_static_hearts_RoundEndedResponse_descriptor =

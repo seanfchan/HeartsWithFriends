@@ -19,6 +19,8 @@ import org.bitcoma.heartserver.game.GameInstance;
 import org.bitcoma.heartserver.model.database.User;
 import org.bitcoma.heartserver.utils.Encryptor;
 import org.jboss.netty.channel.Channel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import activejdbc.Base;
 
@@ -35,6 +37,8 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
     private User currentUser = null;
     private GameInstance currentGame = null;
 
+    private static final Logger logger = LoggerFactory.getLogger(HeartsServerApiImpl.class);
+
     public void connectDB() {
         if (!dbConnected) {
             Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://" + DB_HOST + "/" + DB_NAME, DB_USER, DB_PASSWORD);
@@ -50,7 +54,7 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
     }
 
     private void setCurrentUser(User user) {
-        if (user != getCurrentUser()) {
+        if (getCurrentUser() != null && user != getCurrentUser()) {
             ServerState.userIdToChannelMap.remove(currentUser.getLongId());
 
             setCurrentGame(null);
@@ -64,16 +68,26 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
     }
 
     public GameInstance getCurrentGame() {
+        // Clear out game if the game is over. Not completely necessary, but a
+        // good idea.
+        if (currentGame != null && currentGame.getGameState() == GameInstance.State.FINISHED) {
+            currentGame = null;
+        }
+
         return currentGame;
     }
 
     private void setCurrentGame(GameInstance game) {
-        if (game != getCurrentGame()) {
+        if (getCurrentGame() != null && game != getCurrentGame()) {
             if (getCurrentUser() != null)
                 currentGame.removePlayer(getCurrentUser());
         }
 
         currentGame = game;
+    }
+
+    public boolean isInGame() {
+        return currentGame != null && currentGame.getGameState() != GameInstance.State.FINISHED;
     }
 
     @Override
@@ -152,7 +166,7 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
         if (getCurrentUser() == null) {
             // Need to be logged in at this point
             return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.UNAUTHORIZED).build();
-        } else if (getCurrentGame() == null) {
+        } else if (!isInGame()) {
             // Not in a game so this is unexpected.
             return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.UNEXPECTED_REQUEST)
                     .build();
@@ -175,7 +189,7 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
         if (getCurrentUser() == null) {
             // Need to be logged in at this point
             return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.UNAUTHORIZED).build();
-        } else if (getCurrentGame() == null) {
+        } else if (!isInGame()) {
             return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.UNEXPECTED_REQUEST)
                     .build();
         } else if (request != null && request.hasGameId()) {
@@ -310,7 +324,7 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
         if (getCurrentUser() == null) {
             // Need to be logged in at this point
             return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.UNAUTHORIZED).build();
-        } else if (getCurrentGame() == null) {
+        } else if (!isInGame()) {
             return GenericResponse.newBuilder().setResponseCode(GenericResponse.ResponseCode.UNEXPECTED_REQUEST)
                     .build();
         } else if (request != null && request.getCardsCount() > 0) {
@@ -320,6 +334,8 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
             for (org.bitcoma.hearts.model.transfered.CardProtos.Card card : request.getCardsList()) {
                 cardsToPlay.add(new Card((byte) card.getValue()));
             }
+
+            logger.debug("Player: {} is trying to play cards: {}", getCurrentUser().getLongId(), cardsToPlay);
 
             boolean result = getCurrentGame().playCard(getCurrentUser().getLongId(), cardsToPlay);
 
@@ -344,6 +360,10 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
     public void resetState() {
         // Remove DB connection if still around
         disconnectDB();
+
+        if (getCurrentUser() != null) {
+            logger.info("User {} is disconnecting", getCurrentUser().getId());
+        }
 
         // Clean up game and logged in user status.
         setCurrentUser(null);

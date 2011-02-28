@@ -8,7 +8,7 @@ import java.util.LinkedList;
 public class BotPlay {
 
     public static boolean isBot(Long playerId) {
-        if (playerId > 0 && playerId <= 10) {
+        if (playerId != null && playerId > 0 && playerId <= 10) {
             return true;
         }
         return false;
@@ -115,8 +115,10 @@ public class BotPlay {
         return cards.contains(Card.TWO_CLUBS);
     }
 
-    public static Card playCard(byte suitOfTrick, Collection<Card> trickCards, Collection<Card> cards,
-            Collection<Card> allPlayed) {
+    public static Card playCard(Trick trick, Collection<Card> cards, Collection<Card> allPlayed) {
+
+        Collection<Card> trickCards = trick.getPlayerIdToCardMap().values();
+        byte suitOfTrick = trick.getSuitOfTrick();
 
         if (trickCards.size() == 0) {
 
@@ -206,8 +208,7 @@ public class BotPlay {
                 // highest trick cards played already.
                 // sort the suit cards
                 Card[] sortedCards = new Card[suitCards.size()];
-                for (int i = 0; i < suitCards.size(); i++)
-                    sortedCards[i] = suitCards.get(i);
+                sortedCards = suitCards.toArray(sortedCards);
                 Card.sortCards(sortedCards);
 
                 // sort the trick cards:
@@ -233,13 +234,11 @@ public class BotPlay {
 
             } else {
                 /*
-                 * If you do not have the suit being played then you have
-                 * already lost the trick. So throw down cards in this order.
-                 * Queen of Spades, any hearts (high to low), any other suit
-                 * (high to low).
+                 * If you do not have the suit being played then you will not
+                 * lose this trick. So throw down cards in this order. Queen of
+                 * Spades, any hearts (high to low), any other suit (high to
+                 * low).
                  */
-                suitCards = getSuitCards(Card.SPADES, cards);
-
                 Card queenOfSpades = findQueen(cards);
                 if (queenOfSpades != null) {
                     return queenOfSpades;
@@ -248,29 +247,29 @@ public class BotPlay {
                 suitCards = getSuitCards(Card.HEARTS, cards);
                 // have no hearts cards
                 if (suitCards.size() == 0) {
-                    LinkedList<Card> suitCards1 = getSuitCards(Card.DIAMONDS, cards);
-                    suitCards = suitCards1;
-                    suitCards1 = getSuitCards(Card.CLUBS, cards);
-                    for (Card s : suitCards1) {
-                        suitCards.add(s);
-                    }
-                    suitCards1 = getSuitCards(Card.SPADES, cards);
-                    for (Card s : suitCards1) {
-                        suitCards.add(s);
-                    }
-                    Card[] arrCards = new Card[suitCards.size()];
-                    for (int count = 0; count < suitCards.size(); count++) {
-                        arrCards[count] = suitCards.get(count);
-                    }
-                    return arrCards[arrCards.length - 1];
+                    // Throw down ace/king of spades first to try and not get
+                    // Queen of Spades, then any other high card
 
+                    // Sort cards by rank first
+                    Card[] sortedCards = new Card[cards.size()];
+                    sortedCards = cards.toArray(sortedCards);
+                    Card.sortCards(sortedCards);
+
+                    // Check all kings and aces
+                    for (int i = sortedCards.length - 1; i >= 0 && sortedCards[i].getRank() >= Card.KING; --i) {
+                        byte suit = sortedCards[i].getSuit();
+                        byte rank = sortedCards[i].getRank();
+                        if (suit == Card.SPADES && (rank == Card.ACE || rank == Card.KING))
+                            return sortedCards[i];
+                    }
+
+                    // Throw down highest rank card.
+                    return sortedCards[sortedCards.length - 1];
                 }
-                // have hearts to throw
+                // have hearts to throw, so throw highest hearts first
                 else {
                     Card[] arrCards = new Card[suitCards.size()];
-                    for (int count = 0; count < suitCards.size(); count++) {
-                        arrCards[count] = suitCards.get(count);
-                    }
+                    arrCards = suitCards.toArray(arrCards);
 
                     Card.sortCards(arrCards);
                     return arrCards[arrCards.length - 1];

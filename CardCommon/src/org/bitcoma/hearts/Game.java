@@ -41,7 +41,7 @@ public class Game {
                     handler.handleGameEnded(this);
                 }
                 break;
-            } else if (currentRound.hasRoundEnded()) {
+            } else if (currentRound.isRoundOver()) {
                 // Round has ended so we need to start a new round
                 if (handler != null) {
                     handler.handleRoundEnded(currentRound);
@@ -49,7 +49,7 @@ public class Game {
 
                 createRound();
             }
-        } while (currentRound.hasRoundEnded());
+        } while (currentRound.isRoundOver());
     }
 
     public synchronized int getNumPlayers() {
@@ -188,7 +188,8 @@ public class Game {
                         if (handler != null) {
                             handler.handleGameEnded(this);
                         }
-                    } else if (currentRound.hasRoundEnded()) {
+                        break;
+                    } else if (currentRound.isRoundOver()) {
                         // Round has ended so we need to start a new round
                         if (handler != null) {
                             handler.handleRoundEnded(currentRound);
@@ -196,7 +197,7 @@ public class Game {
 
                         createRound();
                     }
-                } while (currentRound.hasRoundEnded());
+                } while (currentRound.isRoundOver());
             }
         }
 

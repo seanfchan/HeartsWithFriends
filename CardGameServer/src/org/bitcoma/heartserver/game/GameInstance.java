@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 
 public class GameInstance implements IHeartsGameHandler {
     public static enum State {
-        PLAYING, SYNCING_START, WAITING
+        PLAYING, SYNCING_START, WAITING, FINISHED
     };
 
     public static AtomicLong gameCounter = new AtomicLong(1);
@@ -84,6 +84,7 @@ public class GameInstance implements IHeartsGameHandler {
         userIdToUserMap.put(user.getLongId(), user);
 
         if (isFull()) {
+            setGameState(State.SYNCING_START);
 
             // Add bots to number of ready players
             for (Long id : userIdToUserMap.keySet()) {
@@ -91,7 +92,6 @@ public class GameInstance implements IHeartsGameHandler {
                     addReadyPlayer();
             }
 
-            setGameState(State.SYNCING_START);
         }
 
         return true;
@@ -333,19 +333,24 @@ public class GameInstance implements IHeartsGameHandler {
     @Override
     public void handleSingleCardPlayed(Long srcId, Card cardPlayed, Long nextPlayerId) {
 
+        logger.info("Handling single card played. Game: {}", getId());
+
         // Remove timer task here for passing single card
         setTimeout(null);
 
         // Send card played to all clients
-        PlaySingleCardResponse response = PlaySingleCardResponse
+        PlaySingleCardResponse.Builder builder = PlaySingleCardResponse
                 .newBuilder()
                 .setCardPlayed(
                         org.bitcoma.hearts.model.transfered.CardProtos.Card.newBuilder()
-                                .setValue(cardPlayed.getValue())).setSrcUserId(srcId).setNextPlayerId(nextPlayerId)
-                .build();
+                                .setValue(cardPlayed.getValue())).setSrcUserId(srcId);
+
+        // If the round is over then this is null
+        if (nextPlayerId != null)
+            builder.setNextPlayerId(nextPlayerId);
 
         for (Long userId : userIdToUserMap.keySet()) {
-            ServerState.sendToClient(userId, response);
+            ServerState.sendToClient(userId, builder.build());
         }
 
         if (!BotPlay.isBot(nextPlayerId)) {
@@ -358,6 +363,8 @@ public class GameInstance implements IHeartsGameHandler {
 
     @Override
     public void handleCardsPassed(List<PassingCardsInfo> passingCardInfo, Long firstPlayerId) {
+
+        logger.info("Handling cards passed. Game: {}", getId());
 
         // Remove timer task here for passing cards.
         setTimeout(null);
@@ -387,6 +394,8 @@ public class GameInstance implements IHeartsGameHandler {
     @Override
     public void handleScoreUpdate(Map<Long, Byte> userIdToGameScore, Map<Long, Byte> userIdToRoundScore) {
 
+        logger.info("Handling score update. Game: {}", getId());
+
         // Send score updates to all clients
         ScoreUpdateResponse.Builder builder = ScoreUpdateResponse.newBuilder();
         for (Long userId : userIdToGameScore.keySet()) {
@@ -403,6 +412,9 @@ public class GameInstance implements IHeartsGameHandler {
 
     @Override
     public void handleTrickEnded(Trick finishedTrick) {
+
+        logger.info("Handling trick ended. Game: {}", getId());
+
         TrickEndedResponse response = TrickEndedResponse.newBuilder().setLoserId(finishedTrick.getLoser()).build();
 
         for (Long userId : userIdToUserMap.keySet()) {
@@ -412,6 +424,11 @@ public class GameInstance implements IHeartsGameHandler {
 
     @Override
     public void handleRoundEnded(Round finishedRound) {
+
+        logger.info("Handling round ended. Game: {}", getId());
+
+        setTimeout(null);
+
         RoundEndedResponse response = RoundEndedResponse.newBuilder().build();
 
         for (Long userId : userIdToUserMap.keySet()) {
@@ -422,6 +439,10 @@ public class GameInstance implements IHeartsGameHandler {
     @Override
     public void handleRoundStarted(Round startedRound) {
 
+        logger.info("Handling round started. Game: {}", getId());
+
+        setTimeout(null);
+
         Map<Long, LinkedList<Card>> handMap = startedRound.getUserIdToHand();
         Map<Long, Long> passingMap = startedRound.getUserIdToUserIdPassingMap();
 
@@ -430,8 +451,13 @@ public class GameInstance implements IHeartsGameHandler {
             RoundStartedResponse.Builder builder = RoundStartedResponse.newBuilder();
 
             // Show who you are passing to if this is a passing round
-            if (startedRound.isPassingTurn())
+            if (startedRound.isPassingTurn()) {
                 builder.setPassedToUserId(passingMap.get(userId));
+            }
+            // Tell who's turn is first if this is a non-passing round
+            else {
+                builder.setFirstPlayerId(startedRound.getCurrentTurnPlayerId());
+            }
 
             builder.setUserId(userId);
             for (Card c : handMap.get(userId)) {
@@ -451,11 +477,27 @@ public class GameInstance implements IHeartsGameHandler {
 
     @Override
     public void handleGameEnded(Game finishedGame) {
+
+        logger.info("Handling Game Ended. Game: {}", getId());
+
+        setTimeout(null);
+
+        // Remove game from set of active games as this game is now over.
+        ServerState.activeGames.remove(getId());
+
+        // Mark game as finished
+        setGameState(State.FINISHED);
+
+        // TODO: @jon maybe display user statistics about # of games won,
+        // ranking, etc...
         GameEndedResponse response = GameEndedResponse.newBuilder().build();
 
         for (Long userId : userIdToUserMap.keySet()) {
             ServerState.sendToClient(userId, response);
         }
+
+        // TODO: @jon remove game from each individuals current game variable.
+        // How to do this?
     }
 
 }

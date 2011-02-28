@@ -1,10 +1,15 @@
 package org.bitcoma.heartsclient;
 
 import java.net.InetSocketAddress;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.Executors;
 
 import org.bitcoma.hearts.model.transfered.LoginProtos.LoginRequest;
 import org.bitcoma.hearts.model.transfered.SignupProtos.SignupRequest;
+import org.bitcoma.heartsClient.HeartsProtoHandler;
+import org.bitcoma.heartsClient.netty.HeartsClientHandler;
+import org.bitcoma.heartsClient.netty.HeartsClientPipelineFactory;
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFuture;
@@ -14,21 +19,27 @@ public class HeartsClient {
 
     public static void main(String[] args) throws Exception {
         // Print usage if no argument is specified.
-        if (args.length != 2) {
-            System.err.println("Usage: " + HeartsClient.class.getSimpleName() + " <host> <port>");
+        if (args.length != 4) {
+            System.err.println("Usage: " + HeartsClient.class.getSimpleName() + " <host> <port> <username> <password>");
             return;
         }
 
         // Parse options.
         final String host = args[0];
         final int port = Integer.parseInt(args[1]);
+        final String username = args[2];
+        final String password = args[3];
 
         // Configure the client.
         ClientBootstrap bootstrap = new ClientBootstrap(new NioClientSocketChannelFactory(
                 Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
 
+        // Use a basic handler for the messages used.
+        List<HeartsProtoHandler> handlers = new LinkedList<HeartsProtoHandler>();
+        HeartsClientPipelineFactory pipeline = new HeartsClientPipelineFactory(handlers);
+
         // Set up the pipeline factory.
-        bootstrap.setPipelineFactory(new HeartsClientPipelineFactory());
+        bootstrap.setPipelineFactory(pipeline);
 
         // Start the connection attempt.
         ChannelFuture future = bootstrap.connect(new InetSocketAddress(host, port));
@@ -41,36 +52,21 @@ public class HeartsClient {
             return;
         }
 
-        // FindGameRoomsRequest fgrr =
-        // FindGameRoomsRequest.newBuilder().build();
-        // channel.write(fgrr);
-        //
-        // FindGamesRequest fgr =
-        // FindGamesRequest.newBuilder().setGameRoomId(27)
-        // .build();
-        // channel.write(fgr);
-        //
-        // JoinRequest jr = JoinRequest.newBuilder().setGameId(2).build();
-        // channel.write(jr);
-        //
-        // LoginRequest lr = LoginRequest.newBuilder().setEmail("dude")
-        // .setPassword("mypass").build();
-        // channel.write(lr);
-        //
-        // SignupRequest sr = SignupRequest.newBuilder().setEmail("dude")
-        // .setPassword("mypass").build();
-        // channel.write(sr);
-        //
-        // GenericResponse gr = GenericResponse.newBuilder()
-        // .setResponseCode(GenericResponse.ResponseCode.OK).build();
-        // channel.write(gr);
+        // HACK: This is a tight coupling but only used for performance testing
+        // so it shouldn't really matter too much
+        HeartsClientHandler networkHandle = channel.getPipeline().get(HeartsClientHandler.class);
+        HeartsProtoHandler handler = new SimpleHeartsProtoHandler(networkHandle);
+        handlers.add(handler);
 
-        SignupRequest sr = SignupRequest.newBuilder().setUserName("dude").setEmail("dude@mymail.com")
-                .setPassword("mypass").build();
-        channel.write(sr);
+        // Try to sign up. This may fail or add the user doesn't really matter.
+        // We will sign in right after this.
+        SignupRequest sr = SignupRequest.newBuilder().setUserName(username).setEmail(username + "@mymail.com")
+                .setPassword(password).build();
+        networkHandle.writeMessage(sr);
 
-        LoginRequest lr = LoginRequest.newBuilder().setIdentifier("dude").setPassword("mypass").build();
-        channel.write(lr);
+        // Login as the user passed in.
+        LoginRequest lr = LoginRequest.newBuilder().setIdentifier(username).setPassword(password).build();
+        networkHandle.writeMessage(lr);
 
         // Wait until the channel closes. To make sure responses are seen.
         future.getChannel().getCloseFuture().awaitUninterruptibly();

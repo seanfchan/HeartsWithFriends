@@ -47,6 +47,13 @@ public class HeartsClientHandler extends SimpleChannelUpstreamHandler {
         }
     }
 
+    public boolean shutdown() {
+        if (channel != null)
+            channel.close();
+
+        return true;
+    }
+
     @Override
     public void channelOpen(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
         channel = e.getChannel();

@@ -8,6 +8,8 @@ import org.jboss.netty.channel.Channel;
 
 public class ServerState {
 
+    public static long numActiveConnections = 0;
+
     // Create a performant map of user ids to Channels to enable push operations
     // to clients.
     public static FastMap<Long, Channel> userIdToChannelMap = new FastMap<Long, Channel>().shared();

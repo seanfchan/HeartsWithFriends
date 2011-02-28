@@ -39,7 +39,7 @@ public class GameLobbyTimeOutTask implements TimerTask {
 
         // Remove GameInstance from the waiting games map
         // Check to make sure this still needs bots added
-        if (ServerState.waitingGames.remove(gameInstance.getId()) != null && gameInstance.getTimeout() == this) {
+        if (ServerState.waitingGames.remove(gameInstance.getId()) != null && gameInstance.getTimeout() == timeout) {
 
             // Remove timeout as it is no longer needed
             gameInstance.setTimeout(null, false);
@@ -48,22 +48,27 @@ public class GameLobbyTimeOutTask implements TimerTask {
 
             // Add bots to the game
             while (!gameInstance.isFull()) {
+
+                // Dirty Hack. Cannot use addPlayer because the game will start
+                // before all player information is
+                // sent back to the client.
                 User botToAdd = User.selectRandomBot(gameInstance.getUserIdToUserMap().keySet());
-
-                // Check that we actually add a bot.
-                if (gameInstance.addPlayer(botToAdd))
-                    numBotsAdded++;
+                gameInstance.getUserIdToUserMap().put(botToAdd.getLongId(), botToAdd);
+                numBotsAdded++;
             }
 
-            if (numBotsAdded > 0) {
-                logger.info("Timeout task added {} bots.", numBotsAdded);
+            logger.info("Timeout task added bots.");
 
-                // Add GameInstance to the active games map.
-                ServerState.activeGames.put(gameInstance.getId(), gameInstance);
+            // Add GameInstance to the active games map.
+            ServerState.activeGames.put(gameInstance.getId(), gameInstance);
 
-                // Send the updates to the users.
-                JoinGameResponseHelper.sendResponses(gameInstance);
-            }
+            // Send the updates to the users.
+            JoinGameResponseHelper.sendResponses(gameInstance);
+
+            // Add bots as ready players as all player info has now gone back to
+            // the clients.
+            for (int i = 0; i < numBotsAdded; ++i)
+                gameInstance.addReadyPlayer();
         }
     }
 }

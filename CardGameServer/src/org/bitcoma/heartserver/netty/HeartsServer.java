@@ -19,6 +19,7 @@ public class HeartsServer {
 
         // Set up the pipeline factory.
         bootstrap.setPipelineFactory(new HeartsServerPipelineFactory(executor));
+        bootstrap.setOption("child.tcpNoDelay", true);
 
         // Bind and start to accept incoming connections.
         bootstrap.bind(new InetSocketAddress(7000));

@@ -18,8 +18,7 @@ public class Trick {
         }
 
         // Check if you have two of clubs. This needs to be played.
-        Card twoOfClubs = new Card(Card.CLUBS, Card.TWO);
-        if (playerCards.contains(twoOfClubs) && !cardToPlay.equals(twoOfClubs)) {
+        if (playerCards.contains(Card.TWO_CLUBS) && !cardToPlay.equals(Card.TWO_CLUBS)) {
             return false;
         }
 
@@ -39,8 +38,6 @@ public class Trick {
                     // Played heart with only hearts in hand
                 }
             }
-
-            suitOfTrick = cardToPlay.getSuit();
             return true;
         } else {
             // Card matches trick suit.
@@ -64,6 +61,10 @@ public class Trick {
 
     public void makeMove(Long playerId, Card card) {
         synchronized (playerIdToCardMap) {
+
+            if (playerIdToCardMap.size() == 0)
+                suitOfTrick = card.getSuit();
+
             playerIdToCardMap.put(playerId, card);
         }
     }

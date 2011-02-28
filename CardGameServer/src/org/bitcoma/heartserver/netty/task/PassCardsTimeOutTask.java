@@ -45,7 +45,7 @@ public class PassCardsTimeOutTask implements TimerTask {
         logger.info("Running timeout task: GameId {}", gameInstance.getId());
 
         // Check that this timeout is still associated with this game.
-        if (gameInstance.getTimeout() == this) {
+        if (gameInstance.getTimeout() == timeout) {
 
             // Remove timeout as it is no longer needed
             gameInstance.setTimeout(null, false);

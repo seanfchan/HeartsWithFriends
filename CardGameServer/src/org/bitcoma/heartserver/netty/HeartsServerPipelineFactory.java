@@ -13,8 +13,6 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import org.jboss.netty.handler.execution.ExecutionHandler;
 import org.jboss.netty.handler.execution.OrderedMemoryAwareThreadPoolExecutor;
-import org.jboss.netty.handler.logging.LoggingHandler;
-import org.jboss.netty.logging.InternalLogLevel;
 
 public class HeartsServerPipelineFactory implements ChannelPipelineFactory {
 
@@ -35,7 +33,8 @@ public class HeartsServerPipelineFactory implements ChannelPipelineFactory {
     public ChannelPipeline getPipeline() throws Exception {
         ChannelPipeline pipeline = pipeline();
 
-        pipeline.addLast("logger", new LoggingHandler(InternalLogLevel.INFO, true));
+        // pipeline.addLast("logger", new LoggingHandler(InternalLogLevel.ERROR,
+        // true));
         pipeline.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
         pipeline.addLast("protobufDecoder", PROTOBUF_DECODER);
 

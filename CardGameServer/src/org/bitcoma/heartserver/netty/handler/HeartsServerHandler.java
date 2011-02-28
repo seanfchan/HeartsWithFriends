@@ -11,6 +11,7 @@ import org.bitcoma.hearts.model.transfered.SignupProtos.SignupRequest;
 import org.bitcoma.hearts.model.transfered.StartGameProtos.StartGameRequest;
 import org.bitcoma.heartserver.HeartsServerApiImpl;
 import org.bitcoma.heartserver.IHeartsServerApi;
+import org.bitcoma.heartserver.ServerState;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.ExceptionEvent;
@@ -95,7 +96,15 @@ public class HeartsServerHandler extends SimpleChannelHandler {
     }
 
     @Override
+    public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
+        ServerState.numActiveConnections++;
+
+        super.channelConnected(ctx, e);
+    }
+
+    @Override
     public void channelDisconnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
+        ServerState.numActiveConnections--;
         api.resetState();
 
         super.channelDisconnected(ctx, e);
@@ -103,11 +112,10 @@ public class HeartsServerHandler extends SimpleChannelHandler {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
-
         api.resetState();
 
-        logger.error(e.getCause().getMessage());
-
+        Throwable throwable = e.getCause();
+        logger.error("Server Exception caught {}: {}", throwable, throwable != null ? throwable.getMessage() : null);
+        e.getChannel().close();
     }
-
 }

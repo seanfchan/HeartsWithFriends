@@ -43,7 +43,7 @@ public class PlaySingleCardTimeOutTask implements TimerTask {
         logger.info("Running timeout task: GameId {}", gameInstance.getId());
 
         // Check that this timeout is still associated with this game.
-        if (gameInstance.getTimeout() == this) {
+        if (gameInstance.getTimeout() == timeout) {
 
             // Make sure no one plays cards while we finish this work.
             synchronized (gameInstance) {
@@ -73,8 +73,7 @@ public class PlaySingleCardTimeOutTask implements TimerTask {
                         List<Card> playerHand = gameInstance.getUserHand(playerId);
 
                         // Play cards for them based on bot decision
-                        Card cardToPlay = BotPlay.playCard(currentTrick.getSuitOfTrick(), currentTrick
-                                .getPlayerIdToCardMap().values(), playerHand, round.getAllCardsPlayed());
+                        Card cardToPlay = BotPlay.playCard(currentTrick, playerHand, round.getAllCardsPlayed());
                         List<Card> cardsToPlay = new LinkedList<Card>();
                         cardsToPlay.add(cardToPlay);
                         gameInstance.playCard(playerId, cardsToPlay, true);

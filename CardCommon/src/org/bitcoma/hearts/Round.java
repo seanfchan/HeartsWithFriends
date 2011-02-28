@@ -84,11 +84,13 @@ public class Round {
         // Shuffle and deal out the cards
         shuffle(userIdToScoreInGame.size());
 
-        if (handler != null)
-            handler.handleRoundStarted(this);
-
-        // Have bot players pass their cards now.
         if (isPassingTurn()) {
+
+            // Say round has started
+            if (handler != null)
+                handler.handleRoundStarted(this);
+
+            // Have bot players pass their cards now.
             for (Long userId : userIdTableOrderList) {
                 if (BotPlay.isBot(userId)) {
                     playCard(userId, getBotCardsToPlay(userId));
@@ -99,6 +101,10 @@ public class Round {
             // No passing so set first player.
             Long firstPlayerId = getFirstTurnPlayerId();
             setPlayerTurnOrder(firstPlayerId);
+
+            // Say round has started after we denote who is first
+            if (handler != null)
+                handler.handleRoundStarted(this);
 
             // Bot plays if they are first to play
             if (BotPlay.isBot(firstPlayerId)) {
@@ -216,12 +222,21 @@ public class Round {
         return false;
     }
 
-    public boolean hasRoundEnded() {
-        for (Long userId : userIdToHand.keySet()) {
-            if (userIdToHand.get(userId).size() != 0)
-                return false;
+    public boolean isRoundOver() {
+        if (allCardsPlayed.size() == numOfCardsInDeck)
+            return true;
+        else
+            return false;
+    }
+
+    public boolean isGameOver() {
+        for (Byte score : userIdToScoreInGame.values()) {
+            if (score >= 100) {
+                return true;
+            }
         }
-        return true;
+
+        return false;
     }
 
     private void addCard(Long userId, Card cardToAdd) {
@@ -251,7 +266,7 @@ public class Round {
 
         Long nextPlayerId = getCurrentTurnPlayerId();
 
-        if (nextPlayerId != null && !hasRoundEnded()) {
+        if (nextPlayerId != null && !isRoundOver()) {
             // Next player is a bot so make their turn
             if (BotPlay.isBot(nextPlayerId)) {
                 // Grab bots cards and play them
@@ -308,9 +323,11 @@ public class Round {
                     // Trick has ended
                     if (currentTrick.getNumCards() == userIdToScoreInRound.size()) {
 
-                        // Trick has ended so nextPlayerId is loser of trick
+                        // Trick has ended so nextPlayerId is loser of trick or
+                        // null if the round is over
+                        Long nextPlayerId = isRoundOver() || isGameOver() ? null : currentTrick.getLoser();
                         if (handler != null) {
-                            handler.handleSingleCardPlayed(id, cardToPlay, currentTrick.getLoser());
+                            handler.handleSingleCardPlayed(id, cardToPlay, nextPlayerId);
                         }
 
                         // Update scores and send updates to clients
@@ -416,8 +433,11 @@ public class Round {
         return false;
     }
 
-    private void setPlayerTurnOrder(Long firstPlayerId) {
-        userIdTurnIdx = userIdTableOrderList.indexOf(firstPlayerId);
+    private void setPlayerTurnOrder(Long firstTurnPlayerId) {
+        if (firstTurnPlayerId == null)
+            userIdTurnIdx = -1;
+        else
+            userIdTurnIdx = userIdTableOrderList.indexOf(firstTurnPlayerId);
     }
 
     // Updating scores in Round and Game, meant to be run after every trick
@@ -548,8 +568,7 @@ public class Round {
             return BotPlay.removeThree(userIdToHand.get(userId));
         } else {
             // Grab bots cards and play them
-            Card botCard = BotPlay.playCard(currentTrick.getSuitOfTrick(),
-                    currentTrick.getPlayerIdToCardMap().values(), userIdToHand.get(userId), allCardsPlayed);
+            Card botCard = BotPlay.playCard(currentTrick, userIdToHand.get(userId), allCardsPlayed);
             List<Card> botCards = new LinkedList<Card>();
             botCards.add(botCard);
             return botCards;

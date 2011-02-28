@@ -34,8 +34,7 @@ public class BotPlayTest {
         botHand.add(new Card(Card.SPADES, Card.FOUR));
         botHand.add(new Card(Card.DIAMONDS, Card.ACE));
 
-        Card botCardToPlay = BotPlay.playCard(currentTrick.getSuitOfTrick(), currentTrick.getPlayerIdToCardMap()
-                .values(), botHand, allCardsPlayed);
+        Card botCardToPlay = BotPlay.playCard(currentTrick, botHand, allCardsPlayed);
 
         assertEquals("Should play two of clubs", new Card(Card.CLUBS, Card.TWO), botCardToPlay);
     }
@@ -44,16 +43,16 @@ public class BotPlayTest {
     public void testPlayCard1() {
         List<Card> botHand = new LinkedList<Card>();
         List<Card> allCardsPlayed = new LinkedList<Card>();
-        List<Card> trickCards = new LinkedList<Card>();
 
-        trickCards.add(new Card(Card.HEARTS, Card.EIGHT));
+        Trick trick = new Trick();
+        trick.makeMove((long) 0, new Card(Card.HEARTS, Card.EIGHT));
 
         botHand.add(new Card(Card.HEARTS, Card.TWO));
         botHand.add(new Card(Card.DIAMONDS, Card.THREE));
         botHand.add(new Card(Card.SPADES, Card.FOUR));
         botHand.add(new Card(Card.DIAMONDS, Card.ACE));
 
-        Card botCardToPlay = BotPlay.playCard(Card.HEARTS, trickCards, botHand, allCardsPlayed);
+        Card botCardToPlay = BotPlay.playCard(trick, botHand, allCardsPlayed);
 
         assertTrue("Should play a card in our hand", botHand.contains(botCardToPlay));
         assertEquals("Should play heart", Card.HEARTS, botCardToPlay.getSuit());
@@ -64,16 +63,16 @@ public class BotPlayTest {
     public void testPlayCard2() {
         List<Card> botHand = new LinkedList<Card>();
         List<Card> allCardsPlayed = new LinkedList<Card>();
-        List<Card> trickCards = new LinkedList<Card>();
 
-        trickCards.add(new Card(Card.CLUBS, Card.EIGHT));
+        Trick trick = new Trick();
+        trick.makeMove((long) 0, new Card(Card.CLUBS, Card.EIGHT));
 
         botHand.add(new Card(Card.HEARTS, Card.TWO));
         botHand.add(new Card(Card.DIAMONDS, Card.THREE));
         botHand.add(new Card(Card.SPADES, Card.FOUR));
         botHand.add(new Card(Card.DIAMONDS, Card.ACE));
 
-        Card botCardToPlay = BotPlay.playCard(Card.CLUBS, trickCards, botHand, allCardsPlayed);
+        Card botCardToPlay = BotPlay.playCard(trick, botHand, allCardsPlayed);
 
         assertTrue("Should play a card in our hand", botHand.contains(botCardToPlay));
         assertEquals("Should play heart b/c they don't have a spade", Card.HEARTS, botCardToPlay.getSuit());
@@ -84,7 +83,7 @@ public class BotPlayTest {
     public void testPlayCard3() {
         List<Card> botHand = new LinkedList<Card>();
         List<Card> allCardsPlayed = new LinkedList<Card>();
-        List<Card> trickCards = new LinkedList<Card>();
+        Trick trick = new Trick();
 
         botHand.add(new Card(Card.HEARTS, Card.TWO));
         botHand.add(new Card(Card.DIAMONDS, Card.THREE));
@@ -95,7 +94,7 @@ public class BotPlayTest {
         allCardsPlayed.add(new Card(Card.HEARTS, Card.FIVE));
 
         // No trick cards and we go first. Should not play a club.
-        Card botCardToPlay = BotPlay.playCard(Card.CLUBS, trickCards, botHand, allCardsPlayed);
+        Card botCardToPlay = BotPlay.playCard(trick, botHand, allCardsPlayed);
 
         assertTrue("Should play a card in our hand", botHand.contains(botCardToPlay));
     }
@@ -104,18 +103,20 @@ public class BotPlayTest {
     public void testPlayCard4() {
         List<Card> botHand = new LinkedList<Card>();
         List<Card> allCardsPlayed = new LinkedList<Card>();
-        List<Card> trickCards = new LinkedList<Card>();
 
-        trickCards.add(new Card(Card.SPADES, Card.FIVE));
-        trickCards.add(new Card(Card.SPADES, Card.QUEEN));
-        trickCards.add(new Card(Card.SPADES, Card.THREE));
+        Trick trick = new Trick();
+        trick.makeMove((long) 0, new Card(Card.CLUBS, Card.EIGHT));
+
+        trick.makeMove((long) 0, new Card(Card.SPADES, Card.FIVE));
+        trick.makeMove((long) 0, new Card(Card.SPADES, Card.QUEEN));
+        trick.makeMove((long) 0, new Card(Card.SPADES, Card.THREE));
 
         botHand.add(new Card(Card.SPADES, Card.ACE));
         botHand.add(new Card(Card.SPADES, Card.FOUR));
         botHand.add(new Card(Card.SPADES, Card.JACK));
 
         // Should play card below highest in trick if possible
-        Card botCardToPlay = BotPlay.playCard(Card.SPADES, trickCards, botHand, allCardsPlayed);
+        Card botCardToPlay = BotPlay.playCard(trick, botHand, allCardsPlayed);
 
         assertTrue("Should play a card in our hand", botHand.contains(botCardToPlay));
         assertEquals("Should play Jack of Spades", new Card(Card.SPADES, Card.JACK), botCardToPlay);
@@ -125,11 +126,11 @@ public class BotPlayTest {
     public void testWtfBug1() {
         List<Card> botHand = new LinkedList<Card>();
         List<Card> allCardsPlayed = new LinkedList<Card>();
-        List<Card> trickCards = new LinkedList<Card>();
 
-        trickCards.add(new Card(Card.SPADES, Card.TWO));
-        trickCards.add(new Card(Card.SPADES, Card.SIX));
-        trickCards.add(new Card(Card.SPADES, Card.THREE));
+        Trick trick = new Trick();
+        trick.makeMove((long) 0, new Card(Card.SPADES, Card.TWO));
+        trick.makeMove((long) 0, new Card(Card.SPADES, Card.SIX));
+        trick.makeMove((long) 0, new Card(Card.SPADES, Card.THREE));
 
         botHand.add(new Card(Card.HEARTS, Card.TEN));
         botHand.add(new Card(Card.HEARTS, Card.TWO));
@@ -145,7 +146,7 @@ public class BotPlayTest {
         botHand.add(new Card(Card.DIAMONDS, Card.FOUR));
 
         // Should play card below highest in trick if possible
-        Card botCardToPlay = BotPlay.playCard(Card.SPADES, trickCards, botHand, allCardsPlayed);
+        Card botCardToPlay = BotPlay.playCard(trick, botHand, allCardsPlayed);
 
         assertTrue("Should play a card in our hand", botHand.contains(botCardToPlay));
     }
@@ -154,7 +155,7 @@ public class BotPlayTest {
     public void testLeadingTrickWithHighHearts() {
         List<Card> botHand = new LinkedList<Card>();
         List<Card> allCardsPlayed = new LinkedList<Card>();
-        List<Card> trickCards = new LinkedList<Card>();
+        Trick trick = new Trick();
 
         allCardsPlayed.add(new Card(Card.CLUBS, Card.TWO));
         allCardsPlayed.add(new Card(Card.CLUBS, Card.TEN));
@@ -182,7 +183,7 @@ public class BotPlayTest {
         botHand.add(new Card(Card.HEARTS, Card.ACE));
         botHand.add(new Card(Card.DIAMONDS, Card.QUEEN));
 
-        Card botCardToPlay = BotPlay.playCard(Card.SPADES, trickCards, botHand, allCardsPlayed);
+        Card botCardToPlay = BotPlay.playCard(trick, botHand, allCardsPlayed);
 
         assertTrue("Should play a card in our hand", botHand.contains(botCardToPlay));
         // This check is done in is move valid. Should be figured into picking a
@@ -195,7 +196,7 @@ public class BotPlayTest {
     public void testLeadingTrickWithOnlyHearts() {
         List<Card> botHand = new LinkedList<Card>();
         List<Card> allCardsPlayed = new LinkedList<Card>();
-        List<Card> trickCards = new LinkedList<Card>();
+        Trick trick = new Trick();
 
         allCardsPlayed.add(new Card(Card.CLUBS, Card.TWO));
         allCardsPlayed.add(new Card(Card.CLUBS, Card.TEN));
@@ -215,7 +216,7 @@ public class BotPlayTest {
         botHand.add(new Card(Card.HEARTS, Card.EIGHT));
 
         // Should play a heart even though no hearts have been played
-        Card botCardToPlay = BotPlay.playCard(Card.SPADES, trickCards, botHand, allCardsPlayed);
+        Card botCardToPlay = BotPlay.playCard(trick, botHand, allCardsPlayed);
 
         assertTrue("Should play a card in our hand", botHand.contains(botCardToPlay));
         assertTrue("Should be a heart. No hearts played and we lead the trick with only hearts to play.",
@@ -226,7 +227,7 @@ public class BotPlayTest {
     public void testWtfBug2() {
         List<Card> botHand = new LinkedList<Card>();
         List<Card> allCardsPlayed = new LinkedList<Card>();
-        List<Card> trickCards = new LinkedList<Card>();
+        Trick trick = new Trick();
 
         allCardsPlayed.add(new Card(Card.CLUBS, Card.TWO));
         allCardsPlayed.add(new Card(Card.CLUBS, Card.THREE));
@@ -265,7 +266,7 @@ public class BotPlayTest {
         botHand.add(new Card(Card.SPADES, Card.TWO));
 
         // Should play a heart even though no hearts have been played
-        Card botCardToPlay = BotPlay.playCard(Card.SPADES, trickCards, botHand, allCardsPlayed);
+        Card botCardToPlay = BotPlay.playCard(trick, botHand, allCardsPlayed);
         // Hearts[10]
 
         assertTrue("Should play a card in our hand", botHand.contains(botCardToPlay));
@@ -277,7 +278,7 @@ public class BotPlayTest {
     public void testWtfBug3() {
         List<Card> botHand = new LinkedList<Card>();
         List<Card> allCardsPlayed = new LinkedList<Card>();
-        List<Card> trickCards = new LinkedList<Card>();
+        Trick trick = new Trick();
 
         allCardsPlayed.add(new Card(Card.CLUBS, Card.TWO));
         allCardsPlayed.add(new Card(Card.CLUBS, Card.SIX));
@@ -316,7 +317,7 @@ public class BotPlayTest {
         botHand.add(new Card(Card.SPADES, Card.TWO));
 
         // Should play a heart even though no hearts have been played
-        Card botCardToPlay = BotPlay.playCard(Card.SPADES, trickCards, botHand, allCardsPlayed);
+        Card botCardToPlay = BotPlay.playCard(trick, botHand, allCardsPlayed);
         // Hearts[11]
 
         assertTrue("Should play a card in our hand", botHand.contains(botCardToPlay));

@@ -11,12 +11,16 @@ message RoundStartedResponse {
 	// User id of who you are passing cards to.
 	// User id is not present if this is a non-passing round.
 	optional uint64 passed_to_user_id = 1;
+	
+	// User id of player who should go first.
+	// NOTE: This is only filled for a non-passing round.
+	optional uint64 first_player_id = 2;
 
 	// User id of whose cards these are
-	optional uint64 user_id = 2;
+	optional uint64 user_id = 3;
 	
 	// Cards for this player
-	repeated Card cards = 3;
+	repeated Card cards = 4;
 }
 
 message RoundEndedResponse {

@@ -58,9 +58,12 @@ public class FullGameTest implements IHeartsGameHandler {
     @Override
     public void handleSingleCardPlayed(Long srcId, Card cardPlayed, Long nextPlayerId) {
         assertNotNull("Player playing card needs to be not null.", srcId);
-        assertNotNull("Next player id needs to be not null.", nextPlayerId);
-        assertTrue("Next player id needs to be in the game.", playerIds.contains(nextPlayerId));
-        assertTrue("Player playing card needs to be in the game.", playerIds.contains(nextPlayerId));
+
+        // If the round is not over then this is non-null
+        if (nextPlayerId != null)
+            assertTrue("Next player id needs to be in the game.", playerIds.contains(nextPlayerId));
+
+        assertTrue("Player playing card needs to be in the game.", playerIds.contains(srcId));
     }
 
     @Override
@@ -122,7 +125,7 @@ public class FullGameTest implements IHeartsGameHandler {
         roundEndedCount++;
 
         assertTrue("Trick ended count should equal 13.", trickEndedCount == 13);
-        assertTrue("Round should have ended in callback.", finishedRound.hasRoundEnded());
+        assertTrue("Round should have ended in callback.", finishedRound.isRoundOver());
 
         if (roundCount % 4 != 0) {
             assertTrue("This should be a passing round.", finishedRound.isPassingRound());

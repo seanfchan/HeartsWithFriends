@@ -15,6 +15,7 @@ message PlaySingleCardResponse {
 	// User id of the next player of this trick
 	// At the end of a trick this should be the same id
 	// as is present in the trick ended message
+	// Note: This field is not present if round is over.
 	optional uint64 next_player_id = 1;
 
 	// User that played the card
