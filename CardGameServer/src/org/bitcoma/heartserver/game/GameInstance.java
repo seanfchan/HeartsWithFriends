@@ -333,7 +333,8 @@ public class GameInstance implements IHeartsGameHandler {
     @Override
     public void handleSingleCardPlayed(Long srcId, Card cardPlayed, Long nextPlayerId) {
 
-        logger.info("Handling single card played. Game: {}", getId());
+        logger.info("Handling single card played. Game: {} Player: {} Card: {} NextPlayer: {}", new Object[] { getId(),
+                srcId, cardPlayed, nextPlayerId });
 
         // Remove timer task here for passing single card
         setTimeout(null);

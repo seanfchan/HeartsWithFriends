@@ -266,7 +266,7 @@ public class Round {
 
         Long nextPlayerId = getCurrentTurnPlayerId();
 
-        if (nextPlayerId != null && !isRoundOver()) {
+        if (nextPlayerId != null && !isRoundOver() && !isGameOver()) {
             // Next player is a bot so make their turn
             if (BotPlay.isBot(nextPlayerId)) {
                 // Grab bots cards and play them
@@ -346,9 +346,10 @@ public class Round {
                         // Trick is still in session so use next player in list
                         // for nextPlayerId
                         if (handler != null) {
-                            if (userIdTurnIdx >= 0)
-                                handler.handleSingleCardPlayed(id, cardToPlay, userIdTableOrderList.get(userIdTurnIdx));
-                            else
+                            if (userIdTurnIdx >= 0) {
+                                Long nextPlayerId = isRoundOver() || isGameOver() ? null : getCurrentTurnPlayerId();
+                                handler.handleSingleCardPlayed(id, cardToPlay, nextPlayerId);
+                            } else
                                 System.err
                                         .println("Should be another player in turn list as trick is not over. This is BAD!!!");
                         }
@@ -420,7 +421,7 @@ public class Round {
 
                     // Bot player got 2 of spades. Have them make the first
                     // move
-                    if (BotPlay.isBot(nextUserId)) {
+                    if (BotPlay.isBot(nextUserId) && !isGameOver() && !isRoundOver()) {
                         // Grab bots cards and play them
                         playCard(nextUserId, getBotCardsToPlay(nextUserId));
                     }
@@ -489,7 +490,7 @@ public class Round {
         // there turn as everyone is waiting on them.
         if (getCurrentTurnPlayerId() == newUserId) {
             // Next player is a bot so make their turn
-            if (BotPlay.isBot(newUserId)) {
+            if (BotPlay.isBot(newUserId) && !isGameOver() && !isRoundOver()) {
                 playCard(newUserId, getBotCardsToPlay(newUserId));
             }
         }
