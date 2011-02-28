@@ -105,11 +105,9 @@ public class BotPlayTest {
         List<Card> allCardsPlayed = new LinkedList<Card>();
 
         Trick trick = new Trick();
-        trick.makeMove((long) 0, new Card(Card.CLUBS, Card.EIGHT));
-
-        trick.makeMove((long) 0, new Card(Card.SPADES, Card.FIVE));
-        trick.makeMove((long) 0, new Card(Card.SPADES, Card.QUEEN));
-        trick.makeMove((long) 0, new Card(Card.SPADES, Card.THREE));
+        trick.makeMove((long) 2, new Card(Card.SPADES, Card.FIVE));
+        trick.makeMove((long) 3, new Card(Card.SPADES, Card.QUEEN));
+        trick.makeMove((long) 4, new Card(Card.SPADES, Card.THREE));
 
         botHand.add(new Card(Card.SPADES, Card.ACE));
         botHand.add(new Card(Card.SPADES, Card.FOUR));
@@ -128,9 +126,9 @@ public class BotPlayTest {
         List<Card> allCardsPlayed = new LinkedList<Card>();
 
         Trick trick = new Trick();
-        trick.makeMove((long) 0, new Card(Card.SPADES, Card.TWO));
-        trick.makeMove((long) 0, new Card(Card.SPADES, Card.SIX));
-        trick.makeMove((long) 0, new Card(Card.SPADES, Card.THREE));
+        trick.makeMove((long) 1, new Card(Card.SPADES, Card.TWO));
+        trick.makeMove((long) 2, new Card(Card.SPADES, Card.SIX));
+        trick.makeMove((long) 3, new Card(Card.SPADES, Card.THREE));
 
         botHand.add(new Card(Card.HEARTS, Card.TEN));
         botHand.add(new Card(Card.HEARTS, Card.TWO));

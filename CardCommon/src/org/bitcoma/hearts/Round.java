@@ -265,8 +265,7 @@ public class Round {
         boolean result = playCardInternal(id, cardsToPlay);
 
         Long nextPlayerId = getCurrentTurnPlayerId();
-
-        if (nextPlayerId != null && !isRoundOver() && !isGameOver()) {
+        if (nextPlayerId != null) {
             // Next player is a bot so make their turn
             if (BotPlay.isBot(nextPlayerId)) {
                 // Grab bots cards and play them
@@ -323,6 +322,15 @@ public class Round {
                     // Trick has ended
                     if (currentTrick.getNumCards() == userIdToScoreInRound.size()) {
 
+                        // Update scores so we know if we should send a next
+                        // player id for handleSingleCardPlayed
+                        int scoreToAdd = currentTrick.computeScore();
+                        Long loserOfTrick = currentTrick.getLoser();
+                        userIdToScoreInRound.put(loserOfTrick,
+                                (byte) (userIdToScoreInRound.get(loserOfTrick) + scoreToAdd));
+                        userIdToScoreInGame.put(loserOfTrick,
+                                (byte) (userIdToScoreInGame.get(loserOfTrick) + scoreToAdd));
+
                         // Trick has ended so nextPlayerId is loser of trick or
                         // null if the round is over
                         Long nextPlayerId = isRoundOver() || isGameOver() ? null : currentTrick.getLoser();
@@ -330,8 +338,10 @@ public class Round {
                             handler.handleSingleCardPlayed(id, cardToPlay, nextPlayerId);
                         }
 
-                        // Update scores and send updates to clients
-                        updateScores(currentTrick);
+                        // Send a score update
+                        if (handler != null) {
+                            handler.handleScoreUpdate(userIdToScoreInGame, userIdToScoreInRound);
+                        }
 
                         // Send updates to handle since trick has ended.
                         if (handler != null) {
@@ -339,15 +349,15 @@ public class Round {
                         }
 
                         // Reset player turn order based on who lost the trick
-                        setPlayerTurnOrder(currentTrick.getLoser());
+                        setPlayerTurnOrder(nextPlayerId);
 
                         currentTrick = new Trick();
                     } else {
                         // Trick is still in session so use next player in list
                         // for nextPlayerId
                         if (handler != null) {
-                            if (userIdTurnIdx >= 0) {
-                                Long nextPlayerId = isRoundOver() || isGameOver() ? null : getCurrentTurnPlayerId();
+                            Long nextPlayerId = isRoundOver() || isGameOver() ? null : getCurrentTurnPlayerId();
+                            if (nextPlayerId != null) {
                                 handler.handleSingleCardPlayed(id, cardToPlay, nextPlayerId);
                             } else
                                 System.err
@@ -419,9 +429,9 @@ public class Round {
 
                     Long nextUserId = getCurrentTurnPlayerId();
 
-                    // Bot player got 2 of spades. Have them make the first
+                    // Bot player got 2 of clubs. Have them make the first
                     // move
-                    if (BotPlay.isBot(nextUserId) && !isGameOver() && !isRoundOver()) {
+                    if (BotPlay.isBot(nextUserId)) {
                         // Grab bots cards and play them
                         playCard(nextUserId, getBotCardsToPlay(nextUserId));
                     }
@@ -439,14 +449,6 @@ public class Round {
             userIdTurnIdx = -1;
         else
             userIdTurnIdx = userIdTableOrderList.indexOf(firstTurnPlayerId);
-    }
-
-    // Updating scores in Round and Game, meant to be run after every trick
-    private void updateScores(Trick currentTrick) {
-        Long loser = currentTrick.getLoser();
-        int scoreFromTrick = currentTrick.computeScore();
-
-        addToScore(loser, (byte) scoreFromTrick);
     }
 
     public void addToScore(Long playerId, byte scoreToAdd) {
@@ -490,7 +492,7 @@ public class Round {
         // there turn as everyone is waiting on them.
         if (getCurrentTurnPlayerId() == newUserId) {
             // Next player is a bot so make their turn
-            if (BotPlay.isBot(newUserId) && !isGameOver() && !isRoundOver()) {
+            if (BotPlay.isBot(newUserId)) {
                 playCard(newUserId, getBotCardsToPlay(newUserId));
             }
         }
