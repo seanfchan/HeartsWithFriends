@@ -49,7 +49,7 @@ public class Game {
 
                 createRound();
             }
-        } while (currentRound.isRoundOver());
+        } while (currentRound.isRoundOver() || isGameOver());
     }
 
     public synchronized int getNumPlayers() {
@@ -197,7 +197,7 @@ public class Game {
 
                         createRound();
                     }
-                } while (currentRound.isRoundOver());
+                } while (currentRound.isRoundOver() || isGameOver());
             }
         }
 
