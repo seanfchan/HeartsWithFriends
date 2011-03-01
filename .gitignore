@@ -1,16 +1,16 @@
 *.class
 .*.swp
 *.orig
+*.log
 
-CardCommon/bin/*
-CardCommon/bin/**/*
-CardCommon/protobuf/org/*
-CardCommon/protobuf/org/**/*
+CardCommon/bin
+CardCommon/protobuf/org
 
-CardGameServer/bin/*
-CardGameServer/bin/**/*
+CardGameServer/bin
+CardGameServer/logs
 
-HeartsClient/bin/*
-HeartsClient/bin/**/*
-HeartsClient/gen/*
-HeartsClient/gen/**/*
+HeartsClient/bin
+HeartsClient/gen
+
+SimpleHeartsClient/bin
+SimpleHeartsClient/logs
