@@ -11,9 +11,9 @@ import org.bitcoma.hearts.model.transfered.JoinGameProtos.JoinGameRequest;
 import org.bitcoma.hearts.model.transfered.LoginProtos.LoginRequest;
 import org.bitcoma.hearts.model.transfered.LoginProtos.LoginResponse;
 import org.bitcoma.hearts.model.transfered.SignupProtos.SignupRequest;
+import org.bitcoma.hearts.utils.Encryptor;
 import org.bitcoma.heartserver.HeartsServerApiImpl;
 import org.bitcoma.heartserver.model.database.User;
-import org.bitcoma.heartserver.utils.Encryptor;
 import org.junit.Before;
 import org.junit.Test;
 
