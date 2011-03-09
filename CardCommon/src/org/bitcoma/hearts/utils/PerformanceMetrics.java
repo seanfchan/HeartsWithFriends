@@ -3,17 +3,19 @@ package org.bitcoma.hearts.utils;
 import org.hyperic.sigar.CpuInfo;
 import org.hyperic.sigar.CpuPerc;
 import org.hyperic.sigar.Mem;
+import org.hyperic.sigar.NetInterfaceStat;
 import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarException;
 
 public class PerformanceMetrics {
 
     private static PerformanceMetrics instance;
-    private Sigar sigar = new Sigar();
+    private Sigar sigar;
 
     public static PerformanceMetrics instance() {
         if (instance == null) {
             instance = new PerformanceMetrics();
+            instance.sigar = new Sigar();
         }
         return instance;
     }
@@ -93,6 +95,31 @@ public class PerformanceMetrics {
         }
 
         return info;
+    }
+    
+    public NetworkInfo getNetworkInfo() {
+    	NetworkInfo info = new NetworkInfo();
+    	
+    	try {
+    		String[] names = sigar.getNetInterfaceList();
+    		
+    		for(String name: names) {
+    			NetInterfaceStat stat = sigar.getNetInterfaceStat(name);
+    			
+    			info.transferredBytes += stat.getTxBytes();
+    			info.receivedBytes += stat.getRxBytes();
+    			
+    		}
+    	} catch (SigarException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return info;
+    }
+    
+    public class NetworkInfo {
+    	public long transferredBytes;
+    	public long receivedBytes;
     }
 
     public class RamUsageInfo {

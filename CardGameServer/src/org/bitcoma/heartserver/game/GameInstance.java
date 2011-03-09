@@ -288,8 +288,8 @@ public class GameInstance implements IHeartsGameHandler {
                 byte infractionCount = userIdToInfractionCount.get(userId);
                 userIdToInfractionCount.put(userId, (byte) (infractionCount + 1));
             }
-            // Clear infraction count as this was player initiated.
-            else {
+            // Clear infraction count as this was player initiated and valid
+            else if (result) {
                 userIdToInfractionCount.put(userId, (byte) 0);
             }
 

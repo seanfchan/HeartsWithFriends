@@ -11,10 +11,16 @@ public class Trick {
         suitOfTrick = (byte) 0xFF;
     }
 
-    public boolean isMoveValid(Card cardToPlay, List<Card> playerCards, boolean bHeartPlayed) {
+    public boolean isMoveValid(Long playerId, Card cardToPlay, List<Card> playerCards, Long firstPlayerId,
+            boolean bHeartPlayed) {
         int numCardsPlayed;
         synchronized (playerIdToCardMap) {
             numCardsPlayed = playerIdToCardMap.size();
+        }
+
+        // Check if this player already went with this trick
+        if (playerIdToCardMap.containsKey(playerId)) {
+            return false;
         }
 
         // Check if you have two of clubs. This needs to be played.
@@ -24,6 +30,12 @@ public class Trick {
 
         // Set the suit with the first played card
         if (numCardsPlayed == 0) {
+
+            // Not the first player
+            if (playerId != firstPlayerId) {
+                return false;
+            }
+
             // Heart played as first card of trick
             if (cardToPlay.getSuit() == Card.HEARTS) {
                 if (bHeartPlayed) {

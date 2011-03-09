@@ -14,8 +14,12 @@ import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HeartsClient {
+
+    public static final Logger logger = LoggerFactory.getLogger(HeartsClient.class);
 
     public static void main(String[] args) throws Exception {
         // Print usage if no argument is specified.
@@ -23,6 +27,8 @@ public class HeartsClient {
             System.err.println("Usage: " + HeartsClient.class.getSimpleName() + " <host> <port> <username> <password>");
             return;
         }
+
+        logger.info("Starting up client");
 
         // Parse options.
         final String host = args[0];
@@ -38,11 +44,15 @@ public class HeartsClient {
         List<HeartsProtoHandler> handlers = new LinkedList<HeartsProtoHandler>();
         HeartsClientPipelineFactory pipeline = new HeartsClientPipelineFactory(handlers);
 
+        logger.info("Setting pipeline factory");
+
         // Set up the pipeline factory.
         bootstrap.setPipelineFactory(pipeline);
 
         // Start the connection attempt.
         ChannelFuture future = bootstrap.connect(new InetSocketAddress(host, port));
+
+        logger.info("Trying to connect");
 
         // Wait until the connection is established
         Channel channel = future.awaitUninterruptibly().getChannel();
@@ -51,6 +61,8 @@ public class HeartsClient {
             bootstrap.releaseExternalResources();
             return;
         }
+
+        logger.info("Connected successfully");
 
         // HACK: This is a tight coupling but only used for performance testing
         // so it shouldn't really matter too much
@@ -73,5 +85,7 @@ public class HeartsClient {
 
         // Shut down thread pools to exit.
         bootstrap.releaseExternalResources();
+
+        logger.info("Shutting down client");
     }
 }

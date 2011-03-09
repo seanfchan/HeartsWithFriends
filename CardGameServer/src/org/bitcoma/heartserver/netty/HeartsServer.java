@@ -33,8 +33,8 @@ public class HeartsServer {
         MessageCounterHandler msgHandler = HeartsServerPipelineFactory.MESSAGE_COUNTER;
 
         // Start up a recurring task to log throughput performance metrics.
-        TimeOutTaskCreator.createTask(new PerformanceMetricsTask(byteCounter, msgHandler), PerformanceMetricsTask.DELAY,
-                PerformanceMetricsTask.UNIT);
+        TimeOutTaskCreator.createTask(new PerformanceMetricsTask(byteCounter, msgHandler),
+                PerformanceMetricsTask.DELAY, PerformanceMetricsTask.UNIT);
 
         // Wait for server to shutdown.
         channel.getCloseFuture().awaitUninterruptibly();

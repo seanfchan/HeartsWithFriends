@@ -60,6 +60,13 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
             setCurrentGame(null);
         }
 
+        if (user != null && currentUser != user) {
+            ServerState.numLoggedInUsers.getAndIncrement();
+        }
+        if (user == null && currentUser != null) {
+            ServerState.numLoggedInUsers.getAndDecrement();
+        }
+
         currentUser = user;
     }
 

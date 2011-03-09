@@ -24,6 +24,7 @@ import com.google.protobuf.MessageLite;
 
 public class HeartsServerHandler extends SimpleChannelHandler {
 
+    public static int UNKNOWN_REQUEST = 0xFFFFFFFF;
     private static Logger logger = LoggerFactory.getLogger(HeartsServerHandler.class);
     private IHeartsServerApi api = new HeartsServerApiImpl();
 
@@ -32,6 +33,8 @@ public class HeartsServerHandler extends SimpleChannelHandler {
         OneMessage msg = (OneMessage) e.getMessage();
         MessageLite response = null;
 
+        long reqTime = System.currentTimeMillis();
+
         switch (msg.getType()) {
         case JOIN_GAME_REQUEST:
             logger.info("Server: Join Game Request seen");
@@ -39,6 +42,8 @@ public class HeartsServerHandler extends SimpleChannelHandler {
             response = api.joinGame(joinRequest);
             // Write response to channel with matching message id
             e.getChannel().write(new OneMessageWrapper(msg.getMessageId(), response));
+            ServerState.reqRespMetricsMap.get(msg.getType().getNumber()).updateMetrics(
+                    System.currentTimeMillis() - reqTime);
             break;
 
         case LEAVE_GAME_REQUEST:
@@ -47,6 +52,8 @@ public class HeartsServerHandler extends SimpleChannelHandler {
             response = api.leaveGame(leaveRequest);
             // Write response to channel with matching message id
             e.getChannel().write(new OneMessageWrapper(msg.getMessageId(), response));
+            ServerState.reqRespMetricsMap.get(msg.getType().getNumber()).updateMetrics(
+                    System.currentTimeMillis() - reqTime);
             break;
 
         case LOGIN_REQUEST:
@@ -55,6 +62,8 @@ public class HeartsServerHandler extends SimpleChannelHandler {
             response = api.login(loginRequest, e.getChannel());
             // Write response to channel with matching message id
             e.getChannel().write(new OneMessageWrapper(msg.getMessageId(), response));
+            ServerState.reqRespMetricsMap.get(msg.getType().getNumber()).updateMetrics(
+                    System.currentTimeMillis() - reqTime);
             break;
 
         case SIGNUP_REQUEST:
@@ -64,6 +73,8 @@ public class HeartsServerHandler extends SimpleChannelHandler {
             response = api.signup(signupRequest);
             // Write response to channel with matching message id
             e.getChannel().write(new OneMessageWrapper(msg.getMessageId(), response));
+            ServerState.reqRespMetricsMap.get(msg.getType().getNumber()).updateMetrics(
+                    System.currentTimeMillis() - reqTime);
             break;
 
         case START_GAME_REQUEST:
@@ -73,6 +84,8 @@ public class HeartsServerHandler extends SimpleChannelHandler {
             response = api.startGame(startGameRequest);
             // Write response to channel with matching message id
             e.getChannel().write(new OneMessageWrapper(msg.getMessageId(), response));
+            ServerState.reqRespMetricsMap.get(msg.getType().getNumber()).updateMetrics(
+                    System.currentTimeMillis() - reqTime);
             break;
 
         case PLAY_CARD_REQUEST:
@@ -82,6 +95,8 @@ public class HeartsServerHandler extends SimpleChannelHandler {
             response = api.playCard(playCardRequest);
             // Write response to channel with matching message id
             e.getChannel().write(new OneMessageWrapper(msg.getMessageId(), response));
+            ServerState.reqRespMetricsMap.get(msg.getType().getNumber()).updateMetrics(
+                    System.currentTimeMillis() - reqTime);
             break;
 
         // Unrecognized messages.
@@ -91,20 +106,22 @@ public class HeartsServerHandler extends SimpleChannelHandler {
                     .setResponseCode(GenericResponse.ResponseCode.UNEXPECTED_REQUEST).build();
             // Write response to channel with matching message id
             e.getChannel().write(new OneMessageWrapper(msg.getMessageId(), genericResponse));
+            ServerState.reqRespMetricsMap.get(UNKNOWN_REQUEST).updateMetrics(System.currentTimeMillis() - reqTime);
             break;
         }
+
     }
 
     @Override
     public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
-        ServerState.numActiveConnections++;
+        ServerState.numActiveConnections.incrementAndGet();
 
         super.channelConnected(ctx, e);
     }
 
     @Override
     public void channelDisconnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
-        ServerState.numActiveConnections--;
+        ServerState.numActiveConnections.decrementAndGet();
         api.resetState();
 
         super.channelDisconnected(ctx, e);

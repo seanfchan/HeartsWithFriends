@@ -265,7 +265,7 @@ public class Round {
         boolean result = playCardInternal(id, cardsToPlay);
 
         Long nextPlayerId = getCurrentTurnPlayerId();
-        if (nextPlayerId != null) {
+        if (result && nextPlayerId != null) {
             // Next player is a bot so make their turn
             if (BotPlay.isBot(nextPlayerId)) {
                 // Grab bots cards and play them
@@ -287,33 +287,35 @@ public class Round {
     /**
      * Method actually plays the cards. Used for bots and real players
      * 
-     * @param id
+     * @param playerId
+     *            Player id of who is playing cards
      * @param cardsToPlay
      * @return
      */
-    private boolean playCardInternal(Long id, List<Card> cardsToPlay) {
+    private boolean playCardInternal(Long playerId, List<Card> cardsToPlay) {
         int numCardsPlayed = cardsToPlay.size();
         if (numCardsPlayed == 3 || numCardsPlayed == 1) {
 
             // Single card played
             if (numCardsPlayed == 1 && passingCardsInfo == null) {
                 Card cardToPlay = cardsToPlay.get(0);
-                if (currentTrick.isMoveValid(cardToPlay, userIdToHand.get(id), bHeartPlayed)) {
+                if (currentTrick.isMoveValid(playerId, cardToPlay, userIdToHand.get(playerId),
+                        getCurrentTurnPlayerId(), bHeartPlayed)) {
 
                     // Check if it is the players turn
-                    if (getCurrentTurnPlayerId() == id) {
+                    if (getCurrentTurnPlayerId() == playerId) {
                         userIdTurnIdx = (userIdTurnIdx + 1) % getNumPlayers();
                     } else {
                         // Card is valid, but out of order. Save here to play in
                         // order after.
-                        userIdToPendingCardPlayed.put(id, cardToPlay);
+                        userIdToPendingCardPlayed.put(playerId, cardToPlay);
                         return true;
                     }
 
                     // Move was valid and card is played.
-                    removeCard(id, cardToPlay);
+                    removeCard(playerId, cardToPlay);
                     allCardsPlayed.add(cardToPlay);
-                    currentTrick.makeMove(id, cardToPlay);
+                    currentTrick.makeMove(playerId, cardToPlay);
 
                     // Optimize checking for a heart has been played.
                     if (cardToPlay.getSuit() == Card.HEARTS)
@@ -335,7 +337,7 @@ public class Round {
                         // null if the round is over
                         Long nextPlayerId = isRoundOver() || isGameOver() ? null : currentTrick.getLoser();
                         if (handler != null) {
-                            handler.handleSingleCardPlayed(id, cardToPlay, nextPlayerId);
+                            handler.handleSingleCardPlayed(playerId, cardToPlay, nextPlayerId);
                         }
 
                         // Send a score update
@@ -358,7 +360,7 @@ public class Round {
                         if (handler != null) {
                             Long nextPlayerId = isRoundOver() || isGameOver() ? null : getCurrentTurnPlayerId();
                             if (nextPlayerId != null) {
-                                handler.handleSingleCardPlayed(id, cardToPlay, nextPlayerId);
+                                handler.handleSingleCardPlayed(playerId, cardToPlay, nextPlayerId);
                             } else
                                 System.err
                                         .println("Should be another player in turn list as trick is not over. This is BAD!!!");
@@ -369,7 +371,7 @@ public class Round {
 
                 } else {
                     // Invalid move played
-                    System.err.println("Player: " + id + " playing an invalid card: " + cardToPlay);
+                    System.err.println("Player: " + playerId + " playing an invalid card: " + cardToPlay);
                     return false;
                 }
 
@@ -381,28 +383,28 @@ public class Round {
                 List<Card> cardsPlayedCopy = new LinkedList<Card>(cardsToPlay);
 
                 // Does the player have all the cards trying to pass?
-                List<Card> hand = userIdToHand.get(id);
+                List<Card> hand = userIdToHand.get(playerId);
                 for (Card c : cardsToPlay) {
                     // Remove card from copy.
                     cardsPlayedCopy.remove(c);
 
                     // Does not have the card they are playing
                     if (!hand.contains(c)) {
-                        System.err.println("Player: " + id + " trying to play a card they do not have.");
+                        System.err.println("Player: " + playerId + " trying to play a card they do not have.");
                         return false;
                     }
 
                     // Playing two instances of the same card.
                     if (cardsPlayedCopy.contains(c)) {
-                        System.err.println("Player: " + id + " trying to pass same card multiple times.");
+                        System.err.println("Player: " + playerId + " trying to pass same card multiple times.");
                         return false;
                     }
                 }
 
                 // Give the cards to the other player based on what was passed
                 // in from Game.
-                Long dstId = userIdToUserIdPassingMap.get(id);
-                passingCardsInfo.add(new PassingCardsInfo(id, dstId, cardsToPlay));
+                Long dstId = userIdToUserIdPassingMap.get(playerId);
+                passingCardsInfo.add(new PassingCardsInfo(playerId, dstId, cardsToPlay));
 
                 // Everyone has finished passing cards so now we distribute
                 // them.
