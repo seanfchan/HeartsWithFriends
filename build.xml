@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Master Build" default="deploy" basedir=".">
+
+  <import file="commontasks.xml"/>
+
+  <target name="init-properties" failonerror="true">
+    <property name="build.dir" value="./out"/>
+  </target>
+
+  <target name="init" depends="clean" failonerror="true">
+    <mkdir dir="${build.dir}"/>
+    
+    <subant target="init" genericantfile="build.xml">
+      <fileset dir="."/>
+    </subant>
+  </target>
+
+  <target name="clean" failonerror="true">
+    <!-- Delete output directory -->
+    <delete dir="${build.dir}"/>
+
+    <subant target="clean" genericantfile="build.xml">
+      <fileset dir="."/>
+    </subant>
+  </target>
+
+  <target name="compile" depends="init" failonerror="true">
+    <subant target="compile" genericantfile="build.xml">
+      <fileset dir="."/>
+    </subant>
+  </target>
+
+  <target name="jar" depends="compile" failonerror="true">
+    <subant target="jar" genericantfile="build.xml">
+      <fileset dir="."/>
+    </subant>
+  </target>
+
+  <target name="deploy" depends="jar">
+    <subant target="deploy" genericantfile="build.xml">
+      <fileset dir="."/>
+    </subant>
+
+    <!-- Copy final jars to output directory -->
+
+  </target>
+
+</project>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="commontasks" basedir=".">
+
+  <!-- Needed for relative paths used with task defs -->
+  <dirname property="commontasks.dir" file="${ant.file.commontasks}"/>
+  <property name="anthelpers.dir" value="${commontasks.dir}/AntHelpers"/>
+
+  <!-- Common Task defs -->
+  <taskdef name="pack" classname="org.sadun.util.ant.Pack"
+    classpath="${anthelpers.dir}/pack.jar"/>
+	<taskdef name="one-jar" 
+	      classname="com.simontuffs.onejar.ant.OneJarTask"
+        classpath="${anthelpers.dir}/one-jar-ant-task-0.97.jar" onerror="report"/>
+	
+  <target name="init" depends="clean, init-properties">
+    <mkdir dir="${build.dir}/classes"/>
+    <mkdir dir="${build.dir}/lib"/>
+  </target>
+
+  <target name="clean">
+    <!-- Delete output directory -->
+    <delete dir="${build.dir}"/>
+  </target>
+
+  <target name="compile" depends="init">
+    <javac srcdir="${src.dir}" destdir="${build.dir}/classes" optimize="on">
+      <classpath refid="build_classpath"/>
+    </javac>
+  </target>
+
+  <target name="jar" depends="compile" if="jar.name">
+    <jar destfile="${build.dir}/lib/${jar.name}" basedir="${build.dir}/classes"/>
+  </target>
+
+  <target name="deploy" depends="jar">
+  </target>
+
+</project>

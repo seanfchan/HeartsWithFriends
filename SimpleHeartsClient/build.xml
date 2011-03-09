@@ -1,82 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Simple Hearts Client" default="compile">
+<project name="Simple Hearts Client" default="compile" basedir=".">
 
-    <property name="target" value="${basedir}/bin"/>
-	<property name="commondir" value="${basedir}/../CardCommon"/>
-	<property name="androiddir" value="${basedir}/../HeartsClient"/>
-
-	<taskdef name="pack" classname="org.sadun.util.ant.Pack"
-		 classpath="${commondir}/lib/pack.jar"/>
-	<taskdef name="one-jar" 
-		      classname="com.simontuffs.onejar.ant.OneJarTask"
-		      classpath="${commondir}/lib/one-jar-ant-task-0.97.jar" onerror="report"/>
+	<import file="../commontasks.xml"/>
+	<import file="../CardCommon/build.xml"/>
 	
-    <path id="run_classpath">
-    	<path refid="build_classpath"/>
-    	<fileset dir="res"/>
-    </path>
-
-    <path id="build_classpath">
-    	<pathelement location="${target}"/>
-	        <fileset dir="lib">
-	            <include name="*.jar"/>
-	        </fileset>
-	    	<fileset dir="${commondir}/lib">
-	            <include name="*.jar"/>
-	        </fileset>
-    	<pathelement location="${commondir}/bin"/>
-    	<pathelement location="${androiddir}/bin"/>
-    </path>
-
-    <target name="clean">
-        <delete dir="${target}" failonerror="false"/>
-        <mkdir dir="${target}"/>
-    </target>
-
-    <target name="compile">
-        <javac srcdir="src" destdir="${target}" debug="true">
-            <classpath refid="build_classpath"/>
-        </javac>
-    </target>
-
-    <target name="run" depends="compile">
-        <java classname="org.bitcoma.heartsclient.HeartsClient">
-            <classpath refid="run_classpath"/>
-        </java>
-    </target>
-	
-	<target name="jar" depends="compile">
+	<target name="init-properties">
+	    <property name="build.dir" value="./bin"/>
+		<property name="src.dir" value="./src"/>
+		<property name="common.dir" value="${basedir}/../CardCommon"/>
+		<property name="android.dir" value="${basedir}/../HeartsClient"/>
+		<property name="jar.name" value="simpleheartsclient.jar"/>
 		<property name="version.number" value="1.00" />
 		<buildnumber file="build.num" />
-		<delete file="simpleheartsclient.jar"/>
-		<delete file="MANIFEST.MF"/>
+		
+		<path id="run_classpath">
+	    	<path refid="build_classpath"/>
+	    </path>
+
+	    <path id="build_classpath">
+	    	<pathelement location="${build.dir}/classes"/>
+	    	<pathelement location="${android.dir}/bin/classes"/>
+	    	<pathelement location="${common.dir}/bin/classes"/>
+	    	<fileset dir="lib" includes="*.jar"/>
+	    	<fileset dir="${common.dir}/lib" includes="*.jar"/>
+	    </path>
+	</target>
+	
+	<target name="run" depends="compile">
+	        <java classname="org.bitcoma.heartsclient.HeartsClient">
+	            <classpath refid="run_classpath"/>
+	        </java>
+	    </target>
+	
+	<target name="jar" depends="compile" if="jar.name">
 
 		<pack classes="org.bitcoma.heartsclient.HeartsClient"
-			  targetJar="simpleheartsclienttmp.jar"
+			  targetJar="${build.dir}/lib/tmp.jar"
 			  manifestMainClass="org.bitcoma.heartsclient.HeartsClient"
 			  manifestclasspath=".">
-			<classpath refid="run_classpath" />
+			<classpath refid="build_classpath" />
 		</pack>
 	
-		<one-jar destfile="simpleheartsclient.jar">
+		<one-jar destfile="${build.dir}/lib/${jar.name}">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}" />
 				<attribute name="Implementation-Version" value="${version.number}-b${build.number}" />
 				<attribute name="One-Jar-Main-Class" value="org.bitcoma.heartsclient.HeartsClient" />
 		    </manifest>
-			<main jar="simpleheartsclienttmp.jar" />
+			<main jar="${build.dir}/lib/tmp.jar" />
 			<lib>
-				<fileset file="${commondir}/lib/log4j-1.2.16.jar"/>
-				<fileset file="${commondir}/lib/netty-3.2.4.Final.jar"/>
-				<fileset file="${commondir}/lib/protobuf-java-2.4.0.jar"/>
-				<fileset file="${commondir}/lib/slf4j-log4j12-1.6.1.jar"/>
-				<fileset file="${commondir}/lib/slf4j-api-1.6.1.jar"/>
+				<fileset file="${common.dir}/lib/log4j-1.2.16.jar"/>
+				<fileset file="${common.dir}/lib/netty-3.2.4.Final.jar"/>
+				<fileset file="${common.dir}/lib/protobuf-java-2.4.0.jar"/>
+				<fileset file="${common.dir}/lib/slf4j-log4j12-1.6.1.jar"/>
+				<fileset file="${common.dir}/lib/slf4j-api-1.6.1.jar"/>
 			</lib>
 			<fileset file="log4j.properties" />
 		</one-jar> 
 	
-		<delete file="simpleheartsclienttmp.jar"/>
-	
+		<delete file="${build.dir}/lib/tmp.jar"/>
 	</target>
 	
 </project>

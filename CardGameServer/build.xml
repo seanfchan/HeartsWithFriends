@@ -1,84 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Card Game Server" default="instrument">
+<project name="cardgameserver" default="deploy" basedir=".">
 
-    <property name="target" value="${basedir}/bin"/>
-	<property name="commondir" value="${basedir}/../CardCommon"/>
+	<import file="../commontasks.xml"/>
 	
-	<taskdef name="pack" classname="org.sadun.util.ant.Pack"
-	 classpath="${commondir}/lib/pack.jar"/>
-	<taskdef name="one-jar" 
-	      classname="com.simontuffs.onejar.ant.OneJarTask"
-	      classpath="${commondir}/lib/one-jar-ant-task-0.97.jar" onerror="report"/>
-	
-    <path id="run_classpath">
-    	<path refid="build_classpath"/>
-    	<fileset dir="${commondir}/lib">
-            <include name="sigar/*.*"/>
-        </fileset>
-    </path>
-
-    <path id="build_classpath">
-    	<pathelement location="${target}"/>
-	        <fileset dir="lib">
-	            <include name="*.jar"/>
+	<target name="init-properties">
+	    <property name="build.dir" value="./bin"/>
+		<property name="src.dir" value="./src"/>
+		<property name="common.dir" value="./../CardCommon"/>
+		<property name="jar.name" value="cardgameserver.jar"/>
+		<property name="version.number" value="1.00" />
+		<buildnumber file="build.num" />
+		
+		<path id="run_classpath">
+	    	<path refid="build_classpath"/>
+	    	<fileset dir="${common.dir}/lib">
+	            <include name="sigar/*.*"/>
 	        </fileset>
-	    	<fileset dir="${commondir}/lib">
-	            <include name="*.jar"/>
-	        </fileset>
-    	<pathelement location="${commondir}/bin"/>
-    </path>
+	    </path>
 
-    <target name="clean">
-        <delete dir="${target}" failonerror="false"/>
-        <mkdir dir="${target}"/>
-    </target>
+	    <path id="build_classpath">
+	    	<pathelement location="${build.dir}/classes"/>
+	    	<fileset dir="lib" includes="*.jar"/>
+	    	<fileset dir="${common.dir}/lib" includes="*.jar"/>
+	    	<pathelement location="${common.dir}/bin/classes"/>
+	    </path>
+	</target>
 
-    <target name="compile">
-        <javac srcdir="src" destdir="${target}" debug="true">
-            <classpath refid="run_classpath"/>
-        </javac>
-    </target>
+	<target name="run" depends="compile">
+	    <java classname="org.bitcoma.heartserver.netty.HeartsServer">
+	        <classpath refid="run_classpath"/>
+	    </java>
+	</target>
 
     <target name="instrument" depends="compile">
         <java classname="activejdbc.instrumentation.Main">
-            <sysproperty key="outputDirectory" value="${target}"/>
+            <sysproperty key="outputDirectory" value="${build.dir}/classes"/>
             <classpath refid="build_classpath"/>
         </java>
     </target>
-
-    <target name="run" depends="instrument">
-        <java classname="activejdbc.ant.example.Main">
-            <classpath refid="run_classpath"/>
-        </java>
-    </target>
-	
-	<target name="jar" depends="instrument,compile">
-		<property name="version.number" value="1.00" />
-		<buildnumber file="build.num" />
-		<delete file="cardgameserver.jar"/>
-		<delete file="MANIFEST.MF"/>
+ 
+	<target name="jar" depends="instrument,compile" if="jar.name">
+		<delete file="${build.dir}/lib/${jar.name}"/>
 		
 		<pack classes="org.bitcoma.heartserver.netty.HeartsServer"
-			  targetJar="cardgameservertmp.jar"
-			  manifestMainClass="org.bitcoma.heartserver.netty.HeartsServer">
+			  targetJar="${build.dir}/lib/tmp.jar"
+			  manifestMainClass="org.bitcoma.heartserver.netty.HeartsServer"
+			  manifestclasspath=".">
 			<classpath refid="run_classpath" />
 		</pack>
-		<one-jar destfile="cardgameserver.jar">
+		<one-jar destfile="${build.dir}/lib/${jar.name}">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}" />
 				<attribute name="Implementation-Version" value="${version.number}-b${build.number}" />
 				<attribute name="One-Jar-Main-Class" value="org.bitcoma.heartserver.netty.HeartsServer" />
 		    </manifest>
-			<main jar="cardgameservertmp.jar"/>
+			<main jar="${build.dir}/lib/tmp.jar"/>
 			<lib>
 				<fileset file="lib/mysql-connector-java-5.1.14-bin.jar"/>
 			</lib>
 			<binlib>
-				<fileset dir="${commondir}/lib/sigar"/>
+				<fileset dir="${common.dir}/lib/sigar"/>
 			</binlib>
 		</one-jar> 
 		
-		<delete file="cardgameservertmp.jar"/>
+		<delete file="${build.dir}/lib/${jar.name}"/>
 		
 	</target>
 	

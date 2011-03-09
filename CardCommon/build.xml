@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="cardcommon" default="deploy" basedir=".">
+
+	<import file="../commontasks.xml"/>
+	
+	<target name="init-properties">
+	    <property name="build.dir" value="./bin"/>
+		<property name="src.dir" value="./src"/>
+		<property name="jar.name" value="cardcommon.jar"/>
+		<property name="version.number" value="1.00" />
+		<buildnumber file="build.num" />
+		
+		<path id="run_classpath">
+	    	<path refid="build_classpath"/>
+	    </path>
+
+	    <path id="build_classpath">
+	    	<pathelement location="${build.dir}/classes"/>
+	        <fileset dir="lib">
+	            <include name="*.jar"/>
+	        </fileset>
+	    </path>
+	</target>
+
+</project>
