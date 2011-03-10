@@ -21,5 +21,8 @@
 	        </fileset>
 	    </path>
 	</target>
+	
+	<target name="-pre-compile">
+	</target>
 
 </project>

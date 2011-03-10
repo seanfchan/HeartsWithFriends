@@ -1,11 +1,11 @@
-package org.bitcoma.heartsClient.netty;
+package org.bitcoma.hearts.netty.handler;
 
 import java.util.HashMap;
 import java.util.List;
 
+import org.bitcoma.hearts.HeartsProtoHandler;
 import org.bitcoma.hearts.model.transfered.OneMessageProtos.OneMessage;
 import org.bitcoma.hearts.model.transfered.OneMessageWrapper;
-import org.bitcoma.heartsClient.HeartsProtoHandler;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;

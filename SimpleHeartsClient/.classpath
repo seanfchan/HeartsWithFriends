@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/AndroidHeartsClient"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/CardCommon"/>
 	<classpathentry kind="lib" path="/CardCommon/lib/protobuf-java-2.4.0.jar"/>
 	<classpathentry kind="lib" path="/CardCommon/lib/slf4j-api-1.6.1.jar"/>

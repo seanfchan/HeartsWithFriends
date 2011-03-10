@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="dependencies" default="depend.all">
+
+    <dirname property="dependencies.basedir" file="${ant.file.dependencies}"/>
+    
+    <property name="dependencies.all" value="depend.cardgameserver, depend.androidclient" />
+    <property name="dependencies.cardgameserver" value="depend.cardcommon" />
+    <property name="dependencies.cardcommon" value="" />
+    <property name="dependencies.simpleheartsclient" value="depend.cardcommon" />
+    <property name="dependencies.androidclient" value="depend.cardcommon" />
+    
+
+    <target name="depend.all"> 
+        <antcall target="${dependencies.all}"/>
+    </target>
+
+    <target name="depend.androidclient">
+        <antcall target="${dependencies.androidclient}"/>
+        <ant dir="${dependencies.basedir}/HeartsClient" inheritAll="false"/>
+    </target>
+
+    <target name="depend.simpleheartsclient"> 
+        <antcall target="${dependencies.simpleheartsclient}"/>
+        <ant dir="${dependencies.basedir}/SimpleHeartsClient" inheritAll="false"/>
+    </target>
+
+    <target name="depend.cardgameserver"> 
+        <antcall target="${dependencies.cardgameserver}"/>
+        <ant dir="${dependencies.basedir}/CardGameServer" inheritAll="false"/>
+    </target>
+
+    <target name="depend.cardcommon">
+        <ant dir="${dependencies.basedir}/CardCommon" inheritAll="false"/>
+    </target>
+</project>

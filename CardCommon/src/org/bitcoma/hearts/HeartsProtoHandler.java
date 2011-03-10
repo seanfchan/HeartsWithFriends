@@ -1,4 +1,4 @@
-package org.bitcoma.heartsClient;
+package org.bitcoma.hearts;
 
 import org.bitcoma.hearts.model.transfered.GameProtos.GameEndedResponse;
 import org.bitcoma.hearts.model.transfered.GenericProtos.GenericResponse;

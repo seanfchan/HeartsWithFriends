@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Simple Hearts Client" default="compile" basedir=".">
+<project name="simpleheartsclient" default="deploy" basedir=".">
 
 	<import file="../commontasks.xml"/>
 	<import file="../CardCommon/build.xml"/>
@@ -27,27 +27,36 @@
 	</target>
 	
 	<target name="run" depends="compile">
-	        <java classname="org.bitcoma.heartsclient.HeartsClient">
-	            <classpath refid="run_classpath"/>
-	        </java>
-	    </target>
+        <java classname="org.bitcoma.heartsclient.HeartsClient">
+            <classpath refid="run_classpath"/>
+        </java>
+    </target>
+	
+	<target name="-pre-compile">
+		<antcall target="${dependencies.cardgameserver}" />
+	</target>
 	
 	<target name="jar" depends="compile" if="jar.name">
 
+		<!--
 		<pack classes="org.bitcoma.heartsclient.HeartsClient"
 			  targetJar="${build.dir}/lib/tmp.jar"
-			  manifestMainClass="org.bitcoma.heartsclient.HeartsClient"
-			  manifestclasspath=".">
+			  manifestMainClass="org.bitcoma.heartsclient.HeartsClient">
 			<classpath refid="build_classpath" />
 		</pack>
-	
+		-->
 		<one-jar destfile="${build.dir}/lib/${jar.name}">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}" />
 				<attribute name="Implementation-Version" value="${version.number}-b${build.number}" />
 				<attribute name="One-Jar-Main-Class" value="org.bitcoma.heartsclient.HeartsClient" />
 		    </manifest>
+			<main>
+				<fileset dir="${src.dir}"/>
+			</main>
+			<!--
 			<main jar="${build.dir}/lib/tmp.jar" />
+			-->
 			<lib>
 				<fileset file="${common.dir}/lib/log4j-1.2.16.jar"/>
 				<fileset file="${common.dir}/lib/netty-3.2.4.Final.jar"/>

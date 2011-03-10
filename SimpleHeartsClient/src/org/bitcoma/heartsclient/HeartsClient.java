@@ -5,10 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Executors;
 
+import org.bitcoma.hearts.HeartsProtoHandler;
 import org.bitcoma.hearts.model.transfered.LoginProtos.LoginRequest;
 import org.bitcoma.hearts.model.transfered.SignupProtos.SignupRequest;
-import org.bitcoma.heartsClient.HeartsProtoHandler;
-import org.bitcoma.heartsClient.netty.HeartsClientHandler;
+import org.bitcoma.hearts.netty.handler.HeartsClientHandler;
 import org.bitcoma.heartsClient.netty.HeartsClientPipelineFactory;
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;

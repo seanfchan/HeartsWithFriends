@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Master Build" default="deploy" basedir=".">
 
-  <import file="commontasks.xml"/>
-
-  <target name="init-properties" failonerror="true">
+  <target name="init-properties">
     <property name="build.dir" value="./out"/>
   </target>
 
-  <target name="init" depends="clean" failonerror="true">
+  <target name="init" depends="clean, init-properties">
     <mkdir dir="${build.dir}"/>
     
     <subant target="init" genericantfile="build.xml">
@@ -15,7 +13,7 @@
     </subant>
   </target>
 
-  <target name="clean" failonerror="true">
+  <target name="clean">
     <!-- Delete output directory -->
     <delete dir="${build.dir}"/>
 
@@ -24,13 +22,13 @@
     </subant>
   </target>
 
-  <target name="compile" depends="init" failonerror="true">
+  <target name="compile" depends="init">
     <subant target="compile" genericantfile="build.xml">
       <fileset dir="."/>
     </subant>
   </target>
 
-  <target name="jar" depends="compile" failonerror="true">
+  <target name="jar" depends="compile">
     <subant target="jar" genericantfile="build.xml">
       <fileset dir="."/>
     </subant>

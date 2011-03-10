@@ -5,7 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Executors;
 
-import org.bitcoma.heartsClient.HeartsProtoHandler;
+import org.bitcoma.hearts.HeartsProtoHandler;
+import org.bitcoma.hearts.netty.handler.HeartsClientHandler;
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFuture;

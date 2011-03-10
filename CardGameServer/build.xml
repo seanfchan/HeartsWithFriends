@@ -38,23 +38,33 @@
             <classpath refid="build_classpath"/>
         </java>
     </target>
+	
+	<target name="-pre-compile">
+		<antcall target="${dependencies.cardgameserver}" />
+	</target>
  
 	<target name="jar" depends="instrument,compile" if="jar.name">
 		<delete file="${build.dir}/lib/${jar.name}"/>
-		
+		<!--
 		<pack classes="org.bitcoma.heartserver.netty.HeartsServer"
 			  targetJar="${build.dir}/lib/tmp.jar"
-			  manifestMainClass="org.bitcoma.heartserver.netty.HeartsServer"
-			  manifestclasspath=".">
+			  manifestMainClass="org.bitcoma.heartserver.netty.HeartsServer">
 			<classpath refid="run_classpath" />
 		</pack>
+		-->
 		<one-jar destfile="${build.dir}/lib/${jar.name}">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}" />
 				<attribute name="Implementation-Version" value="${version.number}-b${build.number}" />
 				<attribute name="One-Jar-Main-Class" value="org.bitcoma.heartserver.netty.HeartsServer" />
 		    </manifest>
+			<!-- Construct main.jar from classes and source code -->
+			<main>
+				<fileset dir="${src.dir}"/>
+			</main>
+			<!--
 			<main jar="${build.dir}/lib/tmp.jar"/>
+			-->
 			<lib>
 				<fileset file="lib/mysql-connector-java-5.1.14-bin.jar"/>
 			</lib>
@@ -62,8 +72,6 @@
 				<fileset dir="${common.dir}/lib/sigar"/>
 			</binlib>
 		</one-jar> 
-		
-		<delete file="${build.dir}/lib/${jar.name}"/>
 		
 	</target>
 	

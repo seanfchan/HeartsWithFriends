@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.bitcoma.hearts.BotPlay;
 import org.bitcoma.hearts.Card;
+import org.bitcoma.hearts.HeartsProtoHandler;
 import org.bitcoma.hearts.Trick;
 import org.bitcoma.hearts.model.transfered.GameProtos.GameEndedResponse;
 import org.bitcoma.hearts.model.transfered.GameStructProtos.GameInfo;
@@ -27,8 +28,7 @@ import org.bitcoma.hearts.model.transfered.ScoreUpdateProtos.ScoreUpdateResponse
 import org.bitcoma.hearts.model.transfered.SignupProtos.SignupRequest;
 import org.bitcoma.hearts.model.transfered.StartGameProtos.StartGameRequest;
 import org.bitcoma.hearts.model.transfered.TrickProtos.TrickEndedResponse;
-import org.bitcoma.heartsClient.HeartsProtoHandler;
-import org.bitcoma.heartsClient.netty.HeartsClientHandler;
+import org.bitcoma.hearts.netty.handler.HeartsClientHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

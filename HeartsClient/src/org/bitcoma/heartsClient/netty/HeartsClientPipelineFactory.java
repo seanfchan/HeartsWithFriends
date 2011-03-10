@@ -4,9 +4,10 @@ import static org.jboss.netty.channel.Channels.pipeline;
 
 import java.util.List;
 
+import org.bitcoma.hearts.HeartsProtoHandler;
 import org.bitcoma.hearts.model.transfered.OneMessageProtos;
+import org.bitcoma.hearts.netty.handler.HeartsClientHandler;
 import org.bitcoma.hearts.netty.handler.OneMessageEncoder;
-import org.bitcoma.heartsClient.HeartsProtoHandler;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
