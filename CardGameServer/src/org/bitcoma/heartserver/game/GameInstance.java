@@ -395,7 +395,7 @@ public class GameInstance implements IHeartsGameHandler {
     @Override
     public void handleScoreUpdate(Map<Long, Byte> userIdToGameScore, Map<Long, Byte> userIdToRoundScore) {
 
-        logger.info("Handling score update. Game: {}", getId());
+        logger.info("Handling score update. Game: {} Scores: {}", getId(), userIdToGameScore);
 
         // Send score updates to all clients
         ScoreUpdateResponse.Builder builder = ScoreUpdateResponse.newBuilder();
@@ -414,7 +414,8 @@ public class GameInstance implements IHeartsGameHandler {
     @Override
     public void handleTrickEnded(Trick finishedTrick) {
 
-        logger.info("Handling trick ended. Game: {}", getId());
+        logger.info("Handling trick ended. Game: {} Loser: {} Score: {}",
+                new Object[] { getId(), finishedTrick.getLoser(), finishedTrick.computeScore() });
 
         TrickEndedResponse response = TrickEndedResponse.newBuilder().setLoserId(finishedTrick.getLoser()).build();
 
@@ -479,7 +480,7 @@ public class GameInstance implements IHeartsGameHandler {
     @Override
     public void handleGameEnded(Game finishedGame) {
 
-        logger.info("Handling Game Ended. Game: {}", getId());
+        logger.info("Handling Game Ended. Game: {} Total # Rounds: {}", getId(), finishedGame.getRoundCount());
 
         setTimeout(null);
 
