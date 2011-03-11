@@ -4,9 +4,9 @@
 	<import file="../commontasks.xml"/>
 	
 	<target name="init-properties">
-	    <property name="build.dir" value="./bin"/>
-		<property name="src.dir" value="./src"/>
-		<property name="common.dir" value="./../CardCommon"/>
+	    <property name="build.dir" value="${basedir}/bin"/>
+		<property name="src.dir" value="${basedir}/src"/>
+		<property name="common.dir" value="${basedir}/../CardCommon"/>
 		<property name="jar.name" value="cardgameserver.jar"/>
 		<property name="version.number" value="1.00" />
 		<buildnumber file="build.num" />
@@ -29,7 +29,7 @@
 	<target name="run" depends="compile">
 	    <java classname="org.bitcoma.heartserver.netty.HeartsServer">
 	        <classpath refid="run_classpath"/>
-	    </java>
+	    </java> 
 	</target>
 
     <target name="instrument" depends="compile">
@@ -45,13 +45,13 @@
  
 	<target name="jar" depends="instrument,compile" if="jar.name">
 		<delete file="${build.dir}/lib/${jar.name}"/>
-		<!--
+		
 		<pack classes="org.bitcoma.heartserver.netty.HeartsServer"
 			  targetJar="${build.dir}/lib/tmp.jar"
 			  manifestMainClass="org.bitcoma.heartserver.netty.HeartsServer">
-			<classpath refid="run_classpath" />
+			<classpath refid="build_classpath" />
 		</pack>
-		-->
+		
 		<one-jar destfile="${build.dir}/lib/${jar.name}">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}" />
@@ -59,20 +59,21 @@
 				<attribute name="One-Jar-Main-Class" value="org.bitcoma.heartserver.netty.HeartsServer" />
 		    </manifest>
 			<!-- Construct main.jar from classes and source code -->
+			<!--
 			<main>
 				<fileset dir="${src.dir}"/>
 			</main>
-			<!--
-			<main jar="${build.dir}/lib/tmp.jar"/>
 			-->
+			<main jar="${build.dir}/lib/tmp.jar"/>
 			<lib>
 				<fileset file="lib/mysql-connector-java-5.1.14-bin.jar"/>
 			</lib>
 			<binlib>
 				<fileset dir="${common.dir}/lib/sigar"/>
 			</binlib>
-		</one-jar> 
+		</one-jar>  
 		
+		<delete file="${build.dir}/lib/tmp.jar"/>
 	</target>
 	
 </project>

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 
 import org.bitcoma.hearts.HeartsProtoHandler;
+import org.bitcoma.hearts.netty.HeartsClientPipelineFactory;
 import org.bitcoma.hearts.netty.handler.HeartsClientHandler;
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;

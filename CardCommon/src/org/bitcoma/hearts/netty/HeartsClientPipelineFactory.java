@@ -1,4 +1,4 @@
-package org.bitcoma.heartsClient.netty;
+package org.bitcoma.hearts.netty;
 
 import static org.jboss.netty.channel.Channels.pipeline;
 
