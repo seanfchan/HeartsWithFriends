@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for i in {1..4}
+do
+    java -jar ../SimpleHeartsClient/bin/lib/simpleheartsclient.jar 192.168.1.106 7000 "superdude$i" mypass &
+    sleep 0.5
+done
