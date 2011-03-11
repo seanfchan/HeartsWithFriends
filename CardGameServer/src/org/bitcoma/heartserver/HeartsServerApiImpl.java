@@ -342,7 +342,7 @@ public class HeartsServerApiImpl implements IHeartsServerApi {
                 cardsToPlay.add(new Card((byte) card.getValue()));
             }
 
-            logger.debug("Player: {} is trying to play cards: {}", getCurrentUser().getLongId(), cardsToPlay);
+            logger.info("Player: {} is trying to play cards: {}", getCurrentUser().getLongId(), cardsToPlay);
 
             boolean result = getCurrentGame().playCard(getCurrentUser().getLongId(), cardsToPlay);
 

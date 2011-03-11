@@ -168,14 +168,19 @@ public class SimpleHeartsProtoHandler extends HeartsProtoHandler {
             return;
         }
 
-        logger.info("Single card played");
-
         Card cardPlayed = new Card((byte) response.getCardPlayed().getValue());
+
+        logger.info("Single card played: Player: {} Card: {}", response.getSrcUserId(), cardPlayed);
 
         allCardsPlayed.add(cardPlayed);
         currentTrick.makeMove(response.getSrcUserId(), cardPlayed);
         currentPlayerTurnId = response.getNextPlayerId();
 
+        // Remove the card from your hand when you take a turn.
+        if(response.getSrcUserId() == userId) {
+        	playerHand.remove(cardPlayed);
+        }
+        
         if (isYourTurn() && playerHand.size() > 0) {
             Card c = BotPlay.playCard(currentTrick, playerHand, allCardsPlayed);
 

@@ -13,13 +13,15 @@ public class Trick {
 
     public boolean isMoveValid(Long playerId, Card cardToPlay, List<Card> playerCards, Long firstPlayerId,
             boolean bHeartPlayed) {
-        int numCardsPlayed;
-        synchronized (playerIdToCardMap) {
-            numCardsPlayed = playerIdToCardMap.size();
-        }
+        int numCardsPlayed = playerIdToCardMap.size();
 
         // Check if this player already went with this trick
         if (playerIdToCardMap.containsKey(playerId)) {
+            return false;
+        }
+
+        // Check that we have the card we are playing
+        if (!playerCards.contains(cardToPlay)) {
             return false;
         }
 

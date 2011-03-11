@@ -137,6 +137,10 @@ public class Game {
     public synchronized Round getCurrentRound() {
         return currentRound;
     }
+    
+    public synchronized int getRoundCount() {
+    	return roundNumber;
+    }
 
     public boolean replacePlayer(Long oldUserId, Long newUserId) {
         if (!userIdToGameScore.containsKey(oldUserId)) {
