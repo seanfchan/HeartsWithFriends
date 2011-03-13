@@ -17,16 +17,19 @@ public class Trick {
 
         // Check if this player already went with this trick
         if (playerIdToCardMap.containsKey(playerId)) {
+            System.err.println("Trick: Player already took turn.");
             return false;
         }
 
         // Check that we have the card we are playing
         if (!playerCards.contains(cardToPlay)) {
+            System.err.println("Trick: Playing card not in hand.");
             return false;
         }
 
         // Check if you have two of clubs. This needs to be played.
         if (playerCards.contains(Card.TWO_CLUBS) && !cardToPlay.equals(Card.TWO_CLUBS)) {
+            System.err.println("Trick: Not playing two of clubs.");
             return false;
         }
 
@@ -35,6 +38,7 @@ public class Trick {
 
             // Not the first player
             if (playerId != firstPlayerId) {
+                System.err.println("Trick: Playing when not your turn.");
                 return false;
             }
 
@@ -45,8 +49,10 @@ public class Trick {
                 } else {
                     for (Card c : playerCards) {
                         // Played a heart to lead with other suits in hand.
-                        if (c.getSuit() != Card.HEARTS)
+                        if (c.getSuit() != Card.HEARTS) {
+                            System.err.println("Trick: Playing heart leading trick when other cards available.");
                             return false;
+                        }
                     }
 
                     // Played heart with only hearts in hand
@@ -60,8 +66,10 @@ public class Trick {
             else {
                 // Do they have a card that can be played?
                 for (Card c : playerCards) {
-                    if (c.getSuit() == suitOfTrick)
+                    if (c.getSuit() == suitOfTrick) {
+                        System.err.println("Trick: Card not matching suit when it should.");
                         return false;
+                    }
                 }
             }
         }
@@ -136,6 +144,10 @@ public class Trick {
         }
 
         return totalScore;
+    }
+
+    public String toString() {
+        return "Suit: " + Card.suitString(suitOfTrick) + " cards: " + playerIdToCardMap;
     }
 
     private byte suitOfTrick;

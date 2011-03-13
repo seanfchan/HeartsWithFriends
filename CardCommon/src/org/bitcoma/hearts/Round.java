@@ -333,11 +333,15 @@ public class Round {
                         userIdToScoreInGame.put(loserOfTrick,
                                 (byte) (userIdToScoreInGame.get(loserOfTrick) + scoreToAdd));
 
-                        // Trick has ended so nextPlayerId is loser of trick or
-                        // null if the round is over
+                        // In round we use the correct next player id. For
+                        // Clients read below.
                         Long nextPlayerId = isRoundOver() || isGameOver() ? null : currentTrick.getLoser();
                         if (handler != null) {
-                            handler.handleSingleCardPlayed(playerId, cardToPlay, nextPlayerId);
+                            // Trick has ended so nextPlayerId is null. Clients
+                            // use TrickEnded to perform the next turn. This is
+                            // easier to determine when a client should reset
+                            // their trick
+                            handler.handleSingleCardPlayed(playerId, cardToPlay, null);
                         }
 
                         // Send a score update

@@ -58,6 +58,10 @@ public class PlaySingleCardTimeOutTask implements TimerTask {
 
                     Round round = gameInstance.getCurrentRound();
 
+                    if (round == null) {
+                        return;
+                    }
+
                     // No longer our turn
                     if (playerId != round.getCurrentTurnPlayerId()) {
                         return;

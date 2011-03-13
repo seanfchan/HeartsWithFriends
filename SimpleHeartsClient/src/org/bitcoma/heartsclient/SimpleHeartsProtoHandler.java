@@ -59,6 +59,7 @@ public class SimpleHeartsProtoHandler extends HeartsProtoHandler {
 
     public SimpleHeartsProtoHandler(HeartsClientHandler networkHandle) {
         this.networkHandle = networkHandle;
+        pendingCardsPlayed = new LinkedList<Card>();
     }
 
     private boolean isYourTurn() {
@@ -74,6 +75,38 @@ public class SimpleHeartsProtoHandler extends HeartsProtoHandler {
     private void updatePendingCardsToPlay(Collection<Card> cardsToPlay) {
         pendingCardsPlayed.clear();
         pendingCardsPlayed.addAll(cardsToPlay);
+    }
+
+    private void playSingleCard() {
+        System.out.println("Trick: " + currentTrick);
+        System.out.println("Play Single PlayerHand: " + playerHand);
+        System.out.println("All Cards played: " + allCardsPlayed);
+
+        Card c = BotPlay.playCard(currentTrick, playerHand, allCardsPlayed);
+
+        updatePendingCardsToPlay(c);
+
+        // Play single card here.
+        org.bitcoma.hearts.model.transfered.CardProtos.Card cardToPlay = org.bitcoma.hearts.model.transfered.CardProtos.Card
+                .newBuilder().setValue(c.getValue()).build();
+        PlayCardRequest request = PlayCardRequest.newBuilder().addCards(cardToPlay).build();
+        networkHandle.writeMessage(request);
+    }
+
+    private void passCards() {
+        List<Card> cardsToPlay = BotPlay.removeThree(playerHand);
+
+        updatePendingCardsToPlay(cardsToPlay);
+
+        PlayCardRequest.Builder builder = PlayCardRequest.newBuilder();
+        for (Card c : cardsToPlay) {
+            // Play single card here.
+            org.bitcoma.hearts.model.transfered.CardProtos.Card cardToPlay = org.bitcoma.hearts.model.transfered.CardProtos.Card
+                    .newBuilder().setValue(c.getValue()).build();
+            builder.addCards(cardToPlay);
+        }
+        // Pass cards here.
+        networkHandle.writeMessage(builder.build());
     }
 
     @Override
@@ -188,25 +221,15 @@ public class SimpleHeartsProtoHandler extends HeartsProtoHandler {
 
         allCardsPlayed.add(cardPlayed);
         currentTrick.makeMove(response.getSrcUserId(), cardPlayed);
-        currentPlayerTurnId = response.getNextPlayerId();
+        currentPlayerTurnId = response.hasNextPlayerId() ? response.getNextPlayerId() : null;
 
         // Remove the card from your hand when you take a turn.
         if (response.getSrcUserId() == userId) {
             playerHand.remove(cardPlayed);
-
-            System.out.println("PlayerHand: " + playerHand);
         }
 
         if (isYourTurn() && playerHand.size() > 0) {
-            Card c = BotPlay.playCard(currentTrick, playerHand, allCardsPlayed);
-
-            updatePendingCardsToPlay(c);
-
-            // Play single card here.
-            org.bitcoma.hearts.model.transfered.CardProtos.Card cardToPlay = org.bitcoma.hearts.model.transfered.CardProtos.Card
-                    .newBuilder().setValue(c.getValue()).build();
-            PlayCardRequest request = PlayCardRequest.newBuilder().addCards(cardToPlay).build();
-            networkHandle.writeMessage(request);
+            playSingleCard();
         }
     }
 
@@ -244,19 +267,11 @@ public class SimpleHeartsProtoHandler extends HeartsProtoHandler {
         // Remove old cards from your hand
         playerHand.removeAll(pendingCardsPlayed);
 
-        System.out.println("PlayerHand: " + playerHand);
+        System.out.println("Cards passed PlayerHand: " + playerHand);
 
         // Take your turn since you have Two of clubs
         if (isYourTurn()) {
-            Card c = BotPlay.playCard(currentTrick, playerHand, allCardsPlayed);
-
-            updatePendingCardsToPlay(c);
-
-            // Play single card here.
-            org.bitcoma.hearts.model.transfered.CardProtos.Card cardToPlay = org.bitcoma.hearts.model.transfered.CardProtos.Card
-                    .newBuilder().setValue(c.getValue()).build();
-            PlayCardRequest request = PlayCardRequest.newBuilder().addCards(cardToPlay).build();
-            networkHandle.writeMessage(request);
+            playSingleCard();
         }
     }
 
@@ -286,12 +301,12 @@ public class SimpleHeartsProtoHandler extends HeartsProtoHandler {
         // Check which round it is so we know when the game started.
         if (roundCount == 1) {
             userIdToGameScore = new HashMap<Long, Integer>();
-            allCardsPlayed = new LinkedList<Card>();
-            pendingCardsPlayed = new LinkedList<Card>();
+
         }
 
         userIdToRoundScore = new HashMap<Long, Integer>();
 
+        allCardsPlayed = new LinkedList<Card>();
         playerHand = new LinkedList<Card>();
         for (org.bitcoma.hearts.model.transfered.CardProtos.Card c : response.getCardsList()) {
             playerHand.add(new Card((byte) c.getValue()));
@@ -301,19 +316,7 @@ public class SimpleHeartsProtoHandler extends HeartsProtoHandler {
 
         // Pass cards here
         if (response.hasPassedToUserId()) {
-            List<Card> cardsToPlay = BotPlay.removeThree(playerHand);
-
-            updatePendingCardsToPlay(cardsToPlay);
-
-            PlayCardRequest.Builder builder = PlayCardRequest.newBuilder();
-            for (Card c : cardsToPlay) {
-                // Play single card here.
-                org.bitcoma.hearts.model.transfered.CardProtos.Card cardToPlay = org.bitcoma.hearts.model.transfered.CardProtos.Card
-                        .newBuilder().setValue(c.getValue()).build();
-                builder.addCards(cardToPlay);
-            }
-            // Pass cards here.
-            networkHandle.writeMessage(builder.build());
+            passCards();
         }
         // This is a non passing round
         else {
@@ -328,15 +331,7 @@ public class SimpleHeartsProtoHandler extends HeartsProtoHandler {
 
             // Play a single card here if you have two of clubs
             if (isYourTurn()) {
-                Card c = BotPlay.playCard(currentTrick, playerHand, allCardsPlayed);
-
-                updatePendingCardsToPlay(c);
-
-                // Play single card here.
-                org.bitcoma.hearts.model.transfered.CardProtos.Card cardToPlay = org.bitcoma.hearts.model.transfered.CardProtos.Card
-                        .newBuilder().setValue(c.getValue()).build();
-                PlayCardRequest request = PlayCardRequest.newBuilder().addCards(cardToPlay).build();
-                networkHandle.writeMessage(request);
+                playSingleCard();
             }
 
         }
@@ -359,7 +354,18 @@ public class SimpleHeartsProtoHandler extends HeartsProtoHandler {
 
     @Override
     public void handleTrickEndedResponse(TrickEndedResponse response) {
+        if (!response.hasLoserId()) {
+            logger.error("Trick without the necessary data!");
+            return;
+        }
+
         currentTrick = new Trick();
+
+        currentPlayerTurnId = response.getLoserId();
+
+        if (isYourTurn() && playerHand.size() > 0) {
+            playSingleCard();
+        }
     }
 
     @Override

@@ -65,26 +65,23 @@ public class Card implements Comparable<Card> {
         Arrays.sort(input);
     }
 
-    public String toString() {
-        String suit = new String();
-        switch (this.getSuit()) {
+    public static String suitString(byte suit) {
+        switch (suit) {
         case 0:
-            suit = "Spades";
-            break;
+            return "Spades";
         case 1:
-            suit = "Hearts";
-            break;
+            return "Hearts";
         case 2:
-            suit = "Clubs";
-            break;
+            return "Clubs";
         case 3:
-            suit = "Diamonds";
-            break;
+            return "Diamonds";
         default:
-            suit = "Unknown";
-            break;
+            return "Unknown";
         }
-        return suit + "[" + getRank() + "]";
+    }
+
+    public String toString() {
+        return suitString(getSuit()) + "[" + getRank() + "]";
     }
 
     public boolean equals(Object o) {

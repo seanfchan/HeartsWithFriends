@@ -263,12 +263,10 @@ public class BotPlayTest {
         botHand.add(new Card(Card.HEARTS, Card.QUEEN));
         botHand.add(new Card(Card.SPADES, Card.TWO));
 
-        // Should play a heart even though no hearts have been played
         Card botCardToPlay = BotPlay.playCard(trick, botHand, allCardsPlayed);
-        // Hearts[10]
 
         assertTrue("Should play a card in our hand", botHand.contains(botCardToPlay));
-        assertTrue("Should not be a heart. No hearts played and we lead the trick with only hearts to play.",
+        assertTrue("Should not be a heart. No hearts played and we lead the trick with not only hearts to play.",
                 botCardToPlay.getSuit() != Card.HEARTS);
     }
 
@@ -314,12 +312,44 @@ public class BotPlayTest {
         botHand.add(new Card(Card.SPADES, Card.QUEEN));
         botHand.add(new Card(Card.SPADES, Card.TWO));
 
-        // Should play a heart even though no hearts have been played
         Card botCardToPlay = BotPlay.playCard(trick, botHand, allCardsPlayed);
-        // Hearts[11]
 
         assertTrue("Should play a card in our hand", botHand.contains(botCardToPlay));
-        assertTrue("Should not be a heart. No hearts played and we lead the trick with only hearts to play.",
+        assertTrue("Should not be a heart. No hearts played and we lead the trick with not only hearts to play.",
+                botCardToPlay.getSuit() != Card.HEARTS);
+    }
+
+    @Test
+    public void testWtfBug4() {
+        List<Card> botHand = new LinkedList<Card>();
+        List<Card> allCardsPlayed = new LinkedList<Card>();
+        Trick trick = new Trick();
+
+        allCardsPlayed.add(new Card(Card.CLUBS, Card.TWO));
+        allCardsPlayed.add(new Card(Card.CLUBS, Card.FOUR));
+        allCardsPlayed.add(new Card(Card.CLUBS, Card.THREE));
+        allCardsPlayed.add(new Card(Card.CLUBS, Card.QUEEN));
+        allCardsPlayed.add(new Card(Card.CLUBS, Card.KING));
+        allCardsPlayed.add(new Card(Card.CLUBS, Card.JACK));
+        allCardsPlayed.add(new Card(Card.CLUBS, Card.TEN));
+        allCardsPlayed.add(new Card(Card.CLUBS, Card.SIX));
+
+        botHand.add(new Card(Card.HEARTS, Card.THREE));
+        botHand.add(new Card(Card.SPADES, Card.FIVE));
+        botHand.add(new Card(Card.DIAMONDS, Card.SIX));
+        botHand.add(new Card(Card.HEARTS, Card.SIX));
+        botHand.add(new Card(Card.SPADES, Card.EIGHT));
+        botHand.add(new Card(Card.SPADES, Card.NINE));
+        botHand.add(new Card(Card.DIAMONDS, Card.JACK));
+        botHand.add(new Card(Card.HEARTS, Card.ACE));
+        botHand.add(new Card(Card.DIAMONDS, Card.ACE));
+        botHand.add(new Card(Card.DIAMONDS, Card.KING));
+        botHand.add(new Card(Card.HEARTS, Card.JACK));
+
+        Card botCardToPlay = BotPlay.playCard(trick, botHand, allCardsPlayed);
+
+        assertTrue("Should play a card in our hand", botHand.contains(botCardToPlay));
+        assertTrue("Should not be a heart. No hearts played and we lead the trick with not only hearts to play.",
                 botCardToPlay.getSuit() != Card.HEARTS);
     }
 }

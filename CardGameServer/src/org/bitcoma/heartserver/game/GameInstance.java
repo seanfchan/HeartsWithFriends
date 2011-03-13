@@ -346,7 +346,7 @@ public class GameInstance implements IHeartsGameHandler {
                         org.bitcoma.hearts.model.transfered.CardProtos.Card.newBuilder()
                                 .setValue(cardPlayed.getValue())).setSrcUserId(srcId);
 
-        // If the round is over then this is null
+        // If the round/trick is over then this is null
         if (nextPlayerId != null)
             builder.setNextPlayerId(nextPlayerId);
 
