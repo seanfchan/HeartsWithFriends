@@ -129,7 +129,7 @@ public class Round {
 
             // removing extra cards
             if (!deck.remove(new Card(Card.DIAMONDS, Card.TWO)))
-                System.out.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
+                System.err.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
 
             numOfCardsInHand = 17;
             break;
@@ -144,10 +144,10 @@ public class Round {
 
             // remove extra cards
             if (!deck.remove(new Card(Card.DIAMONDS, Card.TWO)))
-                System.out.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
+                System.err.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
 
             if (!deck.remove(new Card(Card.CLUBS, Card.TWO)))
-                System.out.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
+                System.err.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
 
             numOfCardsInHand = 10;
             break;
@@ -156,16 +156,16 @@ public class Round {
 
             // Remove extra cards
             if (!deck.remove(new Card(Card.DIAMONDS, Card.TWO)))
-                System.out.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
+                System.err.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
 
             if (!deck.remove(new Card(Card.DIAMONDS, Card.THREE)))
-                System.out.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
+                System.err.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
 
             if (!deck.remove(new Card(Card.CLUBS, Card.THREE)))
-                System.out.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
+                System.err.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
 
             if (!deck.remove(new Card(Card.CLUBS, Card.FOUR)))
-                System.out.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
+                System.err.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
 
             numOfCardsInHand = 8;
             break;
@@ -173,13 +173,13 @@ public class Round {
         case 7:
 
             if (!deck.remove(new Card(Card.DIAMONDS, Card.TWO)))
-                System.out.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
+                System.err.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
 
             if (!deck.remove(new Card(Card.DIAMONDS, Card.THREE)))
-                System.out.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
+                System.err.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
 
             if (!deck.remove(new Card(Card.CLUBS, Card.THREE)))
-                System.out.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
+                System.err.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
 
             numOfCardsInHand = 7;
             break;

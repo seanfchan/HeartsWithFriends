@@ -5,7 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -138,6 +137,8 @@ public class FullGameTest implements IHeartsGameHandler {
 
         checkPlayerIdsAreSame(finishedRound.getUserIdToHand().keySet());
         checkPlayerIdsAreSame(finishedRound.getUserIdToScoreInRound().keySet());
+
+        TestUtils.areAllCardsPresent(finishedRound.getAllCardsPlayed(), playerIds.size());
     }
 
     @Override
@@ -185,14 +186,9 @@ public class FullGameTest implements IHeartsGameHandler {
 
     public void checkPlayerIdsAreSame(Collection<Long> callbackPlayerIds) {
 
-        assertTrue("Number of players should match.", callbackPlayerIds.size() == playerIds.size());
+        boolean result = TestUtils.areAllPlayersPresent(playerIds, callbackPlayerIds);
 
-        // Check that all the players are the same.
-        for (Long id : playerIds) {
-            if (!callbackPlayerIds.contains(id)) {
-                fail("Players should be the same at the end of the game");
-            }
-        }
+        assertTrue("Players should match.", result);
     }
 
 }

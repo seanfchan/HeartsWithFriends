@@ -371,8 +371,8 @@ public class GameInstance implements IHeartsGameHandler {
         setTimeout(null);
 
         // Send cards to client that is destination
-        PassCardsResponse.Builder builder = PassCardsResponse.newBuilder();
         for (PassingCardsInfo pic : passingCardInfo) {
+            PassCardsResponse.Builder builder = PassCardsResponse.newBuilder();
             builder.setSrcUserId(pic.srcId);
             builder.setDstUserId(pic.dstId);
             builder.setFirstPlayerId(firstPlayerId);
