@@ -4,7 +4,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Trick {
+
+    private byte suitOfTrick;
+    private Map<Long, Card> playerIdToCardMap;
+    private static Logger logger = LoggerFactory.getLogger(Round.class);
 
     public Trick() {
         playerIdToCardMap = new HashMap<Long, Card>();
@@ -17,19 +24,19 @@ public class Trick {
 
         // Check if this player already went with this trick
         if (playerIdToCardMap.containsKey(playerId)) {
-            System.err.println("Trick: Player already took turn.");
+            logger.warn("Trick: Player already took turn.");
             return false;
         }
 
         // Check that we have the card we are playing
         if (!playerCards.contains(cardToPlay)) {
-            System.err.println("Trick: Playing card not in hand.");
+            logger.warn("Trick: Playing card not in hand.");
             return false;
         }
 
         // Check if you have two of clubs. This needs to be played.
         if (playerCards.contains(Card.TWO_CLUBS) && !cardToPlay.equals(Card.TWO_CLUBS)) {
-            System.err.println("Trick: Not playing two of clubs.");
+            logger.warn("Trick: Not playing two of clubs.");
             return false;
         }
 
@@ -38,7 +45,7 @@ public class Trick {
 
             // Not the first player
             if (playerId != firstPlayerId) {
-                System.err.println("Trick: Playing when not your turn.");
+                logger.warn("Trick: Playing when not your turn.");
                 return false;
             }
 
@@ -50,7 +57,7 @@ public class Trick {
                     for (Card c : playerCards) {
                         // Played a heart to lead with other suits in hand.
                         if (c.getSuit() != Card.HEARTS) {
-                            System.err.println("Trick: Playing heart leading trick when other cards available.");
+                            logger.warn("Trick: Playing heart leading trick when other cards available.");
                             return false;
                         }
                     }
@@ -67,7 +74,7 @@ public class Trick {
                 // Do they have a card that can be played?
                 for (Card c : playerCards) {
                     if (c.getSuit() == suitOfTrick) {
-                        System.err.println("Trick: Card not matching suit when it should.");
+                        logger.warn("Trick: Card not matching suit when it should.");
                         return false;
                     }
                 }
@@ -150,6 +157,4 @@ public class Trick {
         return "Suit: " + Card.suitString(suitOfTrick) + " cards: " + playerIdToCardMap;
     }
 
-    private byte suitOfTrick;
-    private Map<Long, Card> playerIdToCardMap;
 }
