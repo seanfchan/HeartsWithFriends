@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Random;
 
 import org.bitcoma.hearts.model.PassingCardsInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Round {
 
@@ -43,6 +45,8 @@ public class Round {
 
     // Defines the order players are sitting at the table
     private ArrayList<Long> userIdTableOrderList;
+
+    private static Logger logger = LoggerFactory.getLogger(Round.class);
 
     private Long loserId;
     private Trick currentTrick;
@@ -129,7 +133,7 @@ public class Round {
 
             // removing extra cards
             if (!deck.remove(new Card(Card.DIAMONDS, Card.TWO)))
-                System.err.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
+                logger.error("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
 
             numOfCardsInHand = 17;
             break;
@@ -144,10 +148,10 @@ public class Round {
 
             // remove extra cards
             if (!deck.remove(new Card(Card.DIAMONDS, Card.TWO)))
-                System.err.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
+                logger.error("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
 
             if (!deck.remove(new Card(Card.CLUBS, Card.TWO)))
-                System.err.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
+                logger.error("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
 
             numOfCardsInHand = 10;
             break;
@@ -156,16 +160,16 @@ public class Round {
 
             // Remove extra cards
             if (!deck.remove(new Card(Card.DIAMONDS, Card.TWO)))
-                System.err.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
+                logger.error("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
 
             if (!deck.remove(new Card(Card.DIAMONDS, Card.THREE)))
-                System.err.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
+                logger.error("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
 
             if (!deck.remove(new Card(Card.CLUBS, Card.THREE)))
-                System.err.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
+                logger.error("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
 
             if (!deck.remove(new Card(Card.CLUBS, Card.FOUR)))
-                System.err.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
+                logger.error("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
 
             numOfCardsInHand = 8;
             break;
@@ -173,13 +177,13 @@ public class Round {
         case 7:
 
             if (!deck.remove(new Card(Card.DIAMONDS, Card.TWO)))
-                System.err.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
+                logger.error("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
 
             if (!deck.remove(new Card(Card.DIAMONDS, Card.THREE)))
-                System.err.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
+                logger.error("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
 
             if (!deck.remove(new Card(Card.CLUBS, Card.THREE)))
-                System.err.println("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
+                logger.error("SOMETHING WENT HORRIBLY WRONG! ABORT ABORT!!!");
 
             numOfCardsInHand = 7;
             break;
@@ -366,8 +370,7 @@ public class Round {
                             if (nextPlayerId != null) {
                                 handler.handleSingleCardPlayed(playerId, cardToPlay, nextPlayerId);
                             } else
-                                System.err
-                                        .println("Should be another player in turn list as trick is not over. This is BAD!!!");
+                                logger.error("Should be another player in turn list as trick is not over. This is BAD!!!");
                         }
                     }
 
@@ -375,7 +378,7 @@ public class Round {
 
                 } else {
                     // Invalid move played
-                    System.err.println("Player: " + playerId + " playing an invalid card: " + cardToPlay);
+                    logger.warn("Player: {} playing an invalid card: {}", playerId, cardsToPlay);
                     return false;
                 }
 
@@ -394,13 +397,13 @@ public class Round {
 
                     // Does not have the card they are playing
                     if (!hand.contains(c)) {
-                        System.err.println("Player: " + playerId + " trying to play a card they do not have.");
+                        logger.warn("Player: {} trying to play a card they do not have.", playerId);
                         return false;
                     }
 
                     // Playing two instances of the same card.
                     if (cardsPlayedCopy.contains(c)) {
-                        System.err.println("Player: " + playerId + " trying to pass same card multiple times.");
+                        logger.warn("Player: {} trying to pass same card multiple times.", playerId);
                         return false;
                     }
                 }

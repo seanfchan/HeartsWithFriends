@@ -78,9 +78,9 @@ public class SimpleHeartsProtoHandler extends HeartsProtoHandler {
     }
 
     private void playSingleCard() {
-        System.out.println("Trick: " + currentTrick);
-        System.out.println("Play Single PlayerHand: " + playerHand);
-        System.out.println("All Cards played: " + allCardsPlayed);
+        logger.debug("Trick: {}", currentTrick);
+        logger.debug("Play Single PlayerHand: {}", playerHand);
+        logger.debug("All Cards played: {}", allCardsPlayed);
 
         Card c = BotPlay.playCard(currentTrick, playerHand, allCardsPlayed);
 
@@ -267,7 +267,7 @@ public class SimpleHeartsProtoHandler extends HeartsProtoHandler {
         // Remove old cards from your hand
         playerHand.removeAll(pendingCardsPlayed);
 
-        System.out.println("Cards passed PlayerHand: " + playerHand);
+        logger.debug("Cards passed PlayerHand: {}", playerHand);
 
         // Take your turn since you have Two of clubs
         if (isYourTurn()) {
@@ -312,7 +312,7 @@ public class SimpleHeartsProtoHandler extends HeartsProtoHandler {
             playerHand.add(new Card((byte) c.getValue()));
         }
 
-        System.out.println("PlayerHand: " + playerHand);
+        logger.debug("PlayerHand: {}", playerHand);
 
         // Pass cards here
         if (response.hasPassedToUserId()) {
